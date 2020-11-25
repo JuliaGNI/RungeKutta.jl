@@ -1,0 +1,13 @@
+name = "RungeKutta"
+uuid = "fb486d5c-30a0-4a8a-8415-a8b4ace5a6f7"
+authors = ["Michael Kraus"]
+version = "0.1.0"
+
+[compat]
+julia = "1"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
