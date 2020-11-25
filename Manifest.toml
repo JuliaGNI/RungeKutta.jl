@@ -1,0 +1,175 @@
+# This file is machine-generated - editing it directly is not advised
+
+[[Adapt]]
+deps = ["LinearAlgebra"]
+git-tree-sha1 = "42c42f2221906892ceb765dbcb1a51deeffd86d7"
+uuid = "79e6a3ab-5dfb-504d-930d-738a2a938a0e"
+version = "2.3.0"
+
+[[Artifacts]]
+deps = ["Pkg"]
+git-tree-sha1 = "c30985d8821e0cd73870b17b0ed0ce6dc44cb744"
+uuid = "56f22d72-fd6d-98f1-02f0-08ddc0907c33"
+version = "1.3.0"
+
+[[Base64]]
+uuid = "2a0f44e3-6c83-55bd-87e4-b1978d98bd5f"
+
+[[CompilerSupportLibraries_jll]]
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
+git-tree-sha1 = "8e695f735fca77e9708e795eda62afdb869cbb70"
+uuid = "e66e0078-7015-5450-92f7-15fbd957f2ae"
+version = "0.3.4+0"
+
+[[Dates]]
+deps = ["Printf"]
+uuid = "ade2ca70-3891-5945-98fb-dc099432e06a"
+
+[[ExprTools]]
+git-tree-sha1 = "10407a39b87f29d47ebaca8edbc75d7c302ff93e"
+uuid = "e2ba6199-217a-4e67-a87a-7c52f15ade04"
+version = "0.1.3"
+
+[[EzXML]]
+deps = ["Printf", "XML2_jll"]
+git-tree-sha1 = "0fa3b52a04a4e210aeb1626def9c90df3ae65268"
+uuid = "8f5d6c58-4d21-5cfd-889c-e3ad7ee6a615"
+version = "1.1.0"
+
+[[FastGaussQuadrature]]
+deps = ["LinearAlgebra", "SpecialFunctions"]
+git-tree-sha1 = "3a4939db42fbed6d52c81190ca39afc5017c9841"
+uuid = "442a2c76-b920-505d-bb47-c5924d526838"
+version = "0.4.4"
+
+[[GenericLinearAlgebra]]
+deps = ["LinearAlgebra", "Printf", "Random"]
+git-tree-sha1 = "29a74c7ff32df6eb40c3cb4a5252db14fd33b9f2"
+uuid = "14197337-ba66-59df-a3e3-ca00e7dcff7a"
+version = "0.2.4"
+
+[[InteractiveUtils]]
+deps = ["Markdown"]
+uuid = "b77e0a4c-d291-57a0-90e8-8db25a27a240"
+
+[[Intervals]]
+deps = ["Dates", "Printf", "RecipesBase", "Serialization", "TimeZones"]
+git-tree-sha1 = "323a38ed1952d30586d0fe03412cde9399d3618b"
+uuid = "d8418881-c3e1-53bb-8760-2df7ec849ed5"
+version = "1.5.0"
+
+[[JLLWrappers]]
+git-tree-sha1 = "c70593677bbf2c3ccab4f7500d0f4dacfff7b75c"
+uuid = "692b3bcd-3c85-4b1f-b108-f13ce0eb3210"
+version = "1.1.3"
+
+[[LibGit2]]
+deps = ["Printf"]
+uuid = "76f85450-5226-5b5a-8eaa-529ad045b433"
+
+[[Libdl]]
+uuid = "8f399da3-3557-5675-b5ff-fb832c97cbdb"
+
+[[Libiconv_jll]]
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
+git-tree-sha1 = "8e924324b2e9275a51407a4e06deb3455b1e359f"
+uuid = "94ce4f54-9a6c-5748-9c1c-f9c7231a4531"
+version = "1.16.0+7"
+
+[[LinearAlgebra]]
+deps = ["Libdl"]
+uuid = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+
+[[Logging]]
+uuid = "56ddb016-857b-54e1-b83d-db4d58db5568"
+
+[[Markdown]]
+deps = ["Base64"]
+uuid = "d6f4376e-aef5-505a-96c1-9c027394607a"
+
+[[Mocking]]
+deps = ["ExprTools"]
+git-tree-sha1 = "916b850daad0d46b8c71f65f719c49957e9513ed"
+uuid = "78c3b35d-d492-501b-9361-3d52fe80e533"
+version = "0.7.1"
+
+[[OffsetArrays]]
+deps = ["Adapt"]
+git-tree-sha1 = "9db93b990af57b3a56dca38476832f60d58f777b"
+uuid = "6fe1bfb0-de20-5000-8ca7-80f57d26f881"
+version = "1.4.0"
+
+[[OpenSpecFun_jll]]
+deps = ["Artifacts", "CompilerSupportLibraries_jll", "JLLWrappers", "Libdl", "Pkg"]
+git-tree-sha1 = "9db77584158d0ab52307f8c04f8e7c08ca76b5b3"
+uuid = "efe28fd5-8261-553b-a9e1-b2916fc3738e"
+version = "0.5.3+4"
+
+[[Pkg]]
+deps = ["Dates", "LibGit2", "Libdl", "Logging", "Markdown", "Printf", "REPL", "Random", "SHA", "UUIDs"]
+uuid = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
+
+[[Polynomials]]
+deps = ["GenericLinearAlgebra", "Intervals", "LinearAlgebra", "OffsetArrays", "RecipesBase"]
+git-tree-sha1 = "2607134f8bbbfad2f444b5b6c658641cfee6b0a7"
+repo-rev = "master"
+repo-url = "https://github.com/JuliaMath/Polynomials.jl.git"
+uuid = "f27b6e38-b328-58d1-80ce-0feddd5e7a45"
+version = "1.1.12"
+
+[[Printf]]
+deps = ["Unicode"]
+uuid = "de0858da-6303-5e67-8744-51eddeeeb8d7"
+
+[[REPL]]
+deps = ["InteractiveUtils", "Markdown", "Sockets"]
+uuid = "3fa0cd96-eef1-5676-8a61-b3b8758bbffb"
+
+[[Random]]
+deps = ["Serialization"]
+uuid = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
+
+[[RecipesBase]]
+git-tree-sha1 = "b3fb709f3c97bfc6e948be68beeecb55a0b340ae"
+uuid = "3cdcf5f2-1ef4-517c-9805-6587b60abb01"
+version = "1.1.1"
+
+[[SHA]]
+uuid = "ea8e919c-243c-51af-8825-aaa63cd721ce"
+
+[[Serialization]]
+uuid = "9e88b42a-f829-5b0c-bbe9-9e923198166b"
+
+[[Sockets]]
+uuid = "6462fe0b-24de-5631-8697-dd941f90decc"
+
+[[SpecialFunctions]]
+deps = ["OpenSpecFun_jll"]
+git-tree-sha1 = "bf68b90f72f81dd1519b289b7403c591cfdd6a88"
+uuid = "276daf66-3868-5448-9aa4-cd146d93841b"
+version = "1.0.0"
+
+[[TimeZones]]
+deps = ["Dates", "EzXML", "Mocking", "Pkg", "Printf", "RecipesBase", "Serialization", "Unicode"]
+git-tree-sha1 = "e8a5ab7e56d23bf147585001d33d969c655d4091"
+uuid = "f269a46b-ccf7-5d73-abea-4c690281aa53"
+version = "1.5.2"
+
+[[UUIDs]]
+deps = ["Random", "SHA"]
+uuid = "cf7118a7-6976-5b1a-9a39-7adc72f591a4"
+
+[[Unicode]]
+uuid = "4ec0a83e-493e-50e2-b9ac-8f72acf5a8f5"
+
+[[XML2_jll]]
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Libiconv_jll", "Pkg", "Zlib_jll"]
+git-tree-sha1 = "be0db24f70aae7e2b89f2f3092e93b8606d659a6"
+uuid = "02c8fc9c-b97f-50b9-bbe4-9be30ff0a78a"
+version = "2.9.10+3"
+
+[[Zlib_jll]]
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
+git-tree-sha1 = "320228915c8debb12cb434c59057290f0834dbf6"
+uuid = "83775a58-1f1d-513f-b197-d71354ab007a"
+version = "1.2.11+18"
