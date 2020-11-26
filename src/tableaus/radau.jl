@@ -20,13 +20,9 @@ function get_radau_nodes(s)
 end
 
 @doc raw"""
-The Radau weights can be explicitly computed by the formula
+The Radau weights are implicitly given by the so-called simplifying assumption $B(s)$:
 ```math
-b_j = \frac{1}{s (s-1) P_{s-1}(2 c_j - 1)^2} \qquad j = 1 , \, ... , \, s ,
-```
-where $P_k$ is the $k$th Legendre polynomial, given by
-```math
-P_k (x) = \frac{1}{k! 2^k} \big( \frac{d^k}{dx^k} (x^2 - 1)^k \big) .
+\sum \limits_{j=1}^{s} b_{j} c_{j}^{k-1} = \frac{1}{k}  \qquad k = 1 , \, ... , \, s .
 ```
 """
 function get_radau_weights(s)
