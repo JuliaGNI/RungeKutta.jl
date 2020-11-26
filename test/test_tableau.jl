@@ -1,4 +1,4 @@
-using RungeKutta: name, order, nstages, coefficients, weights, nodes, to_array, from_array
+using RungeKutta: name, order, eachstage, nstages, coefficients, weights, nodes, to_array, from_array
 
 @testset "$(rpad("Tableau",80))" begin
 
@@ -36,6 +36,7 @@ using RungeKutta: name, order, nstages, coefficients, weights, nodes, to_array, 
 
             @test name(tab1) == :Test
             @test order(tab1) == 2s
+            @test eachstage(tab1) == 1:s
             @test nstages(tab1) == s
             @test coefficients(tab1) == a
             @test weights(tab1) == b
