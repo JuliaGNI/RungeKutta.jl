@@ -1,8 +1,27 @@
 
-using FastGaussQuadrature
 using LinearAlgebra
 using Polynomials
+using SpecialPolynomials
 
+
+function get_gauss_nodes(s)
+    p = zeros(BigFloat, s+1); p[end] = 1
+    c = sort(real.(roots(convert(Polynomial, ShiftedLegendre(p)))))
+end
+
+function get_gauss_weights(s)
+    c = get_gauss_nodes(s)
+    p = zeros(BigFloat, s+1); p[end] = 1
+    P = convert(Polynomial, ShiftedLegendre(p))
+    D = Polynomials.derivative(P)
+    
+    inti(i) = begin
+        I = Polynomials.integrate( ( P ÷ Polynomial([-c[i], 1]) )^2 )
+        I(1) - I(0)
+    end
+    
+    b = [ inti(i) / D(c[i])^2  for i in 1:s ]
+end
 
 function vandermonde_matrix_inverse(x::Vector{T}) where {T}
     local n = length(x)
@@ -45,9 +64,8 @@ function TableauGauss(s::Int, T=Float64)
     o = 2s
 
     # obtain Gauss-Legendre nodes and weights
-    c, b = FastGaussQuadrature.gausslegendre(s)
-    b .= b ./ 2
-    c .= (c .+ 1) ./ 2
+    b = get_gauss_weights(s)
+    c = get_gauss_nodes(s)
 
     # create Lagrange polynomial
     vdm = vandermonde_matrix_inverse(c)
