@@ -1,4 +1,4 @@
-using RungeKutta: name, order, nstages, coefficients, weights, nodes
+using RungeKutta: name, order, nstages, coefficients, weights, nodes, to_array, from_array
 
 @testset "$(rpad("Tableau",80))" begin
 
@@ -40,6 +40,9 @@ using RungeKutta: name, order, nstages, coefficients, weights, nodes
             @test coefficients(tab1) == a
             @test weights(tab1) == b
             @test nodes(tab1) == c
+
+            @test tab1 == from_array(to_array(tab1), tab1.name, tab1.o)
+            @test tab1 == convert(Tableau, convert(Matrix{T}, tab1); name=tab1.name, o=tab1.o)
 
         end
     end
