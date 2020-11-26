@@ -12,7 +12,7 @@ end
 
 function check_order_conditions_c(tab::Tableau{T}, k) where {T}
     local order  = falses(tab.s)
-    local res::T
+    local res::T = 0
 
     for i in axes(tab.a, 1)
         res = 0
@@ -28,7 +28,7 @@ end
 
 function check_order_conditions_d(tab::Tableau{T}, k) where {T}
     local order  = falses(tab.s)
-    local res::T
+    local res::T = 0
 
     for i in axes(tab.a, 1)
         res = 0
