@@ -27,6 +27,11 @@ using RungeKutta: name, order, nstages, coefficients, weights, nodes
             @test tab1 !== tabϵ
             @test hash(tab1) != hash(tabϵ)
 
+            @test isequal(tab1, tab2)
+            @test isequal(tab1, tab3)
+            @test isequal(tab1, tab4)
+            @test !isequal(tab1, tabϵ)
+
             @test eltype(tab1) == eltype(tab2) == eltype(tab3) == eltype(tab4) == T
 
             @test name(tab1) == :Test
