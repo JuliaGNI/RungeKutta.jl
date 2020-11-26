@@ -1,4 +1,3 @@
-
 using RungeKutta: name, order, nstages, coefficients, weights, nodes
 
 @testset "$(rpad("ERK Tableaus",80))" begin

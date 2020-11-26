@@ -1,6 +1,6 @@
-@testset "$(rpad("Radau Tableaus",80))" begin
+using RungeKutta: get_radau_nodes, get_radau_weights, get_radau_coefficients
 
-    using RungeKutta: get_radau_nodes, get_radau_weights, get_radau_coefficients
+@testset "$(rpad("Radau Tableaus",80))" begin
 
     @test_throws ErrorException get_radau_nodes(1)
     @test_throws ErrorException get_radau_weights(1)

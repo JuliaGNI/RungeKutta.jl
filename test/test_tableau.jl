@@ -1,6 +1,6 @@
-@testset "$(rpad("Tableau",80))" begin
+using RungeKutta: name, order, nstages, coefficients, weights, nodes
 
-    using RungeKutta: name, order, nstages, coefficients, weights, nodes
+@testset "$(rpad("Tableau",80))" begin
 
     for s in 1:5
         for T ∈ (Float64, BigFloat)

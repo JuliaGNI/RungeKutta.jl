@@ -1,9 +1,9 @@
-@testset "$(rpad("Lobatto Tableaus",80))" begin
+using RungeKutta: get_lobatto_nodes, get_lobatto_weights,
+                  get_lobatto_coefficients_a, get_lobatto_coefficients_b,
+                  get_lobatto_coefficients_c, get_lobatto_coefficients_c̄,
+                  get_lobatto_coefficients_f
 
-    using RungeKutta: get_lobatto_nodes, get_lobatto_weights,
-                      get_lobatto_coefficients_a, get_lobatto_coefficients_b,
-                      get_lobatto_coefficients_c, get_lobatto_coefficients_c̄,
-                      get_lobatto_coefficients_f
+@testset "$(rpad("Lobatto Tableaus",80))" begin
 
     @test_throws ErrorException get_lobatto_nodes(1)
     @test_throws ErrorException get_lobatto_weights(1)
