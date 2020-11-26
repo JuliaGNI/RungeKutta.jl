@@ -11,6 +11,10 @@ function check_symplecticity(tab::Tableau{T}; atol=16*eps(T), rtol=16*eps(T)) wh
     symplectic
 end
 
+function issymplectic(tab::Tableau{T}; atol=16*eps(T), rtol=16*eps(T)) where {T}
+    all(check_symplecticity(tab; atol=atol, rtol=rtol))
+end
+
 
 function compute_symplecticity_error(tab::Tableau)
     [tab.b[i] * tab.a[i,j] + tab.b[j] * tab.a[j,i] - tab.b[i] * tab.b[j] for i in axes(tab.a, 1), j in axes(tab.a,2)]

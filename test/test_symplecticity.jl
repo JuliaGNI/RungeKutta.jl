@@ -10,6 +10,7 @@
 
         @test compute_symplecticity_error(g) ≈ zeros(s,s)  atol=eps()
         @test check_symplecticity(g) == Array{Bool}(ones(s,s))
+        @test issymplectic(g)
     end
 
     for s in 2:5
@@ -37,6 +38,12 @@
         @test B̂.a ≈ E.a atol=1E-15
         @test B̂.b == E.b
         @test B̂.c == E.c
+
+        @test !issymplectic(A)
+        @test !issymplectic(B)
+        @test issymplectic(Â)
+        @test issymplectic(B̂)
+        @test issymplectic(E)
     end
 
 end

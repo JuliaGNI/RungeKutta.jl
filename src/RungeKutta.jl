@@ -21,10 +21,12 @@ module RungeKutta
 
     include("symplecticity.jl")
     
-    export check_symplecticity, compute_symplecticity_error,
-           get_symplectic_conjugate_coefficients, get_symplectic_conjugate_coefficients!,
+    export check_symplecticity,
+           compute_symplecticity_error,
+           issymplectic,
+           get_symplectic_conjugate_coefficients,
+           get_symplectic_conjugate_coefficients!,
            symplecticize
-
 
     include("tableaus/dirk.jl")
 
