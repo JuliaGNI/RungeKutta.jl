@@ -1,6 +1,7 @@
 using RungeKutta
 using Test
 
+include("test_utils.jl")
 include("test_tableau.jl")
 include("test_order_conditions.jl")
 include("test_symmetry.jl")
