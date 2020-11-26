@@ -1,4 +1,4 @@
-# Runge Kutta
+# Runge-Kutta
 
 [![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://juliagni.github.io/RungeKutta.jl/stable)
 [![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://juliagni.github.io/RungeKutta.jl/dev)
@@ -81,8 +81,8 @@ Currently, diagnostic functions for checking symmetry, symplecticity and the so-
 
 * `issymmetric(tab)`
 * `issymplectic(tab)`
-* `satisfies_simplifying_assumption_b(tab, σ=s)`
-* `satisfies_simplifying_assumption_c(tab, σ=s)`
-* `satisfies_simplifying_assumption_d(tab, σ=s)`
+* `satisfies_simplifying_assumption_b(tab, σ=tab.s)`
+* `satisfies_simplifying_assumption_c(tab, σ=tab.s)`
+* `satisfies_simplifying_assumption_d(tab, σ=tab.s)`
 
 This list is expected to grow in the near future.
