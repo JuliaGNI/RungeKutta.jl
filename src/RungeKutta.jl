@@ -1,5 +1,7 @@
 module RungeKutta
 
+    include("utils.jl")
+
     include("tableau.jl")
 
     export Tableau
