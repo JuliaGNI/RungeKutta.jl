@@ -49,16 +49,7 @@ function get_lobatto_coefficients_a(s)
     if s == 1
         throw(ErrorException("Lobatto IIIA coefficients for one stage are not defined."))
     end
-
-    c = get_lobatto_nodes(s)
-    M = [ c[j]^(k-1) for k in 1:s, j in 1:s ]
-    
-    row(i) = begin
-        r = [ c[i]^k / k for k in 1:s ]
-        M \ r
-    end
-    
-    vcat([row(i)' for i in 1:s]...)
+    solve_simplifying_assumption_c(get_lobatto_nodes(s))
 end
 
 @doc raw"""
@@ -74,15 +65,8 @@ function get_lobatto_coefficients_b(s)
 
     b = get_lobatto_weights(s)
     c = get_lobatto_nodes(s)
-    
-    M = [ b[i] * c[i]^(k-1) for k in 1:s, i in 1:s ]
-    
-    row(j) = begin
-        r = [ b[j] / k * (1 - c[j]^k) for k in 1:s ]
-        M \ r
-    end
-    
-    hcat([row(j) for j in 1:s]...)
+
+    solve_simplifying_assumption_d(get_lobatto_weights(s), get_lobatto_nodes(s))
 end
 
 @doc raw"""

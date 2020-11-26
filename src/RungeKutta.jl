@@ -8,7 +8,12 @@ module RungeKutta
 
     include("order_conditions.jl")
 
-    export check_order_conditions_b, check_order_conditions_c, check_order_conditions_d
+    export check_order_conditions_b,
+           check_order_conditions_c,
+           check_order_conditions_d,
+           solve_simplifying_assumption_b,
+           solve_simplifying_assumption_c,
+           solve_simplifying_assumption_d
 
     include("symmetry.jl")
     

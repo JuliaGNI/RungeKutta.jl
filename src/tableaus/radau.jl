@@ -29,11 +29,7 @@ function get_radau_weights(s)
     if s == 1
         throw(ErrorException("Radau weights for one stage are not defined."))
     end
-
-    c = get_radau_nodes(s)
-    M = [ c[j]^(k-1) for k in 1:s, j in 1:s ]
-    r = [ 1 / k for k in big.(1:s) ]
-    M \ r
+    solve_simplifying_assumption_b(get_radau_nodes(s))
 end
 
 @doc raw"""
@@ -46,16 +42,7 @@ function get_radau_coefficients(s)
     if s == 1
         throw(ErrorException("Radau IIA coefficients for one stage are not defined."))
     end
-
-    c = get_radau_nodes(s)
-    M = [ c[j]^(k-1) for k in 1:s, j in 1:s ]
-    
-    row(i) = begin
-        r = [ c[i]^k / k for k in 1:s ]
-        M \ r
-    end
-    
-    vcat([row(i)' for i in 1:s]...)
+    solve_simplifying_assumption_c(get_radau_nodes(s))
 end
 
 
