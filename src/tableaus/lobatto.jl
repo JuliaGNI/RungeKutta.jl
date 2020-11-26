@@ -11,9 +11,9 @@ The s-stage Lobatto nodes are defined as the roots of the following polynomial o
 """
 function get_lobatto_nodes(s)
     if s == 1
-        @error "Lobatto nodes for one stage are not defined."
+        throw(ErrorException("Lobatto nodes for one stage are not defined."))
     end
-    
+
     D(k) = Polynomials.derivative(Polynomials.Polynomial(BigFloat[0, 1, -1])^(k-1), k-2)
     c = sort(real.(Polynomials.roots(D(s))))
     c[begin] = 0; c[end] = 1; c
@@ -31,7 +31,7 @@ P_k (x) = \frac{1}{k! 2^k} \big( \frac{d^k}{dx^k} (x^2 - 1)^k \big) .
 """
 function get_lobatto_weights(s)
     if s == 1
-        @error "Lobatto weights for one stage are not defined."
+        throw(ErrorException("Lobatto weights for one stage are not defined."))
     end
 
     P(k,x) = Polynomials.derivative(Polynomials.Polynomial(BigFloat[-1, 0, 1])^k, k)(x) / factorial(k) / 2^k
@@ -47,7 +47,7 @@ The Lobatto IIIA coefficients are implicitly given by the so-called simplifying 
 """
 function get_lobatto_coefficients_a(s)
     if s == 1
-        @error "Lobatto IIIA coefficients for one stage are not defined."
+        throw(ErrorException("Lobatto IIIA coefficients for one stage are not defined."))
     end
 
     c = get_lobatto_nodes(s)
@@ -69,7 +69,7 @@ The Lobatto IIIB coefficients are implicitly given by the so-called simplifying 
 """
 function get_lobatto_coefficients_b(s)
     if s == 1
-        @error "Lobatto IIIB coefficients for one stage are not defined."
+        throw(ErrorException("Lobatto IIIB coefficients for one stage are not defined."))
     end
 
     b = get_lobatto_weights(s)
@@ -95,7 +95,7 @@ for $a_{i,j}$ with $i = 1, ..., s$ and $j = 2, ..., s$.
 """
 function get_lobatto_coefficients_c(s)
     if s == 1
-        @error "Lobatto IIIC coefficients for one stage are not defined."
+        throw(ErrorException("Lobatto IIIC coefficients for one stage are not defined."))
     end
 
     b = get_lobatto_weights(s)
@@ -120,7 +120,7 @@ for $a_{i,j}$ with $i = 1, ..., s$ and $j = 1, ..., s-1$.
 """
 function get_lobatto_coefficients_c̄(s)
     if s == 1
-        @error "Lobatto IIIC coefficients for one stage are not defined."
+        throw(ErrorException("Lobatto IIIC̄ coefficients for one stage are not defined."))
     end
 
     c = get_lobatto_nodes(s)
@@ -136,6 +136,10 @@ end
 
 
 function get_lobatto_coefficients_f(s)
+    if s == 1
+        throw(ErrorException("Lobatto IIIF coefficients for one stage are not defined."))
+    end
+
     c = get_lobatto_nodes(s)
     M = [ 1 / (k + j - 1) for k in big.(1:s), j in big.(1:s) ]
     r = [ 1 / s / (s + k) for k in big.(1:s) ]

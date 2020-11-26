@@ -1,6 +1,18 @@
 @testset "$(rpad("Lobatto Tableaus",80))" begin
 
-    using RungeKutta: get_lobatto_weights, get_lobatto_nodes
+    using RungeKutta: get_lobatto_nodes, get_lobatto_weights,
+                      get_lobatto_coefficients_a, get_lobatto_coefficients_b,
+                      get_lobatto_coefficients_c, get_lobatto_coefficients_c̄,
+                      get_lobatto_coefficients_f
+
+    @test_throws ErrorException get_lobatto_nodes(1)
+    @test_throws ErrorException get_lobatto_weights(1)
+    @test_throws ErrorException get_lobatto_coefficients_a(1)
+    @test_throws ErrorException get_lobatto_coefficients_b(1)
+    @test_throws ErrorException get_lobatto_coefficients_c(1)
+    @test_throws ErrorException get_lobatto_coefficients_c̄(1)
+    @test_throws ErrorException get_lobatto_coefficients_f(1)
+
 
     function _getTableauLobattoIIIA2(T=Float64)
         a = BigFloat[
@@ -270,6 +282,16 @@
     function _getTableauLobattoIIIG4(T=Float64)
         symplecticize(_getTableauLobattoIIIF4(BigFloat); name=:LobattoIIIG4, T=T)
     end
+
+
+    @test_throws ErrorException TableauLobattoIIIA(1)
+    @test_throws ErrorException TableauLobattoIIIB(1)
+    @test_throws ErrorException TableauLobattoIIIC(1)
+    @test_throws ErrorException TableauLobattoIIIC̄(1)
+    @test_throws ErrorException TableauLobattoIIID(1)
+    @test_throws ErrorException TableauLobattoIIIE(1)
+    @test_throws ErrorException TableauLobattoIIIF(1)
+    @test_throws ErrorException TableauLobattoIIIG(1)
 
 
     @test TableauLobattoIIIA(2) ≈ _getTableauLobattoIIIA2()

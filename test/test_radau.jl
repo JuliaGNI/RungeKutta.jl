@@ -1,5 +1,12 @@
 @testset "$(rpad("Radau Tableaus",80))" begin
 
+    using RungeKutta: get_radau_nodes, get_radau_weights, get_radau_coefficients
+
+    @test_throws ErrorException get_radau_nodes(1)
+    @test_throws ErrorException get_radau_weights(1)
+    @test_throws ErrorException get_radau_coefficients(1)
+
+    
     function _TableauRadauIIA2(T=Float64)
         a = [[5//12  -1//12]
              [3//4    1//4 ]]
@@ -20,6 +27,8 @@
 
         Tableau{T}(:RadauIIA3, 5, a, b, c)
     end
+
+    @test_throws ErrorException TableauRadauIIA(1)
 
     @test TableauRadauIIA(2) ≈ _TableauRadauIIA2()
     @test TableauRadauIIA(3) ≈ _TableauRadauIIA3()
