@@ -70,6 +70,6 @@ module RungeKutta
 
     include("tableaus/radau.jl")
 
-    export TableauRadauIIA
+    export TableauRadauIA, TableauRadauIIA
 
 end

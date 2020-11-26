@@ -21,6 +21,7 @@
         @test  satisfies_simplifying_assumption_b(TableauLobattoIIIC̄(s))
         @test  satisfies_simplifying_assumption_b(TableauLobattoIIID(s))
         @test  satisfies_simplifying_assumption_b(TableauLobattoIIIE(s))
+        @test  satisfies_simplifying_assumption_b(TableauRadauIA(s))
         @test  satisfies_simplifying_assumption_b(TableauRadauIIA(s))
 
         @test  satisfies_simplifying_assumption_c(TableauLobattoIIIA(s))
@@ -29,6 +30,7 @@
         @test !satisfies_simplifying_assumption_c(TableauLobattoIIIC̄(s))
         @test !satisfies_simplifying_assumption_c(TableauLobattoIIID(s))
         @test !satisfies_simplifying_assumption_c(TableauLobattoIIIE(s))
+        @test !satisfies_simplifying_assumption_c(TableauRadauIA(s))
         @test  satisfies_simplifying_assumption_c(TableauRadauIIA(s))
 
         @test !satisfies_simplifying_assumption_d(TableauLobattoIIIA(s))
@@ -37,6 +39,7 @@
         @test !satisfies_simplifying_assumption_d(TableauLobattoIIIC̄(s))
         @test !satisfies_simplifying_assumption_d(TableauLobattoIIID(s))
         @test !satisfies_simplifying_assumption_d(TableauLobattoIIIE(s))
+        @test  satisfies_simplifying_assumption_d(TableauRadauIA(s))
         @test !satisfies_simplifying_assumption_d(TableauRadauIIA(s))
     end
 

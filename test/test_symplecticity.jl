@@ -39,11 +39,19 @@
         @test B̂.b == E.b
         @test B̂.c == E.c
 
-        @test !issymplectic(A)
-        @test !issymplectic(B)
-        @test issymplectic(Â)
-        @test issymplectic(B̂)
-        @test issymplectic(E)
+        @test  issymplectic(Â)
+        @test  issymplectic(B̂)
+    end
+
+    for s in 2:10
+        @test !issymplectic(TableauLobattoIIIA(s))
+        @test !issymplectic(TableauLobattoIIIB(s))
+        @test !issymplectic(TableauLobattoIIIC(s))
+        @test !issymplectic(TableauLobattoIIIC̄(s))
+        @test  issymplectic(TableauLobattoIIID(s))
+        @test  issymplectic(TableauLobattoIIIE(s))
+        @test !issymplectic(TableauRadauIA(s))
+        @test !issymplectic(TableauRadauIIA(s))
     end
 
 end
