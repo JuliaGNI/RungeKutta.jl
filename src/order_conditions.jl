@@ -1,44 +1,31 @@
 
-function check_order_conditions_b(tab::Tableau{T}, k) where {T}
-    local res::T = 0
+function check_order_conditions_b(tab::Tableau{T}, k; atol=16eps(T), rtol=16eps(T)) where {T}
+    b, c, s = tab.b, tab.c, tab.s
+    isapprox(mapreduce(i -> b[i] * c[i]^(k-1), +, 1:s), 1/k; atol=atol, rtol=rtol)
+end
 
-    for i in 1:tab.s
-        res += tab.b[i] * tab.c[i]^(k-1)
-    end
-
-    return isapprox(res, 1/k, atol=16*eps(T), rtol=16*eps(T))
+function satisfies_simplifying_assumption_b(tab::Tableau, σ=tab.s; kwargs...)
+    all([check_order_conditions_b(tab, k; kwargs...) for k in 1:σ])
 end
 
 
-function check_order_conditions_c(tab::Tableau{T}, k) where {T}
-    local order  = falses(tab.s)
-    local res::T = 0
+function check_order_conditions_c(tab::Tableau{T}, k; atol=16eps(T), rtol=16eps(T)) where {T}
+    a, c, s = tab.a, tab.c, tab.s
+    [isapprox(mapreduce(j -> a[i,j] * c[j]^(k-1), +, 1:s), c[i]^k/k; atol=atol, rtol=rtol) for i in 1:s]
+end
 
-    for i in axes(tab.a, 1)
-        res = 0
-        for j in axes(tab.a, 2)
-            res += tab.a[i,j] * tab.c[j]^(k-1)
-        end
-        order[i] = isapprox(res, tab.c[i]^k/k, atol=16*eps(T), rtol=16*eps(T))
-    end
-
-    order
+function satisfies_simplifying_assumption_c(tab::Tableau, σ=tab.s; kwargs...)
+    all(hcat([check_order_conditions_c(tab, k; kwargs...) for k in 1:σ]...))
 end
 
 
-function check_order_conditions_d(tab::Tableau{T}, k) where {T}
-    local order  = falses(tab.s)
-    local res::T = 0
+function check_order_conditions_d(tab::Tableau{T}, k; atol=16eps(T), rtol=16eps(T)) where {T}
+    a, b, c, s = tab.a, tab.b, tab.c, tab.s
+    [isapprox(mapreduce(j -> b[j] * c[j]^(k-1) * a[j,i], +, 1:s), b[i] * (1 - c[i]^k)/k; atol=atol, rtol=rtol) for i in 1:s]
+end
 
-    for i in axes(tab.a, 1)
-        res = 0
-        for j in axes(tab.a, 2)
-            res += tab.b[j] * tab.c[j]^(k-1) * tab.a[j,i]
-        end
-        order[i] = isapprox(res, tab.b[i] * (1 - tab.c[i]^k)/k, atol=16*eps(T), rtol=16*eps(T))
-    end
-
-    order
+function satisfies_simplifying_assumption_d(tab::Tableau, σ=tab.s; kwargs...)
+    all(hcat([check_order_conditions_d(tab, k; kwargs...) for k in 1:σ]...))
 end
 
 

@@ -11,6 +11,9 @@ module RungeKutta
     export check_order_conditions_b,
            check_order_conditions_c,
            check_order_conditions_d,
+           satisfies_simplifying_assumption_b,
+           satisfies_simplifying_assumption_c,
+           satisfies_simplifying_assumption_d,
            solve_simplifying_assumption_b,
            solve_simplifying_assumption_c,
            solve_simplifying_assumption_d
