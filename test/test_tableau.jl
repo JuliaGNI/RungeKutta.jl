@@ -44,6 +44,8 @@ using RungeKutta: name, order, nstages, coefficients, weights, nodes, to_array, 
             @test tab1 == from_array(to_array(tab1), tab1.name, tab1.o)
             @test tab1 == convert(Tableau, convert(Matrix{T}, tab1); name=tab1.name, o=tab1.o)
 
+            @test startswith(repr(tab1), "Runge-Kutta Tableau")
+
         end
     end
 

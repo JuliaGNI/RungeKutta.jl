@@ -1,4 +1,6 @@
 
+using PrettyTables
+
 "Holds the tableau of a Runge-Kutta method."
 struct Tableau{T}
     name::Symbol
@@ -73,10 +75,30 @@ weights(tab::Tableau) = tab.b
 nodes(tab::Tableau) = tab.c
 
 
-"Print Runge-Kutta coefficients."
+const tf_butcher_tableau = TextFormat(
+    up_right_corner     = ' ',
+    up_left_corner      = ' ',
+    bottom_left_corner  = ' ',
+    bottom_right_corner = ' ',
+    up_intersection     = ' ',
+    left_intersection   = ' ',
+    right_intersection  = ' ',
+    middle_intersection = ' ',
+    bottom_intersection = ' ',
+    column              = '│',
+    row                 = ' '
+)
+
+"Pretty-print Runge-Kutta tableau."
 function Base.show(io::IO, tab::Tableau)
-    print(io, "Runge-Kutta Tableau ", tab.name, " with ", tab.s, " stages and order ", tab.o)
-    print(io, "  a = ", tab.a)
-    print(io, "  b = ", tab.b)
-    print(io, "  c = ", tab.c)
+    print(io, "Runge-Kutta Tableau $(tab.name) with $(tab.s) stages and order $(tab.o):\n")
+    arr = convert(Array{Any}, to_array(tab))
+    arr[tab.s+1,1] = ""
+    pretty_table(io, arr,
+                    tf = tf_butcher_tableau,
+                    vlines = [1],
+                    body_hlines = [tab.s],
+                    body_hlines_format = ('─','┼','─','─'),
+                    equal_columns_width = true,
+                    noheader = true)
 end
