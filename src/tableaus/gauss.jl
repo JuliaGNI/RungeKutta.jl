@@ -4,11 +4,23 @@ using Polynomials
 using SpecialPolynomials
 
 
+@doc raw"""
+The Gauss nodes are given by the roots of the shifted Legendre polynomial
+$P_s (2x-1)$ with $s$ the number of stages.
+"""
 function get_gauss_nodes(s)
     p = zeros(BigFloat, s+1); p[end] = 1
     c = sort(real.(roots(convert(Polynomial, ShiftedLegendre(p)))))
 end
 
+@doc raw"""
+The Gauss weights are given by the following integrals
+```math
+b_i = \bigg( \frac{dP}{dx} (c_i) \bigg)^{-2} \int \limits_0^1 \bigg( \frac{P(x)}{x - c_i} \bigg)^2 dx ,
+```
+where $P(x)$ denotes the shifted Legendre polynomial
+$P(x) = P_s (2x-1)$ with $s$ the number of stages.
+"""
 function get_gauss_weights(s)
     c = get_gauss_nodes(s)
     p = zeros(BigFloat, s+1); p[end] = 1
