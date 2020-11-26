@@ -11,7 +11,7 @@ The s-stage Lobatto nodes are defined as the roots of the following polynomial o
 """
 function get_radau_nodes(s)
     if s == 1
-        @error "Lobatto nodes for one stage are not defined."
+        @error "Radau nodes for one stage are not defined."
     end
     D(k) = Polynomials.derivative(Polynomials.Polynomial(BigFloat[0, 1])^(k-1) * Polynomials.Polynomial(BigFloat[-1, 1])^k, k-1)
     c = sort(real.(Polynomials.roots(D(s))))
@@ -30,7 +30,7 @@ P_k (x) = \frac{1}{k! 2^k} \big( \frac{d^k}{dx^k} (x^2 - 1)^k \big) .
 """
 function get_radau_weights(s)
     if s == 1
-        @error "Lobatto weights for one stage are not defined."
+        @error "Radau weights for one stage are not defined."
     end
 
     c = get_radau_nodes(s)
@@ -47,7 +47,7 @@ The Lobatto IIIA coefficients are implicitly given by the so-called simplifying 
 """
 function get_radau_coefficients(s)
     if s == 1
-        @error "Lobatto IIIA coefficients for one stage are not defined."
+        @error "Radau IIA coefficients for one stage are not defined."
     end
 
     c = get_radau_nodes(s)
