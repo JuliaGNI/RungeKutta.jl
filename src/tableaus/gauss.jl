@@ -35,67 +35,18 @@ function get_gauss_weights(s)
     b = [ inti(i) / D(c[i])^2  for i in 1:s ]
 end
 
-function vandermonde_matrix_inverse(x::Vector{T}) where {T}
-    local n = length(x)
-    local L = zeros(T, n, n)
-    local U = Matrix{T}(I, n, n)
-
-    L[1,1] = 1
-    for i in 2:n
-        for j in 1:i
-            p = 1
-            for k in 1:i
-                if k ≠ j
-                    p *= (x[j] - x[k])
-                end
-            end
-            L[i,j] = 1/p
-        end
-    end
-
-    i = 1
-    for j in i+1:n
-        U[i,j] = - U[i,j-1] * x[j-1]
-    end
-
-    for i in 2:n
-        for j in i+1:n
-            U[i,j] = U[i-1,j-1] - U[i,j-1] * x[j-1]
-        end
-    end
-
-    U * L
+@doc raw"""
+The Gauss coefficients are implicitly given by the so-called simplifying assumption $C(s)$:
+```math
+\sum \limits_{j=1}^{s} a_{ij} c_{j}^{k-1} = \frac{c_i^k}{k}  \qquad i = 1 , \, ... , \, s , \; k = 1 , \, ... , \, s .
+```
+"""
+function get_gauss_coefficients(s)
+    solve_simplifying_assumption_c(get_gauss_nodes(s))
 end
 
 
-function TableauGauss(s::Int, T=Float64)
-
-    # order
-    o = 2s
-
-    # obtain Gauss-Legendre nodes and weights
-    b = get_gauss_weights(s)
-    c = get_gauss_nodes(s)
-
-    # create Lagrange polynomial
-    vdm = vandermonde_matrix_inverse(c)
-
-    # compute monomial basis functions and corresponding integrals
-    poly_ints = []
-    for i in 1:s
-        y = zeros(s)
-        y[i] = 1
-        mon = *(vdm, y)
-        push!(poly_ints, Polynomials.integrate(Polynomials.Polynomial(mon)))
-    end
-
-    # compute Runge-Kutta coefficients
-    a = zeros(s,s)
-    for i in 1:s
-        for j in 1:s
-            a[i,j] = poly_ints[j](c[i])
-        end
-    end
-
-    Tableau{T}(Symbol("Gauss", s), o, a, b, c)
+"Gauss tableau with s stages"
+function TableauGauss(s, T=Float64)
+    Tableau{T}(Symbol("Gauss($s)"), 2s, get_gauss_coefficients(s), get_gauss_weights(s), get_gauss_nodes(s))
 end
