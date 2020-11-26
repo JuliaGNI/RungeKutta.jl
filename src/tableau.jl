@@ -91,7 +91,7 @@ const tf_butcher_tableau = TextFormat(
 
 "Pretty-print Runge-Kutta tableau."
 function Base.show(io::IO, tab::Tableau)
-    print(io, "Runge-Kutta Tableau $(tab.name) with $(tab.s) stages and order $(tab.o):\n")
+    print(io, "\nRunge-Kutta Tableau $(tab.name) with $(tab.s) stages and order $(tab.o):\n")
     arr = convert(Array{Any}, to_array(tab))
     arr[tab.s+1,1] = ""
     pretty_table(io, arr,
