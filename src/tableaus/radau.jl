@@ -13,6 +13,7 @@ function get_radau_nodes(s)
     if s == 1
         @error "Radau nodes for one stage are not defined."
     end
+    
     D(k) = Polynomials.derivative(Polynomials.Polynomial(BigFloat[0, 1])^(k-1) * Polynomials.Polynomial(BigFloat[-1, 1])^k, k-1)
     c = sort(real.(Polynomials.roots(D(s))))
     c[end] = 1; c
