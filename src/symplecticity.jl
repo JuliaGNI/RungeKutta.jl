@@ -1,23 +1,17 @@
 
-function check_symplecticity(tab::Tableau{T}; atol=16*eps(T), rtol=16*eps(T)) where {T}
-    symplectic = falses(tab.s, tab.s)
-
-    for i in axes(tab.a, 1)
-        for j in axes(tab.a, 2)
-            symplectic[i,j] = isapprox(tab.b[i] * tab.a[i,j] + tab.b[j] * tab.a[j,i], tab.b[i] * tab.b[j], atol=atol, rtol=rtol)
-        end
-    end
-
-    symplectic
+function check_symplecticity(tab::Tableau{T}; atol=16eps(T), rtol=16eps(T)) where {T}
+    a, b = tab.a, tab.b
+    [isapprox(b[i] * a[i,j] + b[j] * a[j,i], b[i] * b[j]; atol=atol, rtol=rtol) for i in axes(a,1), j in axes(a,2)]
 end
 
-function issymplectic(tab::Tableau{T}; atol=16*eps(T), rtol=16*eps(T)) where {T}
-    all(check_symplecticity(tab; atol=atol, rtol=rtol))
+function issymplectic(tab::Tableau{T}; kwargs...) where {T}
+    all(check_symplecticity(tab; kwargs...))
 end
 
 
 function compute_symplecticity_error(tab::Tableau)
-    [tab.b[i] * tab.a[i,j] + tab.b[j] * tab.a[j,i] - tab.b[i] * tab.b[j] for i in axes(tab.a, 1), j in axes(tab.a,2)]
+    a, b = tab.a, tab.b
+    [b[i] * a[i,j] + b[j] * a[j,i] - b[i] * b[j] for i in axes(a,1), j in axes(a,2)]
 end
 
 
