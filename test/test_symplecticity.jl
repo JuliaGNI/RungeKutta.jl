@@ -1,6 +1,6 @@
 @testset "$(rpad("Symplecticity",80))" begin
 
-    for s in 1:5
+    for s in 1:10
         g = TableauGauss(s)
         g̃ = get_symplectic_conjugate_coefficients(g)
 
@@ -13,7 +13,7 @@
         @test issymplectic(g)
     end
 
-    for s in 2:5
+    for s in 2:10
         A = TableauLobattoIIIA(s)
         B = TableauLobattoIIIB(s)
         E = TableauLobattoIIIE(s)
