@@ -156,42 +156,42 @@ function get_lobatto_coefficients_f(s)
 end
 
 
-"Lobatto IIIA coefficients with s stages"
+"Lobatto IIIA tableau with s stages"
 function TableauLobattoIIIA(s, T=Float64)
     Tableau{T}(Symbol("LobattoIIIA($s)"), 2s-2, get_lobatto_coefficients_a(s), get_lobatto_weights(s), get_lobatto_nodes(s))
 end
 
-"Lobatto IIIB coefficients with s stages"
+"Lobatto IIIB tableau with s stages"
 function TableauLobattoIIIB(s, T=Float64)
     Tableau{T}(Symbol("LobattoIIIB($s)"), 2s-2, get_lobatto_coefficients_b(s), get_lobatto_weights(s), get_lobatto_nodes(s))
 end
 
-"Lobatto IIIC coefficients with s stages"
+"Lobatto IIIC tableau with s stages"
 function TableauLobattoIIIC(s, T=Float64)
     Tableau{T}(Symbol("LobattoIIIC($s)"), 2s-2, get_lobatto_coefficients_c(s), get_lobatto_weights(s), get_lobatto_nodes(s))
 end
 
-"Lobatto IIIC̄ coefficients with s stages"
+"Lobatto IIIC̄ tableau with s stages"
 function TableauLobattoIIIC̄(s, T=Float64)
     Tableau{T}(Symbol("LobattoIIIC̄($s)"), 2s-2, get_lobatto_coefficients_c̄(s), get_lobatto_weights(s), get_lobatto_nodes(s))
 end
 
-"Lobatto IIID coefficients with s stages"
+"Lobatto IIID tableau with s stages"
 function TableauLobattoIIID(s, T=Float64)
     Tableau{T}(Symbol("LobattoIIID($s)"), 2s-2, (get_lobatto_coefficients_c(s) .+ get_lobatto_coefficients_c̄(s)) ./ 2, get_lobatto_weights(s), get_lobatto_nodes(s))
 end
 
-"Lobatto IIIE coefficients with s stages"
+"Lobatto IIIE tableau with s stages"
 function TableauLobattoIIIE(s, T=Float64)
     Tableau{T}(Symbol("LobattoIIIE($s)"), 2s-2, (get_lobatto_coefficients_a(s) .+ get_lobatto_coefficients_b(s)) ./ 2, get_lobatto_weights(s), get_lobatto_nodes(s))
 end
 
-"Lobatto IIIF coefficients with s stages"
+"Lobatto IIIF tableau with s stages"
 function TableauLobattoIIIF(s, T=Float64)
     Tableau{T}(Symbol("LobattoIIIF($s)"), 2s, get_lobatto_coefficients_f(s), get_lobatto_weights(s), get_lobatto_nodes(s))
 end
 
-"Lobatto IIIG coefficients with s stages"
+"Lobatto IIIG tableau with s stages"
 function TableauLobattoIIIG(s, T=Float64)
     symplecticize(TableauLobattoIIIF(s, BigFloat); name=Symbol("LobattoIIIG($s)"), T=T)
 end
