@@ -6,8 +6,8 @@
 [![Coverage](https://codecov.io/gh/JuliaGNI/RungeKutta.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/JuliaGNI/RungeKutta.jl)
 
 This package collects Runge-Kutta tableaus and provides diagnostics to analyze them.
-Most of the functionality is extracted from [GeometricIntegrators.jl](https://github.com/JuliaGNI/GeometricIntegrators.jl).
-We provide algorithms for the computation of Gauss, Lobatto and Radau tableaus with arbitrary numbers of stages as well as tabulated tableaus for various explicit, diagonally and fully implicit methods.
+It implements algorithms for the computation of Gauss, Lobatto and Radau tableaus with arbitrary numbers of stages as well as tabulated coefficients for various explicit, diagonally implicit and fully implicit methods.
+All tableaus can be retrieved in arbitrary precision.
 
 ## Installation
 
