@@ -34,7 +34,7 @@ function get_lobatto_weights(s)
         @error "Lobatto weights for one stage are not defined."
     end
 
-    P(k,x) = Polynomials.derivative(Polynomials.Polynomial([-1, 0, 1])^k, k)(x) / factorial(k) / 2^k
+    P(k,x) = Polynomials.derivative(Polynomials.Polynomial(BigFloat[-1, 0, 1])^k, k)(x) / factorial(k) / 2^k
     c = get_lobatto_nodes(s)
     b = [ 1 / ( s*(s-1) * P(s-1, 2c[i] - 1)^2 ) for i in 1:s ]
 end
