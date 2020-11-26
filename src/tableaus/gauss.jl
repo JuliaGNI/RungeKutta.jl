@@ -25,10 +25,8 @@ end
 
 function vandermonde_matrix_inverse(x::Vector{T}) where {T}
     local n = length(x)
-
-    local L::Matrix{T} = zeros(T,n,n)
-    local U::Matrix{T} = Matrix{T}(I, n, n)
-    local V::Matrix{T}
+    local L = zeros(T, n, n)
+    local U = Matrix{T}(I, n, n)
 
     L[1,1] = 1
     for i in 2:n
@@ -54,7 +52,7 @@ function vandermonde_matrix_inverse(x::Vector{T}) where {T}
         end
     end
 
-    V = *(U,L)
+    U * L
 end
 
 
