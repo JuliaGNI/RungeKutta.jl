@@ -40,6 +40,15 @@ Base.isapprox(tab1::Tableau, tab2::Tableau; kwargs...) = (
  
 Base.isequal(tab1::Tableau{T1}, tab2::Tableau{T2}) where {T1,T2} = (tab1 == tab2 && T1 == T2 && tab1.name == tab2.name && typeof(tab1) == typeof(tab2))
 
+Base.eltype(::Tableau{T}) where {T} = T
+
+name(tab::Tableau) = tab.name
+order(tab::Tableau) = tab.o
+nstages(tab::Tableau) = tab.s
+coefficients(tab::Tableau) = tab.a
+weights(tab::Tableau) = tab.b
+nodes(tab::Tableau) = tab.c
+
 
 "Print Runge-Kutta coefficients."
 function Base.show(io::IO, tab::Tableau)
