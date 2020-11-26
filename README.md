@@ -23,7 +23,7 @@ After loading the Runge-Kutta module by
 ```julia
 julia> using RungeKutta
 ```
-a `Tableau` can be created by calling any one of the provided constructors, e.g.,
+a `Tableau` can be created by calling any one of the provided constructors, for example
 ```julia
 julia> TableauExplicitMidpoint()
 
@@ -37,9 +37,9 @@ Runge-Kutta Tableau explicit_midpoint with 2 stages and order 2:
 
 The `Tableau` type has the following fields
 - `name` is a descriptive name of the tableau,
-- `o` is the order of the method,
-- `s` is the number of stages,
-- `a` are the coefficients,
+- `o` the order of the method,
+- `s` the number of stages,
+- `a` the coefficients,
 - `b` the weights,
 - `c` the nodes.
 
