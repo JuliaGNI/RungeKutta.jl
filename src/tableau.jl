@@ -38,7 +38,7 @@ Base.isapprox(tab1::Tableau, tab2::Tableau; kwargs...) = (
                                          && isapprox(tab1.b, tab2.b; kwargs...)
                                          && isapprox(tab1.c, tab2.c; kwargs...))
  
-Base.isequal(tab1::Tableau{T1}, tab2::Tableau{T2}) where {T1,T2} = (tab1 == tab2 && T1 == T2 && typeof(tab1) == typeof(tab2))
+Base.isequal(tab1::Tableau{T1}, tab2::Tableau{T2}) where {T1,T2} = (tab1 == tab2 && T1 == T2 && tab1.name == tab2.name && typeof(tab1) == typeof(tab2))
 
 
 "Print Runge-Kutta coefficients."
