@@ -14,5 +14,61 @@ We provide algorithms for the computation of Gauss, Lobatto and Radau tableaus w
 
 *RungeKutta.jl* and all of its dependencies can be installed via the Julia REPL by typing 
 ```
-]add RungeKutta
+]add https://github.com/JuliaGNI/RungeKutta.jl
+```
+
+## Basic Usage
+
+After loading the Runge-Kutta module by
+```julia
+julia> using RungeKutta
+```
+a `Tableau` can be created by calling any one of the provided constructors, e.g.,
+```julia
+julia> TableauExplicitMidpoint()
+
+Runge-Kutta Tableau explicit_midpoint with 2 stages and order 2:
+
+ 0.0 │ 0.0  0.0
+ 0.5 │ 0.5  0.0
+─────┼──────────
+     │ 0.0  1.0
+```
+
+The `Tableau` type has the following fields
+- `name` is a descriptive name of the tableau,
+- `o` is the order of the method,
+- `s` is the number of stages,
+- `a` are the coefficients,
+- `b` the weights,
+- `c` the nodes.
+
+The following tableaus are implemented (prepend `Tableau` to the name to call the respective constructor):
+
+- *explicit*: ExplicitEuler/ForwardEuler, ExplicitMidpoint, Heun2, Heun3, Ralston2, Ralston3, Runge/Runge2, Kutta/Kutta3, RK4/RK416, RK438, SSPRK3
+
+- *diagonally implicit*: KraaijevangerSpijker, QinZhang, Crouzeix
+
+- *fully implicit*: ImplicitEuler/BackwardEuler, ImplicitMidpoint, CrankNicolson, SRK3
+
+In addition there exist functions to compute Gauss, Lobatto and Radau tableaus:
+
+- `TableauGauss(s)`
+
+- `TableauLobattoIIIA(s)`, `TableauLobattoIIIB(s)`, `TableauLobattoIIIC(s)`, `TableauLobattoIIIC̄(s)`, `TableauLobattoIIID(s)`, `TableauLobattoIIIE(s)`, `TableauLobattoIIIF(s)`, `TableauLobattoIIIG(s)`
+
+- `TableauRadauIIA(s)`
+
+## Custom Tableaus
+
+If required, it is straight-forward to create a custom tableau.
+The tableau of Heun's method, for example, is defined as follows:
+```julia
+a = [[0.0  0.0]
+     [1.0  0.0]]
+b =  [0.5, 0.5]
+c =  [0.0, 1.0]
+o = 2
+
+tab = Tableau(:heun, o, a, b, c)
 ```
