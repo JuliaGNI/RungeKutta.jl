@@ -31,22 +31,29 @@ module RungeKutta
 
     include("tableaus/dirk.jl")
 
-    export TableauCrouzeix
+    export TableauKraaijevangerSpijker,
+           TableauQinZhang,
+           TableauCrouzeix
 
     include("tableaus/erk.jl")
 
-    export TableauExplicitEuler,
+    export TableauExplicitEuler, TableauForwardEuler,
            TableauExplicitMidpoint, 
-           TableauHeun,
-           TableauRunge,
-           TableauKutta,
-           TableauERK416,
-           TableauERK438
+           TableauHeun2,
+           TableauHeun3,
+           TableauRalston2,
+           TableauRalston3,
+           TableauRunge, TableauRunge2,
+           TableauKutta, TableauKutta3,
+           TableauRK416, TableauRK4,
+           TableauRK438,
+           TableauSSPRK3
 
     include("tableaus/firk.jl")
 
-    export TableauImplicitEuler,
+    export TableauImplicitEuler, TableauBackwardEuler,
            TableauImplicitMidpoint,
+           TableauCrankNicolson,
            TableauSRK3
 
     include("tableaus/gauss.jl")

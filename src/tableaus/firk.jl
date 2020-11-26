@@ -1,5 +1,5 @@
 
-"Implicit Euler"
+"Tableau of one-stage, 1st order implicit (backward) Euler method"
 function TableauImplicitEuler(T=Float64)
     a = ones(BigFloat, 1, 1)
     b = ones(BigFloat, 1)
@@ -9,7 +9,9 @@ function TableauImplicitEuler(T=Float64)
     Tableau{T}(:implicit_euler, o, a, b, c)
 end
 
-"Implicit Midpoint"
+TableauBackwardEuler = TableauImplicitEuler
+
+"Tableau of two-stage, 2nd order implicit midpoint method"
 function TableauImplicitMidpoint(T=Float64)
     a = ones(BigFloat, 1, 1) ./ 2
     b = ones(BigFloat, 1)
@@ -19,7 +21,18 @@ function TableauImplicitMidpoint(T=Float64)
     Tableau{T}(:implicit_midpoint, o, a, b, c)
 end
 
-"Symmetric Runge-Kutta tableau with three stages."
+"Tableau of Crank-Nicolson two-stage, 2nd order method"
+function TableauCrankNicolson(T=Float64)
+    a = @big [[ 0      0    ]
+              [ 1//2   1//2 ]]
+    b = @big  [ 1//2,  1//2 ]
+    c = @big  [ 0,     1    ]
+    o = 2
+
+    Tableau{T}(:cranknicolson, o, a, b, c)
+end
+
+"Tableau of symmetric and symplectic three-stage, 4th order Runge-Kutta method"
 function TableauSRK3(T=Float64)
     a = @big [[ 5/36         2/9        5/36-√15/10 ]
               [ 5/36         2/9        5/36        ]
