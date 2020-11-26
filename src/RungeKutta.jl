@@ -17,7 +17,8 @@ module RungeKutta
 
     include("symmetry.jl")
     
-    export check_symmetry
+    export check_symmetry,
+           issymmetric
 
     include("symplecticity.jl")
     

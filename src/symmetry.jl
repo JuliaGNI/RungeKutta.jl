@@ -10,3 +10,7 @@ function check_symmetry(tab::Tableau{T}; atol=16*eps(T), rtol=16*eps(T)) where {
 
     symmetric
 end
+
+function issymmetric(tab::Tableau{T}; atol=16*eps(T), rtol=16*eps(T)) where {T}
+    all(check_symmetry(tab; atol=atol, rtol=rtol))
+end
