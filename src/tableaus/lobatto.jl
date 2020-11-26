@@ -1,6 +1,7 @@
 
-import LinearAlgebra
+import LinearAlgebra: factorial
 import Polynomials
+import Polynomials: Polynomial
 
 
 @doc raw"""
@@ -14,7 +15,7 @@ function get_lobatto_nodes(s)
         throw(ErrorException("Lobatto nodes for one stage are not defined."))
     end
 
-    D(k) = Polynomials.derivative(Polynomials.Polynomial(BigFloat[0, 1, -1])^(k-1), k-2)
+    D(k) = Polynomials.derivative(Polynomial(BigFloat[0, 1, -1])^(k-1), k-2)
     c = sort(real.(Polynomials.roots(D(s))))
     c[begin] = 0; c[end] = 1; c
 end
@@ -34,7 +35,7 @@ function get_lobatto_weights(s)
         throw(ErrorException("Lobatto weights for one stage are not defined."))
     end
 
-    P(k,x) = Polynomials.derivative(Polynomials.Polynomial(BigFloat[-1, 0, 1])^k, k)(x) / factorial(k) / 2^k
+    P(k,x) = Polynomials.derivative(Polynomial(BigFloat[-1, 0, 1])^k, k)(x) / factorial(k) / 2^k
     c = get_lobatto_nodes(s)
     b = [ 1 / ( s*(s-1) * P(s-1, 2c[i] - 1)^2 ) for i in 1:s ]
 end

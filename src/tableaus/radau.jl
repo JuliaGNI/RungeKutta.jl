@@ -1,6 +1,6 @@
 
-import LinearAlgebra
 import Polynomials
+import Polynomials: Polynomial
 
 
 @doc raw"""
@@ -14,7 +14,7 @@ function get_radau_nodes(s)
         throw(ErrorException("Radau nodes for one stage are not defined."))
     end
 
-    D(k) = Polynomials.derivative(Polynomials.Polynomial(BigFloat[0, 1])^(k-1) * Polynomials.Polynomial(BigFloat[-1, 1])^k, k-1)
+    D(k) = Polynomials.derivative(Polynomial(BigFloat[0, 1])^(k-1) * Polynomial(BigFloat[-1, 1])^k, k-1)
     c = sort(real.(Polynomials.roots(D(s))))
     c[end] = 1; c
 end

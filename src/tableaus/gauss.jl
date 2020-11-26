@@ -1,7 +1,7 @@
 
-using LinearAlgebra
-using Polynomials
-using SpecialPolynomials
+import Polynomials
+import Polynomials: Polynomial
+import SpecialPolynomials: ShiftedLegendre
 
 
 @doc raw"""
@@ -10,7 +10,7 @@ $P_s (2x-1)$ with $s$ the number of stages.
 """
 function get_gauss_nodes(s)
     p = zeros(BigFloat, s+1); p[end] = 1
-    c = sort(real.(roots(convert(Polynomial, ShiftedLegendre(p)))))
+    c = sort(real.(Polynomials.roots(convert(Polynomial, ShiftedLegendre(p)))))
 end
 
 @doc raw"""
