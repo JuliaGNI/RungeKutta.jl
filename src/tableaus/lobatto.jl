@@ -64,9 +64,6 @@ function get_lobatto_coefficients_b(s)
         throw(ErrorException("Lobatto IIIB coefficients for one stage are not defined."))
     end
 
-    b = get_lobatto_weights(s)
-    c = get_lobatto_nodes(s)
-
     solve_simplifying_assumption_d(get_lobatto_weights(s), get_lobatto_nodes(s))
 end
 
