@@ -1,4 +1,5 @@
 
+using Markdown
 using PrettyTables
 
 "Holds the tableau of a Runge-Kutta method."
@@ -106,7 +107,7 @@ end
 
 "Markdown-print Runge-Kutta tableau."
 function Base.show(io::IO, ::MIME"text/markdown", tab::Tableau)
-    print(io, "text/markdown", "\nRunge-Kutta Tableau $(tab.name) with $(tab.s) stages and order $(tab.o):\n")
+    show(io, "text/markdown", Markdown.parse("Runge-Kutta Tableau $(tab.name) with $(tab.s) stages and order $(tab.o):"))
 
     tab_arr = convert(Array{Any}, to_array(tab))
     tab_arr[tab.s+1,1] = ""
@@ -123,5 +124,5 @@ function Base.show(io::IO, ::MIME"text/markdown", tab::Tableau)
     tab_markdown = replace(tab_markdown, "\\begin{table}" => "```math")
     tab_markdown = replace(tab_markdown, "\\end{table}" => "```")
 
-    print(io, "text/markdown", "\n" * tab_markdown)
+    print(io, tab_markdown)
 end

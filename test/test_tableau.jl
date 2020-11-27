@@ -46,7 +46,7 @@ using RungeKutta: name, order, eachstage, nstages, coefficients, weights, nodes,
             @test tab1 == convert(Tableau, convert(Matrix{T}, tab1); name=tab1.name, o=tab1.o)
 
             @test startswith(repr(tab1), "\nRunge-Kutta Tableau")
-            @test startswith(repr(MIME("text/markdown"), tab1), "text/markdown\nRunge-Kutta Tableau")
+            @test startswith(repr(MIME("text/markdown"), tab1), "Runge-Kutta Tableau")
 
         end
     end
