@@ -103,3 +103,25 @@ function Base.show(io::IO, tab::Tableau)
                     equal_columns_width = true,
                     noheader = true)
 end
+
+"Markdown-print Runge-Kutta tableau."
+function Base.show(io::IO, ::MIME"text/markdown", tab::Tableau)
+    print(io, "text/markdown", "\nRunge-Kutta Tableau $(tab.name) with $(tab.s) stages and order $(tab.o):\n")
+
+    tab_arr = convert(Array{Any}, to_array(tab))
+    tab_arr[tab.s+1,1] = ""
+
+    strio = IOBuffer()
+    pretty_table(strio, tab_arr,
+                    backend = :latex,
+                    vlines = [1],
+                    hlines = [tab.s],
+                    noheader = true)
+    tab_latex = String(take!(strio))
+
+    tab_markdown = replace(tab_latex, "tabular" => "array")
+    tab_markdown = replace(tab_markdown, "\\begin{table}" => "```math")
+    tab_markdown = replace(tab_markdown, "\\end{table}" => "```")
+
+    print(io, "text/markdown", "\n" * tab_markdown)
+end
