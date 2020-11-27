@@ -16,6 +16,8 @@ jobs:
       - uses: julia-actions/setup-julia@v1
         with:
           version: '1'
+      - name: Set environment variables
+        run: echo "PYTHON=''" >> $GITHUB_ENV
       - name: Install dependencies
         run: |
           julia --project=docs -e '
@@ -31,7 +33,8 @@ jobs:
             using RungeKutta
             doctest(RungeKutta)'
       - name: Build and deploy Documentation
-        run: julia --project=docs docs/make.jl
+        run: julia --project make.jl
+        working-directory: docs
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DOCUMENTER_KEY: ${{ secrets.DOCUMENTER_KEY }}

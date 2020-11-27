@@ -1,4 +1,10 @@
+.ipynb_checkpoints
 *.jl.*.cov
 *.jl.cov
 *.jl.mem
 /docs/build/
+/docs/src/*.html
+/docs/src/gauss.md
+/docs/src/lobatto.md
+/docs/src/radauIA.md
+/docs/src/radauIIA.md
