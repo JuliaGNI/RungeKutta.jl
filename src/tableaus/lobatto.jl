@@ -10,12 +10,12 @@ The s-stage Lobatto nodes are defined as the roots of the following polynomial o
 \frac{d^{s-2}}{dx^{s-2}} \big( (x - x^2)^{s-1} \big) .
 ```
 """
-function get_lobatto_nodes(s)
+function get_lobatto_nodes(s, T=BigFloat)
     if s == 1
         throw(ErrorException("Lobatto nodes for one stage are not defined."))
     end
 
-    D(k) = Polynomials.derivative(Polynomial(BigFloat[0, 1, -1])^(k-1), k-2)
+    D(k) = Polynomials.derivative(Polynomial(T[0, 1, -1])^(k-1), k-2)
     c = sort(real.(Polynomials.roots(D(s))))
     c[begin] = 0; c[end] = 1; c
 end
@@ -30,13 +30,13 @@ where $P_k$ is the $k$th Legendre polynomial, given by
 P_k (x) = \frac{1}{k! 2^k} \big( \frac{d^k}{dx^k} (x^2 - 1)^k \big) .
 ```
 """
-function get_lobatto_weights(s)
+function get_lobatto_weights(s, T=BigFloat)
     if s == 1
         throw(ErrorException("Lobatto weights for one stage are not defined."))
     end
 
-    P(k,x) = Polynomials.derivative(Polynomial(BigFloat[-1, 0, 1])^k, k)(x) / factorial(k) / 2^k
-    c = get_lobatto_nodes(s)
+    P(k,x) = Polynomials.derivative(Polynomial(T[-1, 0, 1])^k, k)(x) / factorial(k) / 2^k
+    c = get_lobatto_nodes(s,T)
     b = [ 1 / ( s*(s-1) * P(s-1, 2c[i] - 1)^2 ) for i in 1:s ]
 end
 
@@ -46,11 +46,11 @@ The Lobatto IIIA coefficients are implicitly given by the so-called simplifying 
 \sum \limits_{j=1}^{s} a_{ij} c_{j}^{k-1} = \frac{c_i^k}{k}  \qquad i = 1 , \, ... , \, s , \; k = 1 , \, ... , \, s .
 ```
 """
-function get_lobatto_coefficients_a(s)
+function get_lobatto_coefficients_a(s, T=BigFloat)
     if s == 1
         throw(ErrorException("Lobatto IIIA coefficients for one stage are not defined."))
     end
-    solve_simplifying_assumption_c(get_lobatto_nodes(s))
+    solve_simplifying_assumption_c(get_lobatto_nodes(s,T))
 end
 
 @doc raw"""
@@ -59,12 +59,12 @@ The Lobatto IIIB coefficients are implicitly given by the so-called simplifying 
 \sum \limits_{i=1}^{s} b_i c_{i}^{k-1} a_{ij} = \frac{b_j}{k} ( 1 - c_j^k)  \qquad j = 1 , \, ... , \, s , \; k = 1 , \, ... , \, s .
 ```
 """
-function get_lobatto_coefficients_b(s)
+function get_lobatto_coefficients_b(s, T=BigFloat)
     if s == 1
         throw(ErrorException("Lobatto IIIB coefficients for one stage are not defined."))
     end
 
-    solve_simplifying_assumption_d(get_lobatto_weights(s), get_lobatto_nodes(s))
+    solve_simplifying_assumption_d(get_lobatto_weights(s,T), get_lobatto_nodes(s,T))
 end
 
 @doc raw"""
@@ -75,13 +75,13 @@ solving the so-called simplifying assumption $C(s-1)$, given by
 ```
 for $a_{i,j}$ with $i = 1, ..., s$ and $j = 2, ..., s$.
 """
-function get_lobatto_coefficients_c(s)
+function get_lobatto_coefficients_c(s, T=BigFloat)
     if s == 1
         throw(ErrorException("Lobatto IIIC coefficients for one stage are not defined."))
     end
 
-    b = get_lobatto_weights(s)
-    c = get_lobatto_nodes(s)
+    b = get_lobatto_weights(s,T)
+    c = get_lobatto_nodes(s,T)
     M = [ c[j]^(k-1) for k in 1:s-1, j in 2:s ]
     
     row(i) = begin
@@ -100,12 +100,12 @@ solving the so-called simplifying assumption $C(s-1)$, given by
 ```
 for $a_{i,j}$ with $i = 1, ..., s$ and $j = 1, ..., s-1$.
 """
-function get_lobatto_coefficients_c̄(s)
+function get_lobatto_coefficients_c̄(s, T=BigFloat)
     if s == 1
         throw(ErrorException("Lobatto IIIC̄ coefficients for one stage are not defined."))
     end
 
-    c = get_lobatto_nodes(s)
+    c = get_lobatto_nodes(s,T)
     M = [ c[j]^(k-1) for k in 1:s-1, j in 1:s-1 ]
     
     row(i) = begin
@@ -113,24 +113,24 @@ function get_lobatto_coefficients_c̄(s)
         M \ r
     end
     
-    hcat(vcat([row(i)' for i in 1:s]...), zeros(s))
+    hcat(vcat([row(i)' for i in 1:s]...), zeros(T,s))
 end
 
 
-function get_lobatto_coefficients_f(s)
+function get_lobatto_coefficients_f(s, T=BigFloat)
     if s == 1
         throw(ErrorException("Lobatto IIIF coefficients for one stage are not defined."))
     end
 
-    c = get_lobatto_nodes(s)
-    M = [ 1 / (k + j - 1) for k in big.(1:s), j in big.(1:s) ]
-    r = [ 1 / s / (s + k) for k in big.(1:s) ]
+    c = get_lobatto_nodes(s,T)
+    M = [ 1 / (k + j - 1) for k in T.(1:s), j in T.(1:s) ]
+    r = [ 1 / s / (s + k) for k in T.(1:s) ]
     α = M \ r
     
-    Vₛ = [ c[i]^(j-1) for i in big.(1:s), j in big.(1:s) ]
-    Aₛ = zeros(BigFloat, s, s)
-    for i in big.(2:s)
-       Aₛ[i,i-1] = 1 / (i-1)
+    Vₛ = [ c[i]^(j-1) for i in 1:s, j in 1:s ]
+    Aₛ = zeros(T, s, s)
+    for i in 2:s
+       Aₛ[i,i-1] = 1 / (T(i)-1)
     end
     Aₛ[:,s] = α
     

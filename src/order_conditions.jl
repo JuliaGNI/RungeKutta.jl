@@ -35,10 +35,10 @@ Compute the weights by solving the simplifying assumption $B(s)$:
 \sum \limits_{j=1}^{s} b_{j} c_{j}^{k-1} = \frac{1}{k}  \qquad k = 1 , \, ... , \, s .
 ```
 """
-function solve_simplifying_assumption_b(c)
+function solve_simplifying_assumption_b(c::AbstractVector{T}) where {T}
     s = length(c)
     M = [ c[j]^(k-1) for k in 1:s, j in 1:s ]
-    r = [ 1 / k for k in big.(1:s) ]
+    r = [ 1 / T(k) for k in 1:s ]
     M \ r
 end
 
@@ -48,7 +48,7 @@ Compute the coefficients by solving the simplifying assumption $C(s)$:
 \sum \limits_{j=1}^{s} a_{ij} c_{j}^{k-1} = \frac{c_i^k}{k}  \qquad i = 1 , \, ... , \, s , \; k = 1 , \, ... , \, s .
 ```
 """
-function solve_simplifying_assumption_c(c)
+function solve_simplifying_assumption_c(c::AbstractVector{T}) where {T}
     s = length(c)
     M = [ c[j]^(k-1) for k in 1:s, j in 1:s ]
     
@@ -57,7 +57,7 @@ function solve_simplifying_assumption_c(c)
         M \ r
     end
     
-    vcat([row(i)' for i in 1:s]...)
+    T.(vcat([row(i)' for i in 1:s]...))
 end
 
 @doc raw"""
@@ -66,7 +66,7 @@ Compute the coefficients by solving the simplifying assumption $D(s)$:
 \sum \limits_{i=1}^{s} b_i c_{i}^{k-1} a_{ij} = \frac{b_j}{k} ( 1 - c_j^k)  \qquad j = 1 , \, ... , \, s , \; k = 1 , \, ... , \, s .
 ```
 """
-function solve_simplifying_assumption_d(b,c)
+function solve_simplifying_assumption_d(b::AbstractVector{T}, c::AbstractVector{T}) where {T}
     @assert axes(b) == axes(c)
 
     s = length(c)
@@ -77,5 +77,5 @@ function solve_simplifying_assumption_d(b,c)
         M \ r
     end
     
-    hcat([row(j) for j in 1:s]...)
+    T.(hcat([row(j) for j in 1:s]...))
 end
