@@ -15,7 +15,7 @@ function get_radau_1_nodes(s, T=BigFloat)
     end
 
     D(k) = Polynomials.derivative(Polynomial(T[0, 1])^k * Polynomial(T[-1, 1])^(k-1), k-1)
-    c = sort(real.(Polynomials.roots(D(s))))
+    c = sort(T.(Polynomials.roots(D(s))))
     c[begin] = 0; c
 end
 
@@ -31,7 +31,7 @@ function get_radau_2_nodes(s, T=BigFloat)
     end
 
     D(k) = Polynomials.derivative(Polynomial(T[0, 1])^(k-1) * Polynomial(T[-1, 1])^k, k-1)
-    c = sort(real.(Polynomials.roots(D(s))))
+    c = sort(T.(Polynomials.roots(D(s))))
     c[end] = 1; c
 end
 

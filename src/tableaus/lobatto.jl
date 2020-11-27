@@ -16,7 +16,7 @@ function get_lobatto_nodes(s, T=BigFloat)
     end
 
     D(k) = Polynomials.derivative(Polynomial(T[0, 1, -1])^(k-1), k-2)
-    c = sort(real.(Polynomials.roots(D(s))))
+    c = sort(T.(Polynomials.roots(D(s))))
     c[begin] = 0; c[end] = 1; c
 end
 

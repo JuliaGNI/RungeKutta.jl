@@ -15,7 +15,7 @@ The Gauss nodes are given by the roots of the shifted Legendre polynomial
 $P_s (2x-1)$ with $s$ the number of stages.
 """
 function get_gauss_nodes(s, T=BigFloat)
-    T.(sort(real.(Polynomials.roots(convert(Polynomial, _ShiftedLegendre(s,T))))))
+    sort(T.(Polynomials.roots(convert(Polynomial, _ShiftedLegendre(s,T)))))
 end
 
 @doc raw"""
