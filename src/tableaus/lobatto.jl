@@ -46,7 +46,7 @@ The Lobatto IIIA coefficients are implicitly given by the so-called simplifying 
 \sum \limits_{j=1}^{s} a_{ij} c_{j}^{k-1} = \frac{c_i^k}{k}  \qquad i = 1 , \, ... , \, s , \; k = 1 , \, ... , \, s .
 ```
 """
-function get_lobatto_coefficients_a(s, T=BigFloat)
+function get_lobatto_a_coefficients(s, T=BigFloat)
     if s == 1
         throw(ErrorException("Lobatto IIIA coefficients for one stage are not defined."))
     end
@@ -59,7 +59,7 @@ The Lobatto IIIB coefficients are implicitly given by the so-called simplifying 
 \sum \limits_{i=1}^{s} b_i c_{i}^{k-1} a_{ij} = \frac{b_j}{k} ( 1 - c_j^k)  \qquad j = 1 , \, ... , \, s , \; k = 1 , \, ... , \, s .
 ```
 """
-function get_lobatto_coefficients_b(s, T=BigFloat)
+function get_lobatto_b_coefficients(s, T=BigFloat)
     if s == 1
         throw(ErrorException("Lobatto IIIB coefficients for one stage are not defined."))
     end
@@ -75,7 +75,7 @@ solving the so-called simplifying assumption $C(s-1)$, given by
 ```
 for $a_{i,j}$ with $i = 1, ..., s$ and $j = 2, ..., s$.
 """
-function get_lobatto_coefficients_c(s, T=BigFloat)
+function get_lobatto_c_coefficients(s, T=BigFloat)
     if s == 1
         throw(ErrorException("Lobatto IIIC coefficients for one stage are not defined."))
     end
@@ -100,7 +100,7 @@ solving the so-called simplifying assumption $C(s-1)$, given by
 ```
 for $a_{i,j}$ with $i = 1, ..., s$ and $j = 1, ..., s-1$.
 """
-function get_lobatto_coefficients_c̄(s, T=BigFloat)
+function get_lobatto_c̄_coefficients(s, T=BigFloat)
     if s == 1
         throw(ErrorException("Lobatto IIIC̄ coefficients for one stage are not defined."))
     end
@@ -116,8 +116,11 @@ function get_lobatto_coefficients_c̄(s, T=BigFloat)
     hcat(vcat([row(i)' for i in 1:s]...), zeros(T,s))
 end
 
+get_lobatto_d_coefficients(s, T=BigFloat) = (get_lobatto_c_coefficients(s,T) .+ get_lobatto_c̄_coefficients(s,T)) ./ 2
 
-function get_lobatto_coefficients_f(s, T=BigFloat)
+get_lobatto_e_coefficients(s, T=BigFloat) = (get_lobatto_a_coefficients(s,T) .+ get_lobatto_b_coefficients(s,T)) ./ 2
+
+function get_lobatto_f_coefficients(s, T=BigFloat)
     if s == 1
         throw(ErrorException("Lobatto IIIF coefficients for one stage are not defined."))
     end
@@ -137,43 +140,50 @@ function get_lobatto_coefficients_f(s, T=BigFloat)
     Vₛ * Aₛ * inv(Vₛ)
 end
 
+function get_lobatto_g_coefficients(s, T=BigFloat)
+    a = get_lobatto_f_coefficients(s,T)
+    b = get_lobatto_weights(s,T)
+    ā = get_symplectic_conjugate_coefficients(a, b)
+    return (a .+ ā) ./ 2
+end
+
 
 "Lobatto IIIA tableau with s stages"
 function TableauLobattoIIIA(s, T=Float64)
-    Tableau{T}(Symbol("LobattoIIIA($s)"), 2s-2, get_lobatto_coefficients_a(s), get_lobatto_weights(s), get_lobatto_nodes(s))
+    Tableau{T}(Symbol("LobattoIIIA($s)"), 2s-2, get_lobatto_a_coefficients(s), get_lobatto_weights(s), get_lobatto_nodes(s))
 end
 
 "Lobatto IIIB tableau with s stages"
 function TableauLobattoIIIB(s, T=Float64)
-    Tableau{T}(Symbol("LobattoIIIB($s)"), 2s-2, get_lobatto_coefficients_b(s), get_lobatto_weights(s), get_lobatto_nodes(s))
+    Tableau{T}(Symbol("LobattoIIIB($s)"), 2s-2, get_lobatto_b_coefficients(s), get_lobatto_weights(s), get_lobatto_nodes(s))
 end
 
 "Lobatto IIIC tableau with s stages"
 function TableauLobattoIIIC(s, T=Float64)
-    Tableau{T}(Symbol("LobattoIIIC($s)"), 2s-2, get_lobatto_coefficients_c(s), get_lobatto_weights(s), get_lobatto_nodes(s))
+    Tableau{T}(Symbol("LobattoIIIC($s)"), 2s-2, get_lobatto_c_coefficients(s), get_lobatto_weights(s), get_lobatto_nodes(s))
 end
 
 "Lobatto IIIC̄ tableau with s stages"
 function TableauLobattoIIIC̄(s, T=Float64)
-    Tableau{T}(Symbol("LobattoIIIC̄($s)"), 2s-2, get_lobatto_coefficients_c̄(s), get_lobatto_weights(s), get_lobatto_nodes(s))
+    Tableau{T}(Symbol("LobattoIIIC̄($s)"), 2s-2, get_lobatto_c̄_coefficients(s), get_lobatto_weights(s), get_lobatto_nodes(s))
 end
 
 "Lobatto IIID tableau with s stages"
 function TableauLobattoIIID(s, T=Float64)
-    Tableau{T}(Symbol("LobattoIIID($s)"), 2s-2, (get_lobatto_coefficients_c(s) .+ get_lobatto_coefficients_c̄(s)) ./ 2, get_lobatto_weights(s), get_lobatto_nodes(s))
+    Tableau{T}(Symbol("LobattoIIID($s)"), 2s-2, get_lobatto_d_coefficients(s), get_lobatto_weights(s), get_lobatto_nodes(s))
 end
 
 "Lobatto IIIE tableau with s stages"
 function TableauLobattoIIIE(s, T=Float64)
-    Tableau{T}(Symbol("LobattoIIIE($s)"), 2s-2, (get_lobatto_coefficients_a(s) .+ get_lobatto_coefficients_b(s)) ./ 2, get_lobatto_weights(s), get_lobatto_nodes(s))
+    Tableau{T}(Symbol("LobattoIIIE($s)"), 2s-2, get_lobatto_e_coefficients(s), get_lobatto_weights(s), get_lobatto_nodes(s))
 end
 
 "Lobatto IIIF tableau with s stages"
 function TableauLobattoIIIF(s, T=Float64)
-    Tableau{T}(Symbol("LobattoIIIF($s)"), 2s, get_lobatto_coefficients_f(s), get_lobatto_weights(s), get_lobatto_nodes(s))
+    Tableau{T}(Symbol("LobattoIIIF($s)"), 2s,   get_lobatto_f_coefficients(s), get_lobatto_weights(s), get_lobatto_nodes(s))
 end
 
 "Lobatto IIIG tableau with s stages"
 function TableauLobattoIIIG(s, T=Float64)
-    symplecticize(TableauLobattoIIIF(s, BigFloat); name=Symbol("LobattoIIIG($s)"), T=T)
+    Tableau{T}(Symbol("LobattoIIIG($s)"), 2s,   get_lobatto_g_coefficients(s), get_lobatto_weights(s), get_lobatto_nodes(s))
 end

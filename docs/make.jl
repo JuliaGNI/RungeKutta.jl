@@ -12,9 +12,10 @@ module RungeKuttaWeaves
     using RungeKutta: to_array
     using RungeKutta: get_gauss_nodes, get_gauss_weights, get_gauss_coefficients
     using RungeKutta: get_lobatto_nodes, get_lobatto_weights,
-                      get_lobatto_coefficients_a, get_lobatto_coefficients_b,
-                      get_lobatto_coefficients_c, get_lobatto_coefficients_c̄,
-                      get_lobatto_coefficients_f
+                      get_lobatto_a_coefficients, get_lobatto_b_coefficients,
+                      get_lobatto_c_coefficients, get_lobatto_c̄_coefficients,
+                      get_lobatto_d_coefficients, get_lobatto_e_coefficients,
+                      get_lobatto_f_coefficients, get_lobatto_g_coefficients
     using RungeKutta: get_radau_1_nodes, get_radau_1_weights, get_radau_1_coefficients,
                       get_radau_2_nodes, get_radau_2_weights, get_radau_2_coefficients
     using SymPy

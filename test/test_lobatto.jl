@@ -1,17 +1,21 @@
 using RungeKutta: get_lobatto_nodes, get_lobatto_weights,
-                  get_lobatto_coefficients_a, get_lobatto_coefficients_b,
-                  get_lobatto_coefficients_c, get_lobatto_coefficients_c̄,
-                  get_lobatto_coefficients_f
+                  get_lobatto_a_coefficients, get_lobatto_b_coefficients,
+                  get_lobatto_c_coefficients, get_lobatto_c̄_coefficients,
+                  get_lobatto_d_coefficients, get_lobatto_e_coefficients,
+                  get_lobatto_f_coefficients, get_lobatto_g_coefficients
 
 @testset "$(rpad("Lobatto Tableaus",80))" begin
 
     @test_throws ErrorException get_lobatto_nodes(1)
     @test_throws ErrorException get_lobatto_weights(1)
-    @test_throws ErrorException get_lobatto_coefficients_a(1)
-    @test_throws ErrorException get_lobatto_coefficients_b(1)
-    @test_throws ErrorException get_lobatto_coefficients_c(1)
-    @test_throws ErrorException get_lobatto_coefficients_c̄(1)
-    @test_throws ErrorException get_lobatto_coefficients_f(1)
+    @test_throws ErrorException get_lobatto_a_coefficients(1)
+    @test_throws ErrorException get_lobatto_b_coefficients(1)
+    @test_throws ErrorException get_lobatto_c_coefficients(1)
+    @test_throws ErrorException get_lobatto_c̄_coefficients(1)
+    @test_throws ErrorException get_lobatto_d_coefficients(1)
+    @test_throws ErrorException get_lobatto_e_coefficients(1)
+    @test_throws ErrorException get_lobatto_f_coefficients(1)
+    @test_throws ErrorException get_lobatto_g_coefficients(1)
 
 
     function _getTableauLobattoIIIA2(T=Float64)
