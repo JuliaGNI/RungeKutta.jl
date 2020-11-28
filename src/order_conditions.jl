@@ -57,7 +57,7 @@ function solve_simplifying_assumption_c(c::AbstractVector{T}) where {T}
         M \ r
     end
     
-    T.(vcat([row(i)' for i in 1:s]...))
+    vcat([transpose(row(i)) for i in 1:s]...)
 end
 
 @doc raw"""
@@ -77,5 +77,5 @@ function solve_simplifying_assumption_d(b::AbstractVector{T}, c::AbstractVector{
         M \ r
     end
     
-    T.(hcat([row(j) for j in 1:s]...))
+    hcat([row(j) for j in 1:s]...)
 end

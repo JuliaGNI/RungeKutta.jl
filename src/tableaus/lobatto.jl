@@ -89,7 +89,7 @@ function get_lobatto_c_coefficients(s, T=BigFloat)
         M \ r
     end
     
-    T.(hcat(b[1] * ones(T,s), vcat([row(i)' for i in 1:s]...)))
+    hcat(b[1] * ones(T,s), vcat([transpose(row(i)) for i in 1:s]...))
 end
 
 @doc raw"""
@@ -113,7 +113,7 @@ function get_lobatto_c̄_coefficients(s, T=BigFloat)
         M \ r
     end
     
-    T.(hcat(vcat([row(i)' for i in 1:s]...), zeros(T,s)))
+    hcat(vcat([transpose(row(i)) for i in 1:s]...), zeros(T,s))
 end
 
 get_lobatto_d_coefficients(s, T=BigFloat) = (get_lobatto_c_coefficients(s,T) .+ get_lobatto_c̄_coefficients(s,T)) ./ 2
