@@ -15,7 +15,7 @@ function compute_symplecticity_error(tab::Tableau)
 end
 
 
-function get_symplectic_conjugate_coefficients!(a::AbstractMatrix{T}, b::AbstractVector{T}, a̅::AbstractMatrix{T}) where {T}
+function get_symplectic_conjugate_coefficients!(a̅::AbstractMatrix{T}, a::AbstractMatrix{T}, b::AbstractVector{T}) where {T}
     @assert size(a) == size(a̅)
     @assert length(b) == size(a,1) == size(a,2)
 
@@ -28,7 +28,7 @@ function get_symplectic_conjugate_coefficients!(a::AbstractMatrix{T}, b::Abstrac
     return a̅
 end
 
-get_symplectic_conjugate_coefficients(a, b) = get_symplectic_conjugate_coefficients!(a, b, zero(a))
+get_symplectic_conjugate_coefficients(a, b) = get_symplectic_conjugate_coefficients!(zero(a), a, b)
 get_symplectic_conjugate_coefficients(tab::Tableau) = Tableau(tab.name, tab.s, get_symplectic_conjugate_coefficients(tab.a, tab.b), tab.b, tab.c)
 
 
