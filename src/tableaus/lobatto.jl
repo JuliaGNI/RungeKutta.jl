@@ -85,11 +85,11 @@ function get_lobatto_c_coefficients(s, T=BigFloat)
     M = [ c[j]^(k-1) for k in 1:s-1, j in 2:s ]
     
     row(i) = begin
-        r = [ c[i]^k / k - c[1]^(k-1) * b[1] for k in 1:s-1 ]
+        r = [ c[i]^k / T(k) - c[1]^(k-1) * b[1] for k in 1:s-1 ]
         M \ r
     end
     
-    hcat(b[1] * ones(s), vcat([row(i)' for i in 1:s]...))
+    T.(hcat(b[1] * ones(T,s), vcat([row(i)' for i in 1:s]...)))
 end
 
 @doc raw"""
@@ -109,11 +109,11 @@ function get_lobatto_c̄_coefficients(s, T=BigFloat)
     M = [ c[j]^(k-1) for k in 1:s-1, j in 1:s-1 ]
     
     row(i) = begin
-        r = [ c[i]^k / k for k in 1:s-1 ]
+        r = [ c[i]^k / T(k) for k in 1:s-1 ]
         M \ r
     end
     
-    hcat(vcat([row(i)' for i in 1:s]...), zeros(T,s))
+    T.(hcat(vcat([row(i)' for i in 1:s]...), zeros(T,s)))
 end
 
 get_lobatto_d_coefficients(s, T=BigFloat) = (get_lobatto_c_coefficients(s,T) .+ get_lobatto_c̄_coefficients(s,T)) ./ 2
@@ -126,14 +126,14 @@ function get_lobatto_f_coefficients(s, T=BigFloat)
     end
 
     c = get_lobatto_nodes(s,T)
-    M = [ 1 / (k + j - 1) for k in T.(1:s), j in T.(1:s) ]
-    r = [ 1 / s / (s + k) for k in T.(1:s) ]
+    M = [ 1 / T(k + j - 1) for k in 1:s, j in 1:s ]
+    r = [ 1 / T(s) / T(s + k) for k in 1:s ]
     α = M \ r
     
     Vₛ = [ c[i]^(j-1) for i in 1:s, j in 1:s ]
     Aₛ = zeros(T, s, s)
     for i in 2:s
-       Aₛ[i,i-1] = 1 / (T(i)-1)
+       Aₛ[i,i-1] = 1 / T(i-1)
     end
     Aₛ[:,s] = α
     
@@ -143,7 +143,7 @@ end
 function get_lobatto_g_coefficients(s, T=BigFloat)
     a = get_lobatto_f_coefficients(s,T)
     b = get_lobatto_weights(s,T)
-    ā = get_symplectic_conjugate_coefficients(a, b)
+    ā = get_symplectic_conjugate_coefficients(a,b)
     return (a .+ ā) ./ 2
 end
 
