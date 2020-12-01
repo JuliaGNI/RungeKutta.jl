@@ -59,6 +59,11 @@ end
 
 @testset "$(rpad("DIRK Tableaus",80))" begin
 
+    @test typeof(TableauCrankNicolson()) <: Tableau
+    @test order(TableauCrankNicolson()) == 2
+    @test nstages(TableauCrankNicolson()) == 2
+    @test issymmetric(TableauCrankNicolson())
+
     @test typeof(TableauKraaijevangerSpijker()) <: Tableau
     @test order(TableauKraaijevangerSpijker()) == 2
     @test nstages(TableauKraaijevangerSpijker()) == 2
@@ -94,10 +99,5 @@ end
     @test nstages(TableauSRK3()) == 3
     @test issymplectic(TableauSRK3())
     @test issymmetric(TableauSRK3())
-
-    @test typeof(TableauCrankNicolson()) <: Tableau
-    @test order(TableauCrankNicolson()) == 2
-    @test nstages(TableauCrankNicolson()) == 2
-    @test issymmetric(TableauCrankNicolson())
     
 end

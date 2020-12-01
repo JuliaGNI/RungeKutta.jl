@@ -21,17 +21,6 @@ function TableauImplicitMidpoint(T=Float64)
     Tableau{T}(:implicit_midpoint, o, a, b, c)
 end
 
-"Tableau of Crank-Nicolson two-stage, 2nd order method"
-function TableauCrankNicolson(T=Float64)
-    a = @big [[ 0      0    ]
-              [ 1//2   1//2 ]]
-    b = @big  [ 1//2,  1//2 ]
-    c = @big  [ 0,     1    ]
-    o = 2
-
-    Tableau{T}(:cranknicolson, o, a, b, c)
-end
-
 "Tableau of symmetric and symplectic three-stage, 4th order Runge-Kutta method"
 function TableauSRK3(T=Float64)
     a = @big [[ 5/36         2/9        5/36-√15/10 ]

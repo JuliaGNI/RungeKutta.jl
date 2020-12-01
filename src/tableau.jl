@@ -1,4 +1,5 @@
 
+using LinearAlgebra
 using Markdown
 using PrettyTables
 
@@ -75,6 +76,11 @@ eachstage(tab::Tableau) = 1:tab.s
 coefficients(tab::Tableau) = tab.a
 weights(tab::Tableau) = tab.b
 nodes(tab::Tableau) = tab.c
+
+isexplicit(tab::Tableau) = istrilstrict(tab.a)
+isimplicit(tab::Tableau) = !isexplicit(tab)
+isdiagnonallyimplicit(tab::Tableau) = tab.s != 1 && !istrilstrict(tab.a) && istril(tab.a)
+isfullyimplicit(tab::Tableau) = (tab.s == 1 && tab.a[1,1] != 0) || (!istrilstrict(tab.a) && !istril(tab.a))
 
 
 const tf_butcher_tableau = TextFormat(

@@ -51,4 +51,42 @@ using RungeKutta: name, order, eachstage, nstages, coefficients, weights, nodes,
         end
     end
 
+
+    @test  isexplicit(TableauExplicitEuler())
+    @test !isimplicit(TableauExplicitEuler())
+    @test !isdiagnonallyimplicit(TableauExplicitEuler())
+    @test !isfullyimplicit(TableauExplicitEuler())
+    
+    @test  isexplicit(TableauExplicitMidpoint())
+    @test !isimplicit(TableauExplicitMidpoint())
+    @test !isdiagnonallyimplicit(TableauExplicitMidpoint())
+    @test !isfullyimplicit(TableauExplicitMidpoint())
+
+    @test  isexplicit(TableauRK4())
+    @test !isimplicit(TableauRK4())
+    @test !isdiagnonallyimplicit(TableauRK4())
+    @test !isfullyimplicit(TableauRK4())
+    
+
+    @test !isexplicit(TableauCrankNicolson())
+    @test  isimplicit(TableauCrankNicolson())
+    @test  isdiagnonallyimplicit(TableauCrankNicolson())
+    @test !isfullyimplicit(TableauCrankNicolson())
+    
+    @test !isexplicit(TableauCrouzeix())
+    @test  isimplicit(TableauCrouzeix())
+    @test  isdiagnonallyimplicit(TableauCrouzeix())
+    @test !isfullyimplicit(TableauCrouzeix())
+    
+
+    @test !isexplicit(TableauImplicitEuler())
+    @test  isimplicit(TableauImplicitEuler())
+    @test !isdiagnonallyimplicit(TableauImplicitEuler())
+    @test  isfullyimplicit(TableauImplicitEuler())
+
+    @test !isexplicit(TableauImplicitMidpoint())
+    @test  isimplicit(TableauImplicitMidpoint())
+    @test !isdiagnonallyimplicit(TableauImplicitMidpoint())
+    @test  isfullyimplicit(TableauImplicitMidpoint())
+
 end

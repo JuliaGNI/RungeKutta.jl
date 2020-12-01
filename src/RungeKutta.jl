@@ -4,7 +4,11 @@ module RungeKutta
 
     include("tableau.jl")
 
-    export Tableau
+    export Tableau,
+           isexplicit,
+           isimplicit,
+           isdiagnonallyimplicit,
+           isfullyimplicit
 
     include("order_conditions.jl")
 

@@ -1,4 +1,15 @@
 
+"Tableau of Crank-Nicolson two-stage, 2nd order method"
+function TableauCrankNicolson(T=Float64)
+    a = @big [[ 0      0    ]
+              [ 1//2   1//2 ]]
+    b = @big  [ 1//2,  1//2 ]
+    c = @big  [ 0,     1    ]
+    o = 2
+
+    Tableau{T}(:cranknicolson, o, a, b, c)
+end
+
 "Tableau of Kraaijevanger and Spijker's two-stage, 2nd order method"
 function TableauKraaijevangerSpijker(T=Float64)
     a = @big [[ 1//2   0    ]
