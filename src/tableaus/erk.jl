@@ -136,5 +136,5 @@ function TableauSSPRK3(T=Float64)
     c = @big  [ 0,     1,     1//2 ]
     o = 3
 
-    Tableau{T}(:kutta, o, a, b, c)
+    Tableau{T}(:ssprk3, o, a, b, c)
 end
