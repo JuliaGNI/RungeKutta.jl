@@ -2,6 +2,7 @@
 
 [![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://juliagni.github.io/RungeKutta.jl/stable)
 [![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://juliagni.github.io/RungeKutta.jl/dev)
+[![PkgEval Status](https://juliaci.github.io/NanosoldierReports/pkgeval_badges/R/RungeKutta.svg)](https://juliaci.github.io/NanosoldierReports/pkgeval_badges/R/RungeKutta.html)
 [![Build Status](https://github.com/JuliaGNI/RungeKutta.jl/workflows/CI/badge.svg)](https://github.com/JuliaGNI/RungeKutta.jl/actions)
 [![Coverage](https://codecov.io/gh/JuliaGNI/RungeKutta.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/JuliaGNI/RungeKutta.jl)
 [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.4294923.svg)](https://doi.org/10.5281/zenodo.4294923)
