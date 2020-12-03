@@ -76,4 +76,35 @@ module RungeKutta
 
     export TableauRadauIA, TableauRadauIIA
 
+    TableauList = (
+       # explicit
+       explicit_euler    = TableauExplicitEuler,
+       forward_euler     = TableauForwardEuler,
+       explicit_midpoint = TableauExplicitMidpoint, 
+       heun2             = TableauHeun2,
+       heun3             = TableauHeun3,
+       ralston2          = TableauRalston2,
+       ralston3          = TableauRalston3,
+       runge             = TableauRunge,
+       runge2            = TableauRunge2,
+       kutta             = TableauKutta,
+       kutta3            = TableauKutta3,
+       rk416             = TableauRK416,
+       rk4               = TableauRK4,
+       rk438             = TableauRK438,
+       ssprk3            = TableauSSPRK3,
+       # dirk
+       kraaijevanger_spijker = TableauKraaijevangerSpijker,
+       qin_zhang             = TableauQinZhang,
+       crouzeix              = TableauCrouzeix,
+       # firk
+       implicit_euler    = TableauImplicitEuler,
+       backward_euler    = TableauBackwardEuler,
+       implicit_midpoint = TableauImplicitMidpoint,
+       crank_nicolson    = TableauCrankNicolson,
+       srk3              = TableauSRK3,
+    )
+
+    export TableauList
+
 end
