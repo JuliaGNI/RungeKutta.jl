@@ -3,7 +3,20 @@ using LinearAlgebra
 using Markdown
 using PrettyTables
 
-"Holds the tableau of a Runge-Kutta method."
+@doc raw"""
+Holds the tableau of a Runge-Kutta method.
+
+Parameters:
+ * `T`: datatype of coefficient arrays
+
+Fields:
+ * `name`: symbolic name of the tableau
+ * `o`: order of the method
+ * `s`: number of stages
+ * `a`: coefficients $a_{ij}$ with $ 1 \le i,j \le s$
+ * `b`: weights $b_{i}$  with $ 1 \le i \le s$
+ * `c`: nodes $c_{i}$  with $ 1 \le i \le s$
+"""
 struct Tableau{T}
     name::Symbol
     o::Int
