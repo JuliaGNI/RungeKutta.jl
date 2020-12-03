@@ -1,7 +1,9 @@
 using RungeKutta
 using Documenter
+using DocumenterCitations
 using Weave
 
+bib = CitationBibliography("RungeKutta.bib")
 
 module RungeKuttaWeaves
     using Markdown
@@ -67,7 +69,7 @@ weave("src/lobatto.jmd",
          mod = RungeKuttaWeaves)
 
 
-makedocs(;
+makedocs(bib;
     modules=[RungeKutta],
     authors="Michael Kraus",
     repo="https://github.com/JuliaGNI/RungeKutta.jl/blob/{commit}{path}#L{line}",
@@ -87,6 +89,7 @@ makedocs(;
         "Tableau" => "tableau.md",
         "Diagnostics" => "diagnostics.md",
         "Library" => "library.md",
+        "Bibliography" => "bibliography.md",
     ],
 )
 
