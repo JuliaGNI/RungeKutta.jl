@@ -56,11 +56,11 @@ The following tableaus are implemented (prepend `Tableau` to the name to call th
 
 In addition there exist functions to compute Gauss, Lobatto and Radau tableaus with an arbitrary number of stages s:
 
-- `TableauGauss(s)`
+- [`TableauGauss(s)`](@ref)
 
-- `TableauLobattoIIIA(s)`, `TableauLobattoIIIB(s)`, `TableauLobattoIIIC(s)`, `TableauLobattoIIIC̄(s)`, `TableauLobattoIIID(s)`, `TableauLobattoIIIE(s)`, `TableauLobattoIIIF(s)`, `TableauLobattoIIIG(s)`
+- [`TableauLobattoIIIA(s)`](@ref), [`TableauLobattoIIIB(s)`](@ref), [`TableauLobattoIIIC(s)`](@ref), [`TableauLobattoIIIC̄(s)`](@ref), [`TableauLobattoIIID(s)`](@ref), [`TableauLobattoIIIE(s)`](@ref), [`TableauLobattoIIIF(s)`](@ref), [`TableauLobattoIIIG(s)`](@ref)
 
-- `TableauRadauIA(s)`, `TableauRadauIIA(s)`
+- [`TableauRadauIA(s)`](@ref), [`TableauRadauIIA(s)`](@ref)
 
 All constructors take an optional type argument `T`, as in `TableauExplicitMidpoint(T)` or `TableauGauss(s,T)`. The default type is `Float64`, but it can be set to other number types if needed, e.g., to `Float32` for single precision or to the `Dec128` type from [DecFP.jl](https://github.com/JuliaMath/DecFP.jl) for quadruple precision.
 Internally, all tableaus are computed using `BigFloat`, providing high-accuracy coefficients as they are required for simulations in quadruple or higher precision. The internal precision can be set via `setprecision(40)`, cf. the [Julia Manual](https://docs.julialang.org/en/v1/) on [Arbitrary Precision Arithmetic](https://docs.julialang.org/en/v1/manual/integers-and-floating-point-numbers/#Arbitrary-Precision-Arithmetic).
