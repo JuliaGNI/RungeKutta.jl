@@ -17,7 +17,7 @@ import RungeKutta: @big, _big, istriustrict, istrilstrict
     @test x == z
 
 
-    for n in 2:5
+    for n in 1:5
         A = zeros(n,n)
         B = zeros(n,n)
 
