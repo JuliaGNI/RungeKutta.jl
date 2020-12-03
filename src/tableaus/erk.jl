@@ -9,6 +9,7 @@ function TableauExplicitEuler(T=Float64)
     Tableau{T}(:explicit_euler, o, a, b, c)
 end
 
+"Alias for [`TableauExplicitEuler`](@ref)"
 TableauForwardEuler = TableauExplicitEuler
 
 "Tableau of explicit two-stage, 2nd order midpoint method"
@@ -79,6 +80,7 @@ function TableauRunge(T=Float64)
     Tableau{T}(:runge, o, a, b, c)
 end
 
+"Alias for [`TableauRunge`](@ref)"
 TableauRunge2 = TableauRunge
 
 "Tableau of Kutta's three-stage, 3rd order method"
@@ -93,6 +95,7 @@ function TableauKutta(T=Float64)
     Tableau{T}(:kutta, o, a, b, c)
 end
 
+"Alias for [`TableauKutta`](@ref)"
 TableauKutta3 = TableauKutta
 
 "Tableau of explicit Runge-Kutta method of order four (1/6 rule)"
@@ -108,6 +111,7 @@ function TableauRK416(T=Float64)
     Tableau{T}(:erk4, o, a, b, c)
 end
 
+"Alias for [`TableauRK416`](@ref)"
 TableauRK4 = TableauRK416
 
 "Tableau of explicit Runge-Kutta method of order four (3/8 rule)"

@@ -9,6 +9,7 @@ function TableauImplicitEuler(T=Float64)
     Tableau{T}(:implicit_euler, o, a, b, c)
 end
 
+"Alias for [`TableauImplicitEuler`](@ref)"
 TableauBackwardEuler = TableauImplicitEuler
 
 "Tableau of two-stage, 2nd order implicit midpoint method"

@@ -88,7 +88,7 @@ The coefficients of the Gauß, Lobatto and Radau methods are computed on-the-fly
 
 | Function                                    | Method                      | Order   |
 |:--------------------------------------------|:----------------------------|:--------|
-| [`TableauGLRK(s, T=Float64)`](@ref)         | Gauß-Legendre with s stages | $2s$    |
+| [`TableauGauss(s, T=Float64)`](@ref)        | Gauß with s stages          | $2s$    |
 | [`TableauLobattoIIIA(s, T=Float64)`](@ref)  | Lobatto IIIA with s stages  | $2s-2$  |
 | [`TableauLobattoIIIB(s, T=Float64)`](@ref)  | Lobatto IIIB with s stages  | $2s-2$  |
 | [`TableauLobattoIIIC(s, T=Float64)`](@ref)  | Lobatto IIIC with s stages  | $2s-2$  |
