@@ -9,7 +9,7 @@
 
 This package collects Runge-Kutta tableaus and provides diagnostics to analyze them.
 It implements algorithms for the computation of Gauss, Lobatto and Radau tableaus with arbitrary numbers of stages as well as tabulated coefficients for various explicit, diagonally implicit and fully implicit methods.
-All tableaus can be retrieved in arbitrary precision.
+All tableaus can be retrieved in arbitrary precision or symbolically.
 
 ## Installation
 
