@@ -11,7 +11,7 @@ PrettyTables = "08abe8d2-0d0c-5749-adfa-8a2ac140af0d"
 SpecialPolynomials = "a25cea48-d430-424a-8ee7-0d3ad3742e9e"
 
 [compat]
-Polynomials = "1"
+Polynomials = "^1.1.13"
 PrettyTables = "0.10"
 SpecialPolynomials = "0.1"
 julia = "^1.4"
