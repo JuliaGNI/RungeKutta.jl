@@ -4,7 +4,7 @@
 
 ```julia; echo=false; results="raw"
 for s in 2:3
-    show(stdout, "text/markdown", Tableau(Symbol("LobattoIIIA($s)"), 2s-2, get_lobatto_a_coefficients(s, Sym), get_lobatto_weights(s, Sym), get_lobatto_nodes(s, Sym)))
+    show(stdout, "text/markdown", Tableau(Symbol("LobattoIIIA($s)"), 2s-2, get_lobatto_a_coefficients(Sym, s), get_lobatto_weights(Sym, s), get_lobatto_nodes(Sym, s)))
 end
 ```
 
@@ -12,7 +12,7 @@ end
 
 ```julia; echo=false; results="raw"
 for s in 2:3
-    show(stdout, "text/markdown", Tableau(Symbol("LobattoIIIB($s)"), 2s-2, get_lobatto_b_coefficients(s, Sym), get_lobatto_weights(s, Sym), get_lobatto_nodes(s, Sym)))
+    show(stdout, "text/markdown", Tableau(Symbol("LobattoIIIB($s)"), 2s-2, get_lobatto_b_coefficients(Sym, s), get_lobatto_weights(Sym, s), get_lobatto_nodes(Sym, s)))
 end
 ```
 
@@ -20,7 +20,7 @@ end
 
 ```julia; echo=false; results="raw"
 for s in 2:3
-    show(stdout, "text/markdown", Tableau(Symbol("LobattoIIIC($s)"), 2s-2, get_lobatto_c_coefficients(s, Sym), get_lobatto_weights(s, Sym), get_lobatto_nodes(s, Sym)))
+    show(stdout, "text/markdown", Tableau(Symbol("LobattoIIIC($s)"), 2s-2, get_lobatto_c_coefficients(Sym, s), get_lobatto_weights(Sym, s), get_lobatto_nodes(Sym, s)))
 end
 ```
 
@@ -28,7 +28,7 @@ end
 
 ```julia; echo=false; results="raw"
 for s in 2:3
-    show(stdout, "text/markdown", Tableau(Symbol("LobattoIIIC̄($s)"), 2s-2, get_lobatto_c̄_coefficients(s, Sym), get_lobatto_weights(s, Sym), get_lobatto_nodes(s, Sym)))
+    show(stdout, "text/markdown", Tableau(Symbol("LobattoIIIC̄($s)"), 2s-2, get_lobatto_c̄_coefficients(Sym, s), get_lobatto_weights(Sym, s), get_lobatto_nodes(Sym, s)))
 end
 ```
 
@@ -36,7 +36,7 @@ end
 
 ```julia; echo=false; results="raw"
 for s in 2:3
-    show(stdout, "text/markdown", Tableau(Symbol("LobattoIIID($s)"), 2s-2, get_lobatto_d_coefficients(s, Sym), get_lobatto_weights(s, Sym), get_lobatto_nodes(s, Sym)))
+    show(stdout, "text/markdown", Tableau(Symbol("LobattoIIID($s)"), 2s-2, get_lobatto_d_coefficients(Sym, s), get_lobatto_weights(Sym, s), get_lobatto_nodes(Sym, s)))
 end
 ```
 
@@ -44,7 +44,7 @@ end
 
 ```julia; echo=false; results="raw"
 for s in 2:3
-    show(stdout, "text/markdown", Tableau(Symbol("LobattoIIIE($s)"), 2s-2, get_lobatto_e_coefficients(s, Sym), get_lobatto_weights(s, Sym), get_lobatto_nodes(s, Sym)))
+    show(stdout, "text/markdown", Tableau(Symbol("LobattoIIIE($s)"), 2s-2, get_lobatto_e_coefficients(Sym, s), get_lobatto_weights(Sym, s), get_lobatto_nodes(Sym, s)))
 end
 ```
 
@@ -52,7 +52,7 @@ end
 
 ```julia; echo=false; results="raw"
 for s in 2:3
-    show(stdout, "text/markdown", Tableau(Symbol("LobattoIIIF($s)"), 2s,   get_lobatto_f_coefficients(s, Sym), get_lobatto_weights(s, Sym), get_lobatto_nodes(s, Sym)))
+    show(stdout, "text/markdown", Tableau(Symbol("LobattoIIIF($s)"), 2s,   get_lobatto_f_coefficients(Sym, s), get_lobatto_weights(Sym, s), get_lobatto_nodes(Sym, s)))
 end
 ```
 
@@ -60,7 +60,7 @@ end
 
 ```julia; echo=false; results="raw"
 for s in 2:3
-    show(stdout, "text/markdown", Tableau(Symbol("LobattoIIIG($s)"), 2s,   get_lobatto_g_coefficients(s, Sym), get_lobatto_weights(s, Sym), get_lobatto_nodes(s, Sym)))
+    show(stdout, "text/markdown", Tableau(Symbol("LobattoIIIG($s)"), 2s,   get_lobatto_g_coefficients(Sym, s), get_lobatto_weights(Sym, s), get_lobatto_nodes(Sym, s)))
 end
 ```
 

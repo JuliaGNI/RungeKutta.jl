@@ -81,24 +81,26 @@ RungeKutta.jl provides tabulated coefficients for various explicit and implicit 
 | [`TableauImplicitMidpoint`](@ref)                              | 2      | 2     |
 | [`TableauSRK3`](@ref)                                          | 3      | 4     |
 
+All constructors take an optional type argument, defaulting to `Float64`.
+
 
 ## Gauß, Lobatto and Radau Methods
 
 The coefficients of the Gauß, Lobatto and Radau methods are computed on-the-fly by the following constructors:
 
-| Function                                    | Method                      | Order   |
-|:--------------------------------------------|:----------------------------|:--------|
-| [`TableauGauss(s, T=Float64)`](@ref)        | Gauß with s stages          | $2s$    |
-| [`TableauLobattoIIIA(s, T=Float64)`](@ref)  | Lobatto IIIA with s stages  | $2s-2$  |
-| [`TableauLobattoIIIB(s, T=Float64)`](@ref)  | Lobatto IIIB with s stages  | $2s-2$  |
-| [`TableauLobattoIIIC(s, T=Float64)`](@ref)  | Lobatto IIIC with s stages  | $2s-2$  |
-| [`TableauLobattoIIIC̄(s, T=Float64)`](@ref)  | Lobatto IIIC̄ with s stages  | $2s-2$  |
-| [`TableauLobattoIIID(s, T=Float64)`](@ref)  | Lobatto IIID with s stages  | $2s-2$  |
-| [`TableauLobattoIIIE(s, T=Float64)`](@ref)  | Lobatto IIIE with s stages  | $2s-2$  |
-| [`TableauLobattoIIIF(s, T=Float64)`](@ref)  | Lobatto IIIF with s stages  | $2s$    |
-| [`TableauLobattoIIIG(s, T=Float64)`](@ref)  | Lobatto IIIG with s stages  | $2s$    |
-| [`TableauRadauIA(s, T=Float64)`](@ref)      | Radau IA with s stages      | $2s-1$  |
-| [`TableauRadauIIA(s, T=Float64)`](@ref)     | Radau IIA with s stages     | $2s-1$  |
+| Function                            | Method                      | Order   |
+|:------------------------------------|:----------------------------|:--------|
+| [`TableauGauss(T, s)`](@ref)        | Gauß with s stages          | $2s$    |
+| [`TableauLobattoIIIA(T, s)`](@ref)  | Lobatto IIIA with s stages  | $2s-2$  |
+| [`TableauLobattoIIIB(T, s)`](@ref)  | Lobatto IIIB with s stages  | $2s-2$  |
+| [`TableauLobattoIIIC(T, s)`](@ref)  | Lobatto IIIC with s stages  | $2s-2$  |
+| [`TableauLobattoIIIC̄(T, s)`](@ref)  | Lobatto IIIC̄ with s stages  | $2s-2$  |
+| [`TableauLobattoIIID(T, s)`](@ref)  | Lobatto IIID with s stages  | $2s-2$  |
+| [`TableauLobattoIIIE(T, s)`](@ref)  | Lobatto IIIE with s stages  | $2s-2$  |
+| [`TableauLobattoIIIF(T, s)`](@ref)  | Lobatto IIIF with s stages  | $2s$    |
+| [`TableauLobattoIIIG(T, s)`](@ref)  | Lobatto IIIG with s stages  | $2s$    |
+| [`TableauRadauIA(T, s)`](@ref)      | Radau IA with s stages      | $2s-1$  |
+| [`TableauRadauIIA(T, s)`](@ref)     | Radau IIA with s stages     | $2s-1$  |
 
-The first argument `s` refers to the number of stages ($s \ge 1$ for Gauß and $s \ge 2$ for all other methods).
-The second argument specifies the number type of the coefficients. Internally, all coefficients are computed using `BigFloat` and then converted to the requested number type, defaulting to `Float64`.
+The first argument specifies the number type of the coefficients. Internally, all coefficients are computed using `BigFloat` and then converted to the requested number type, defaulting to `Float64`.
+The second argument `s` refers to the number of stages ($s \ge 1$ for Gauß and $s \ge 2$ for all other methods). The type specifier can also be ommitted.
