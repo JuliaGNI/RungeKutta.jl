@@ -17,7 +17,7 @@ All tableaus can be retrieved in arbitrary precision.
 
 *RungeKutta.jl* and all of its dependencies can be installed via the Julia REPL by typing 
 ```julia
-]add https://github.com/JuliaGNI/RungeKutta.jl
+]add RungeKutta
 ```
 
 ## Basic Usage
