@@ -88,3 +88,18 @@ Currently, diagnostic functions for checking symmetry, symplecticity and the so-
 * `satisfies_simplifying_assumption_d(tab, σ=tab.s)`
 
 This list is expected to grow in the near future.
+
+
+## References
+
+If you use RungeKutta.jl in your work, please consider citing it by
+
+```
+@misc{Kraus:2020:RungeKutta,
+  title={RungeKutta.jl: Runge-Kutta Methods in Julia},
+  author={Kraus, Michael},
+  year={2020},
+  howpublished={\url{https://github.com/JuliaGNI/RungeKutta.jl}},
+  doi={10.5281/zenodo.4294923}
+}
+```
