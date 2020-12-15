@@ -1,7 +1,5 @@
 
 import LinearAlgebra: factorial
-import Polynomials
-import Polynomials: Polynomial
 
 
 @doc raw"""

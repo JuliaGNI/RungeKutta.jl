@@ -1,8 +1,4 @@
 
-import Polynomials
-import Polynomials: Polynomial
-
-
 @doc raw"""
 The s-stage Radau IA nodes are defined as the roots of the following polynomial of degree $s$:
 ```math

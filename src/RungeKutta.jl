@@ -1,5 +1,9 @@
 module RungeKutta
 
+    import GenericLinearAlgebra
+    import Polynomials
+    import Polynomials: Polynomial
+
     include("utils.jl")
 
     include("tableau.jl")

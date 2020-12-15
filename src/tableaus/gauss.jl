@@ -1,6 +1,4 @@
 
-import Polynomials
-import Polynomials: Polynomial
 import SpecialPolynomials: ShiftedLegendre
 
 

@@ -1,7 +1,9 @@
 
-using LinearAlgebra
 using Markdown
 using PrettyTables
+
+import LinearAlgebra: istril
+
 
 @doc raw"""
 Holds the tableau of a Runge-Kutta method.
