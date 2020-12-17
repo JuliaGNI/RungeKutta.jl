@@ -14,6 +14,23 @@ macro big(x)
 end
 
 
+"Legendre polynomial P_s(x) of degree s defined on the interval [-1..+1]."
+function _legendre(j::Int, x::T) where {T}
+    if j <= 0
+        return one(T)
+    elseif j == 1
+        return x
+    else
+        return ( (2j-1) * _legendre(j-1, x) * x - (j-1) * _legendre(j-2, x) ) / j
+    end
+end
+
+"Legendre polynomial of degree s shifted to the interval [0..1], i.e., P_s(2x-1)."
+function _shifted_legendre(s, T=BigFloat)
+    _legendre(s, Polynomial(T[-1, 2]))
+end
+
+
 function istriustrict(A::AbstractMatrix)
     m, n = size(A)
     if m == n == 1

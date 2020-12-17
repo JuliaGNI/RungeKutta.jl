@@ -1,19 +1,10 @@
 
-import SpecialPolynomials: ShiftedLegendre
-
-
-function _ShiftedLegendre(::Type{T}, s) where {T}
-    p = vcat([zero(T) for _ in 1:s], one(T))
-    ShiftedLegendre(p)
-end
-
-
 @doc raw"""
 The Gauss nodes are given by the roots of the shifted Legendre polynomial
 $P_s (2x-1)$ with $s$ the number of stages.
 """
 function get_gauss_nodes(::Type{T}, s) where {T}
-    sort(T.(Polynomials.roots(convert(Polynomial, _ShiftedLegendre(T,s)))))
+    sort(T.(Polynomials.roots(_shifted_legendre(s,T))))
 end
 
 get_gauss_nodes(s) = get_gauss_nodes(BigFloat, s)
@@ -29,7 +20,7 @@ $P(x) = P_s (2x-1)$ with $s$ the number of stages.
 """
 function get_gauss_weights(::Type{T}, s) where {T}
     c = get_gauss_nodes(T,s)
-    P = convert(Polynomial, _ShiftedLegendre(T,s))
+    P = _shifted_legendre(s,T)
     D = Polynomials.derivative(P)
     
     inti(i) = begin
