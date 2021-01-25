@@ -22,7 +22,14 @@ function TableauImplicitMidpoint(::Type{T}=Float64) where {T}
     Tableau{T}(:implicit_midpoint, o, a, b, c)
 end
 
-"Tableau of symmetric and symplectic three-stage, 4th order Runge-Kutta method"
+"""
+Tableau of symmetric and symplectic three-stage, 4th order Runge-Kutta method
+
+Reference: Shan Zhao and Guo-Wei Wei.
+           A unified discontinuous Galerkin framework for time integration.
+           Mathematical Methods in the Applied Sciences, Volume 37, Issue 7, Pages 1042-1071, 2014.
+           doi: 10.1002/mma.2863.
+"""
 function TableauSRK3(::Type{T}=Float64) where {T}
     a = @big [[ 5/36         2/9        5/36-√15/10 ]
               [ 5/36         2/9        5/36        ]
