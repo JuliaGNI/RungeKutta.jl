@@ -1,6 +1,6 @@
 
 "Tableau of one-stage, 1st order explicit (forward) Euler method"
-function TableauExplicitEuler(::Type{T}) where {T}
+function TableauExplicitEuler(::Type{T}=Float64) where {T}
     a = zeros(BigFloat, 1, 1)
     b = ones(BigFloat, 1)
     c = zeros(BigFloat, 1)
@@ -9,13 +9,11 @@ function TableauExplicitEuler(::Type{T}) where {T}
     Tableau{T}(:explicit_euler, o, a, b, c)
 end
 
-TableauExplicitEuler() = TableauExplicitEuler(Float64)
-
 "Alias for [`TableauExplicitEuler`](@ref)"
 TableauForwardEuler = TableauExplicitEuler
 
 "Tableau of explicit two-stage, 2nd order midpoint method"
-function TableauExplicitMidpoint(::Type{T}) where {T}
+function TableauExplicitMidpoint(::Type{T}=Float64) where {T}
     a = @big [[ 0     0    ]
               [ 1//2  0    ]]
     b = @big  [ 0,    1    ]
@@ -25,10 +23,8 @@ function TableauExplicitMidpoint(::Type{T}) where {T}
     Tableau{T}(:explicit_midpoint, o, a, b, c)
 end
 
-TableauExplicitMidpoint() = TableauExplicitMidpoint(Float64)
-
 "Tableau of Heun's two-stage, 2nd order method"
-function TableauHeun2(::Type{T}) where {T}
+function TableauHeun2(::Type{T}=Float64) where {T}
     a = @big [[ 0      0    ]
               [ 1      0    ]]
     b = @big  [ 1//2,  1//2 ]
@@ -38,10 +34,9 @@ function TableauHeun2(::Type{T}) where {T}
     Tableau{T}(:heun2, o, a, b, c)
 end
 
-TableauHeun2() = TableauHeun2(Float64)
 
 "Tableau of Heun's three-stage, 3rd order method"
-function TableauHeun3(::Type{T}) where {T}
+function TableauHeun3(::Type{T}=Float64) where {T}
     a = @big [[ 0      0      0    ]
               [ 1//3   0      0    ]
               [ 0      2//3   0    ]]
@@ -52,10 +47,8 @@ function TableauHeun3(::Type{T}) where {T}
     Tableau{T}(:heun3, o, a, b, c)
 end
 
-TableauHeun3() = TableauHeun3(Float64)
-
 "Tableau of Ralston's two-stage, 2nd order method"
-function TableauRalston2(::Type{T}) where {T}
+function TableauRalston2(::Type{T}=Float64) where {T}
     a = @big [[ 0      0    ]
               [ 2//3   0    ]]
     b = @big  [ 1//4,  3//4 ]
@@ -65,10 +58,8 @@ function TableauRalston2(::Type{T}) where {T}
     Tableau{T}(:ralston2, o, a, b, c)
 end
 
-TableauRalston2() = TableauRalston2(Float64)
-
 "Tableau of Ralston's three-stage, 3rd order method"
-function TableauRalston3(::Type{T}) where {T}
+function TableauRalston3(::Type{T}=Float64) where {T}
     a = @big [[ 0      0      0    ]
               [ 1//2   0      0    ]
               [ 0      3//4   0    ]]
@@ -79,10 +70,8 @@ function TableauRalston3(::Type{T}) where {T}
     Tableau{T}(:ralston3, o, a, b, c)
 end
 
-TableauRalston3() = TableauRalston3(Float64)
-
 "Tableau of Runge's two-stage, 2nd order method"
-function TableauRunge(::Type{T}) where {T}
+function TableauRunge(::Type{T}=Float64) where {T}
     a = @big [[ 0      0    ]
               [ 1      0    ]]
     b = @big  [ 1//2,  1//2 ]
@@ -92,13 +81,11 @@ function TableauRunge(::Type{T}) where {T}
     Tableau{T}(:runge, o, a, b, c)
 end
 
-TableauRunge() = TableauRunge(Float64)
-
 "Alias for [`TableauRunge`](@ref)"
 TableauRunge2 = TableauRunge
 
 "Tableau of Kutta's three-stage, 3rd order method"
-function TableauKutta(::Type{T}) where {T}
+function TableauKutta(::Type{T}=Float64) where {T}
     a = @big [[ 0      0      0    ]
               [ 1//2   0      0    ]
               [-1      2      0    ]]
@@ -109,13 +96,11 @@ function TableauKutta(::Type{T}) where {T}
     Tableau{T}(:kutta, o, a, b, c)
 end
 
-TableauKutta() = TableauKutta(Float64)
-
 "Alias for [`TableauKutta`](@ref)"
 TableauKutta3 = TableauKutta
 
 "Tableau of explicit Runge-Kutta method of order four (1/6 rule)"
-function TableauRK416(::Type{T}) where {T}
+function TableauRK416(::Type{T}=Float64) where {T}
     a = @big [[ 0      0      0      0    ]
               [ 1//2   0      0      0    ]
               [ 0      1//2   0      0    ]
@@ -127,13 +112,11 @@ function TableauRK416(::Type{T}) where {T}
     Tableau{T}(:erk4, o, a, b, c)
 end
 
-TableauRK416() = TableauRK416(Float64)
-
 "Alias for [`TableauRK416`](@ref)"
 TableauRK4 = TableauRK416
 
 "Tableau of explicit Runge-Kutta method of order four (3/8 rule)"
-function TableauRK438(::Type{T}) where {T}
+function TableauRK438(::Type{T}=Float64) where {T}
     a = @big [[ 0      0      0      0    ]
               [ 1//3   0      0      0    ]
               [-1//3   1      0      0    ]
@@ -145,10 +128,8 @@ function TableauRK438(::Type{T}) where {T}
     Tableau{T}(:erk438, o, a, b, c)
 end
 
-TableauRK438() = TableauRK438(Float64)
-
 "Tableau of 3rd order Strong Stability Preserving method with three stages"
-function TableauSSPRK3(::Type{T}) where {T}
+function TableauSSPRK3(::Type{T}=Float64) where {T}
     a = @big [[ 0      0      0    ]
               [ 1      0      0    ]
               [ 1//4   1//4   0    ]]
@@ -158,5 +139,3 @@ function TableauSSPRK3(::Type{T}) where {T}
 
     Tableau{T}(:ssprk3, o, a, b, c)
 end
-
-TableauSSPRK3() = TableauSSPRK3(Float64)
