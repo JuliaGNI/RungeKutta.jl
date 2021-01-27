@@ -34,7 +34,7 @@ end
 function istriustrict(A::AbstractMatrix)
     m, n = size(A)
     if m == n == 1
-        if A[1,1] != 0
+        if A[1,1] ≠ 0
             return false
         end
     else
@@ -50,7 +50,7 @@ end
 function istrilstrict(A::AbstractMatrix)
     m, n = size(A)
     if m == n == 1
-        if A[1,1] != 0
+        if A[1,1] ≠ 0
             return false
         end
     else
