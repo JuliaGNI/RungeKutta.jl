@@ -1,4 +1,5 @@
 
+using DelimitedFiles
 using Markdown
 using PrettyTables
 
@@ -100,6 +101,78 @@ function to_array(tab::Tableau{T}) where {T}
     arr[s+1, 2:s+1] .= tab.b
     arr[1:s, 2:s+1] .= tab.a
     return arr
+end
+
+"Read Runge-Kutta tableau from file."
+function from_file(dir::AbstractString, name::AbstractString)
+    file = string(dir, "/", name, ".tsv")
+
+    # Reads and parse Tableau metadata from file
+    f = open(file, "r")
+    header = readline(f)
+    close(f)
+
+    if header[1] == '#'
+        header = split(header[2:end])
+    else
+        header = ()
+    end
+
+    if length(header) ≥ 1
+        o = Base.parse(Int, header[1])
+    else
+        o = 0
+    end
+
+    if length(header) ≥ 2
+        s = Base.parse(Int, header[2])
+    else
+        s = 0
+    end
+
+    if length(header) ≥ 3
+        T = Core.eval(Main, Meta.parse(header[3]))
+    else
+        T = Float64
+    end
+
+
+    # TODO Read data in original format (e.g., Rational).
+    #      For this we need to save tableaus as jld or hdf5.
+    # tab_array = readdlm(file, T)
+    tab_array = readdlm(file, comments=true)
+
+    if s == 0
+        s = size(tab_array, 1) - 1
+    end
+
+    @assert s == size(tab_array, 1) - 1 == size(tab_array, 2) - 1
+
+    @info("Reading Runge-Kutta tableau $(name) with $(s) stages and order $(o) from file\n$(file)")
+
+    from_array(tab_array, Symbol(name), o)
+end
+
+"Write Runge-Kutta tableau to file."
+function to_file(dir::AbstractString, tab::Tableau{T}) where {T}
+    # tab_array = zeros(T, S+1, S+1)
+    # tab_array[1:S, 2:S+1] = tab.a
+    # tab_array[S+1, 2:S+1] = tab.b
+    # tab_array[1:S, 1] = tab.c
+    # tab_array[S+1, 1] = tab.order
+
+    tab_array = to_array(tab)
+    header = string("# ", tab.o, " ", tab.s, " ", T, "\n")
+    file   = string(dir, "/", tab.name, ".tsv")
+
+    @info("Writing Runge-Kutta tableau $(tab.name) with $(tab.s) stages and order $(tab.o) to file\n$(file)")
+
+    f = open(file, "w")
+    write(f, header)
+    writedlm(f, float(tab_array))
+    close(f)
+
+    # TODO Write data in original format (e.g., Rational).
 end
 
 Base.convert(::Type{Tableau}, x::AbstractMatrix; name::Symbol=:nonamespecified, o::Int=0) = from_array(x, name, o)

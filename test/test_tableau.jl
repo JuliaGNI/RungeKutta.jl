@@ -1,4 +1,4 @@
-using RungeKutta: name, order, eachstage, nstages, coefficients, weights, nodes, to_array, from_array
+using RungeKutta: name, order, eachstage, nstages, coefficients, weights, nodes, to_array, from_array, to_file, from_file
 
 @testset "$(rpad("Tableau",80))" begin
 
@@ -70,6 +70,17 @@ using RungeKutta: name, order, eachstage, nstages, coefficients, weights, nodes,
         @test tab2.â == T2.(tab1.a .- tab2.a)
         @test tab2.b̂ == T2.(tab1.b .- tab2.b)
         @test tab2.ĉ == T2.(tab1.c .- tab2.c)
+
+        tmp = mktempdir()
+        to_file(tmp, tab2)
+        tabf = from_file(tmp, "Test")
+        rm(tmp, recursive=true)
+
+        @test tabf.o == tab2.o
+        @test tabf.s == tab2.s
+        @test tabf.a == tab2.a
+        @test tabf.b == tab2.b
+        @test tabf.c == tab2.c
 
     end
 
