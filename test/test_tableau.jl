@@ -19,12 +19,10 @@ using RungeKutta: name, order, eachstage, nstages, coefficients, weights, nodes,
 
             @test tab1 ≈ tab2 ≈ tab3 ≈ tab4
             @test tab1 == tab2 == tab3 == tab4
-            @test tab1 === tab2 === tab3 === tab4
             @test hash(tab1) == hash(tab2) == hash(tab3) == hash(tab4)
 
             @test tab1 ≈ tabϵ
             @test tab1 != tabϵ
-            @test tab1 !== tabϵ
             @test hash(tab1) != hash(tabϵ)
 
             @test isequal(tab1, tab2)
