@@ -23,14 +23,32 @@ struct Tableau{T}
     name::Symbol
     o::Int
     s::Int
+
     a::Matrix{T}
     b::Vector{T}
     c::Vector{T}
 
+    â::Matrix{T}
+    b̂::Vector{T}
+    ĉ::Vector{T}
+
     function Tableau{T}(name,o,s,a,b,c) where {T}
         @assert s > 0 "Number of stages must be > 0"
         @assert s == size(a,1) == size(a,2) == length(b) == length(c)
-        new(name,o,s,a,b,c)
+
+        ã = convert(Matrix{T}, a)
+        b̃ = convert(Vector{T}, b)
+        c̃ = convert(Vector{T}, c)
+
+        â = similar(ã)
+        b̂ = similar(b̃)
+        ĉ = similar(c̃)
+
+        â .= a .- ã
+        b̂ .= b .- b̃
+        ĉ .= c .- c̃
+
+        new(name,o,s,ã,b̃,c̃,â,b̂,ĉ)
     end
 
     function Tableau{T}(name,o,a,b,c) where {T}
@@ -39,16 +57,19 @@ struct Tableau{T}
 end
 
 Tableau(name::Symbol, o::Int, s::Int, a::AbstractMatrix{T}, b::AbstractVector{T}, c::AbstractVector{T}) where {T} = Tableau{T}(name,o,s,a,b,c)
-Tableau(name::Symbol, o::Int, a::AbstractMatrix{T}, b::AbstractVector{T}, c::AbstractVector{T}) where {T} = Tableau{T}(name,o,length(c),a,b,c)
+Tableau(name::Symbol, o::Int, a::AbstractMatrix{T}, b::AbstractVector{T}, c::AbstractVector{T}) where {T} = Tableau{T}(name,o,a,b,c)
 
 
-Base.hash(tab::Tableau, h::UInt) = hash(tab.o, hash(tab.s, hash(tab.a, hash(tab.b, hash(tab.c, hash(:Tableau, h))))))
+Base.hash(tab::Tableau, h::UInt) = hash(tab.o, hash(tab.s, hash(tab.a, hash(tab.b, hash(tab.c, hash(tab.â, hash(tab.b̂, hash(tab.ĉ, hash(:Tableau, h)))))))))
 
 Base.:(==)(tab1::Tableau, tab2::Tableau) = (tab1.o == tab2.o
                                          && tab1.s == tab2.s
                                          && tab1.a == tab2.a
                                          && tab1.b == tab2.b
-                                         && tab1.c == tab2.c)
+                                         && tab1.c == tab2.c
+                                         && tab1.â == tab2.â
+                                         && tab1.b̂ == tab2.b̂
+                                         && tab1.ĉ == tab2.ĉ)
 
 Base.isapprox(tab1::Tableau, tab2::Tableau; kwargs...) = (
                                             tab1.o == tab2.o

@@ -40,6 +40,14 @@ using RungeKutta: name, order, eachstage, nstages, coefficients, weights, nodes,
             @test weights(tab1) == b
             @test nodes(tab1) == c
 
+            @test tab1.a == tab2.a == tab3.a == tab4.a == a
+            @test tab1.b == tab2.b == tab3.b == tab4.b == b
+            @test tab1.c == tab2.c == tab3.c == tab4.c == c
+
+            @test tab1.â == tab2.â == tab3.â == tab4.â == zero(a)
+            @test tab1.b̂ == tab2.b̂ == tab3.b̂ == tab4.b̂ == zero(b)
+            @test tab1.ĉ == tab2.ĉ == tab3.ĉ == tab4.ĉ == zero(c)
+            
             @test tab1 == from_array(to_array(tab1), tab1.name, tab1.o)
             @test tab1 == convert(Tableau, convert(Matrix{T}, tab1); name=tab1.name, o=tab1.o)
 
@@ -47,6 +55,22 @@ using RungeKutta: name, order, eachstage, nstages, coefficients, weights, nodes,
             @test startswith(repr(MIME("text/markdown"), tab1), "Runge-Kutta Tableau")
 
         end
+
+
+        T1 = BigFloat
+        T2 = Float64
+
+        a = rand(T1,s,s)
+        b = rand(T1,s)
+        c = rand(T1,s)
+
+        tab1 = Tableau{T1}(:Test, 2s, s, a, b, c)
+        tab2 = Tableau{T2}(:Test, 2s, s, a, b, c)
+
+        @test tab2.â == T2.(tab1.a .- tab2.a)
+        @test tab2.b̂ == T2.(tab1.b .- tab2.b)
+        @test tab2.ĉ == T2.(tab1.c .- tab2.c)
+
     end
 
 
