@@ -82,7 +82,7 @@ Tableau of Ralston's two-stage, 2nd order method
 Reference: Anthony Ralston.
            Runge-Kutta Methods with Minimum Error Bounds.
            Mathematics of Computation, Volume 16, Pages 431-437, 1962.
-           doi: 10.1090/S0025-5718-1962-0150954-0
+           doi: 10.1090/S0025-5718-1962-0150954-0.
            Equation (3.5)
 """
 function TableauRalston2(::Type{T}=Float64) where {T}
@@ -101,7 +101,7 @@ Tableau of Ralston's three-stage, 3rd order method
 Reference: Anthony Ralston.
            Runge-Kutta Methods with Minimum Error Bounds.
            Mathematics of Computation, Volume 16, Pages 431-437, 1962.
-           doi: 10.1090/S0025-5718-1962-0150954-0
+           doi: 10.1090/S0025-5718-1962-0150954-0.
            Equation (4.10)
 """
 function TableauRalston3(::Type{T}=Float64) where {T}
@@ -121,7 +121,7 @@ Tableau of Runge's two-stage, 2nd order method
 Referene: Carl Runge
           Über die numerische Auflösung von Differentialgleichungen.
           Mathematische Annalen, Volume 46, Pages 167-178, 1895.
-          doi: 10.1007/BF01446807
+          doi: 10.1007/BF01446807.
           Equation (3)
 """
 function TableauRunge(::Type{T}=Float64) where {T}
@@ -205,12 +205,13 @@ end
 """
 Tableau of 2rd order Strong Stability Preserving method with two stages and CFL ≤ 1
 
+Alias for [`TableauHeun2`](@ref)
+
 Reference: Chi-Wang Shu, Stanley Osher.
            Efficient implementation of essentially non-oscillatory shock-capturing schemes.
            Journal of Computational Physics, Volume 77, Issue 2, Pages 439-471, 1988.
+           doi: 10.1016/0021-9991(88)90177-5.
            Equation (2.16)
-
-Alias for [`TableauHeun2`](@ref)
 """
 TableauSSPRK2 = TableauHeun2
 
@@ -220,6 +221,7 @@ Tableau of 3rd order Strong Stability Preserving method with three stages and CF
 Reference: Chi-Wang Shu, Stanley Osher.
            Efficient implementation of essentially non-oscillatory shock-capturing schemes.
            Journal of Computational Physics, Volume 77, Issue 2, Pages 439-471, 1988.
+           doi: 10.1016/0021-9991(88)90177-5.
            Equation (2.18)
 """
 function TableauSSPRK3(::Type{T}=Float64) where {T}
