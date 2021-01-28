@@ -58,6 +58,7 @@ module RungeKutta
            TableauKutta, TableauKutta3,
            TableauRK416, TableauRK4,
            TableauRK438,
+           TableauSSPRK2,
            TableauSSPRK3
 
     include("tableaus/firk.jl")

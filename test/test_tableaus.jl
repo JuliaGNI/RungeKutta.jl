@@ -50,6 +50,10 @@ using RungeKutta: name, order, nstages, coefficients, weights, nodes
     @test order(TableauRK438()) == 4
     @test nstages(TableauRK438()) == 4
 
+    @test typeof(TableauSSPRK2()) <: Tableau
+    @test order(TableauSSPRK2()) == 2
+    @test nstages(TableauSSPRK2()) == 2
+
     @test typeof(TableauSSPRK3()) <: Tableau
     @test order(TableauSSPRK3()) == 3
     @test nstages(TableauSSPRK3()) == 3
