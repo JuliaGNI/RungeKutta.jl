@@ -2,11 +2,13 @@
 """
 Tableau of one-stage, 1st order explicit (forward) Euler method
 
-Reference: Leonhard Euler
-           Institutiones calculi differentialis cum eius vsu in analysi finitorum ac doctrina serierum.
-           Imp. Acad. Imper. Scient. Petropolitanae, Opera Omnia, Vol.X, [I.6], 1755.
-           In: Opera Omnia, 1st Series, Volume 11, Institutiones Calculi Integralis. Teubner, Leipzig, Pages 424-434, 1913.
-           Sectio secunda. Caput VII. De integratione aequationum differentialium per approximationem. Problema 85.
+Reference:
+
+    Leonhard Euler
+    Institutiones calculi differentialis cum eius vsu in analysi finitorum ac doctrina serierum.
+    Imp. Acad. Imper. Scient. Petropolitanae, Opera Omnia, Vol.X, [I.6], 1755.
+    In: Opera Omnia, 1st Series, Volume 11, Institutiones Calculi Integralis. Teubner, Leipzig, Pages 424-434, 1913.
+    Sectio secunda. Caput VII. De integratione aequationum differentialium per approximationem. Problema 85.
 """
 function TableauExplicitEuler(::Type{T}=Float64) where {T}
     a = zeros(BigFloat, 1, 1)
@@ -42,10 +44,12 @@ end
 """
 Tableau of Heun's two-stage, 2nd order method
 
-Reference: Karl Heun.
-           Neue Methoden zur approximativen Integration der Differentialgleichungen einer unabhängigen Veränderlichen.
-           Zeitschrift für Mathematik und Physik, Volume 45, Pages 23-38, 1900.
-           Algorithm II.
+Reference:
+
+    Karl Heun.
+    Neue Methoden zur approximativen Integration der Differentialgleichungen einer unabhängigen Veränderlichen.
+    Zeitschrift für Mathematik und Physik, Volume 45, Pages 23-38, 1900.
+    Algorithm II.
 """
 function TableauHeun2(::Type{T}=Float64) where {T}
     a = @big [[ 0      0    ]
@@ -60,10 +64,12 @@ end
 """
 Tableau of Heun's three-stage, 3rd order method
 
-Reference: Karl Heun.
-           Neue Methoden zur approximativen Integration der Differentialgleichungen einer unabhängigen Veränderlichen.
-           Zeitschrift für Mathematik und Physik, Volume 45, Pages 23-38, 1900.
-           Algorithm VI.
+Reference:
+
+    Karl Heun.
+    Neue Methoden zur approximativen Integration der Differentialgleichungen einer unabhängigen Veränderlichen.
+    Zeitschrift für Mathematik und Physik, Volume 45, Pages 23-38, 1900.
+    Algorithm VI.
 """
 function TableauHeun3(::Type{T}=Float64) where {T}
     a = @big [[ 0      0      0    ]
@@ -79,11 +85,13 @@ end
 """
 Tableau of Ralston's two-stage, 2nd order method
 
-Reference: Anthony Ralston.
-           Runge-Kutta Methods with Minimum Error Bounds.
-           Mathematics of Computation, Volume 16, Pages 431-437, 1962.
-           doi: 10.1090/S0025-5718-1962-0150954-0.
-           Equation (3.5)
+Reference:
+
+    Anthony Ralston.
+    Runge-Kutta Methods with Minimum Error Bounds.
+    Mathematics of Computation, Volume 16, Pages 431-437, 1962.
+    doi: 10.1090/S0025-5718-1962-0150954-0.
+    Equation (3.5)
 """
 function TableauRalston2(::Type{T}=Float64) where {T}
     a = @big [[ 0      0    ]
@@ -98,11 +106,13 @@ end
 """
 Tableau of Ralston's three-stage, 3rd order method
 
-Reference: Anthony Ralston.
-           Runge-Kutta Methods with Minimum Error Bounds.
-           Mathematics of Computation, Volume 16, Pages 431-437, 1962.
-           doi: 10.1090/S0025-5718-1962-0150954-0.
-           Equation (4.10)
+Reference:
+
+    Anthony Ralston.
+    Runge-Kutta Methods with Minimum Error Bounds.
+    Mathematics of Computation, Volume 16, Pages 431-437, 1962.
+    doi: 10.1090/S0025-5718-1962-0150954-0.
+    Equation (4.10)
 """
 function TableauRalston3(::Type{T}=Float64) where {T}
     a = @big [[ 0      0      0    ]
@@ -140,10 +150,12 @@ TableauRunge2 = TableauRunge
 """
 Tableau of Kutta's three-stage, 3rd order method
 
-Reference: Wilhelm Kutta
-           Beitrag zur Näherungsweisen Integration totaler Differentialgleichungen
-           Zeitschrift für Mathematik und Physik, Volume 46, Pages 435–453, 1901.
-           Page 440
+Reference:
+
+    Wilhelm Kutta
+    Beitrag zur Näherungsweisen Integration totaler Differentialgleichungen
+    Zeitschrift für Mathematik und Physik, Volume 46, Pages 435–453, 1901.
+    Page 440
 """
 function TableauKutta(::Type{T}=Float64) where {T}
     a = @big [[ 0      0      0    ]
@@ -162,10 +174,12 @@ TableauKutta3 = TableauKutta
 """
 Tableau of explicit Runge-Kutta method of order four (1/6 rule)
 
-Reference: Wilhelm Kutta
-           Beitrag zur Näherungsweisen Integration totaler Differentialgleichungen
-           Zeitschrift für Mathematik und Physik, Volume 46, Pages 435–453, 1901.
-           Page 443
+Reference:
+
+    Wilhelm Kutta
+    Beitrag zur Näherungsweisen Integration totaler Differentialgleichungen
+    Zeitschrift für Mathematik und Physik, Volume 46, Pages 435–453, 1901.
+    Page 443
 """
 function TableauRK416(::Type{T}=Float64) where {T}
     a = @big [[ 0      0      0      0    ]
@@ -185,10 +199,12 @@ TableauRK4 = TableauRK416
 """
 Tableau of explicit Runge-Kutta method of order four (3/8 rule)
 
-Reference: Wilhelm Kutta
-           Beitrag zur Näherungsweisen Integration totaler Differentialgleichungen
-           Zeitschrift für Mathematik und Physik, Volume 46, Pages 435–453, 1901.
-           Page 441
+Reference:
+
+    Wilhelm Kutta
+    Beitrag zur Näherungsweisen Integration totaler Differentialgleichungen
+    Zeitschrift für Mathematik und Physik, Volume 46, Pages 435–453, 1901.
+    Page 441
 """
 function TableauRK438(::Type{T}=Float64) where {T}
     a = @big [[ 0      0      0      0    ]
@@ -207,22 +223,26 @@ Tableau of 2rd order Strong Stability Preserving method with two stages and CFL 
 
 Alias for [`TableauHeun2`](@ref)
 
-Reference: Chi-Wang Shu, Stanley Osher.
-           Efficient implementation of essentially non-oscillatory shock-capturing schemes.
-           Journal of Computational Physics, Volume 77, Issue 2, Pages 439-471, 1988.
-           doi: 10.1016/0021-9991(88)90177-5.
-           Equation (2.16)
+Reference:
+
+    Chi-Wang Shu, Stanley Osher.
+    Efficient implementation of essentially non-oscillatory shock-capturing schemes.
+    Journal of Computational Physics, Volume 77, Issue 2, Pages 439-471, 1988.
+    doi: 10.1016/0021-9991(88)90177-5.
+    Equation (2.16)
 """
 TableauSSPRK2 = TableauHeun2
 
 """
 Tableau of 3rd order Strong Stability Preserving method with three stages and CFL ≤ 1
 
-Reference: Chi-Wang Shu, Stanley Osher.
-           Efficient implementation of essentially non-oscillatory shock-capturing schemes.
-           Journal of Computational Physics, Volume 77, Issue 2, Pages 439-471, 1988.
-           doi: 10.1016/0021-9991(88)90177-5.
-           Equation (2.18)
+Reference:
+
+    Chi-Wang Shu, Stanley Osher.
+    Efficient implementation of essentially non-oscillatory shock-capturing schemes.
+    Journal of Computational Physics, Volume 77, Issue 2, Pages 439-471, 1988.
+    doi: 10.1016/0021-9991(88)90177-5.
+    Equation (2.18)
 """
 function TableauSSPRK3(::Type{T}=Float64) where {T}
     a = @big [[ 0      0      0    ]

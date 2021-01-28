@@ -165,14 +165,17 @@ get_lobatto_g_coefficients(s) = get_lobatto_g_coefficients(BigFloat, s)
 """
 Lobatto IIIA tableau with s stages
 
-Reference: Byron Leonard Ehle
-           On Padé approximations to the exponential function and a-stable methods for the numerical solution of initial value problems.
-           Research Report CSRR 2010, Dept. AACS, University of Waterloo, 1969.
+References:
 
-           Laurent O. Jay.
-           Lobatto Methods.
-           In: Engquist B. (eds). Encyclopedia of Applied and Computational Mathematics. Springer, Berlin, Heidelberg. 2015.
-           doi: 10.1007/978-3-540-70529-1_123
+    Byron Leonard Ehle
+    On Padé approximations to the exponential function and a-stable methods for the numerical solution of initial value problems.
+    Research Report CSRR 2010, Dept. AACS, University of Waterloo, 1969.
+
+    Laurent O. Jay.
+    Lobatto Methods.
+    In: Engquist B. (eds). Encyclopedia of Applied and Computational Mathematics. Springer, Berlin, Heidelberg. 2015.
+    doi: 10.1007/978-3-540-70529-1_123
+
 """
 function TableauLobattoIIIA(::Type{T}, s) where {T}
     Tableau{T}(Symbol("LobattoIIIA($s)"), 2s-2, get_lobatto_a_coefficients(s), get_lobatto_weights(s), get_lobatto_nodes(s))
@@ -181,14 +184,17 @@ end
 """
 Lobatto IIIB tableau with s stages
 
-Reference: Byron Leonard Ehle.
-           On Padé approximations to the exponential function and a-stable methods for the numerical solution of initial value problems.
-           Research Report CSRR 2010, Dept. AACS, University of Waterloo, 1969.
+References:
 
-           Laurent O. Jay.
-           Lobatto Methods.
-           In: Engquist B. (eds). Encyclopedia of Applied and Computational Mathematics. Springer, Berlin, Heidelberg. 2015.
-           doi: 10.1007/978-3-540-70529-1_123.
+    Byron Leonard Ehle.
+    On Padé approximations to the exponential function and a-stable methods for the numerical solution of initial value problems.
+    Research Report CSRR 2010, Dept. AACS, University of Waterloo, 1969.
+
+    Laurent O. Jay.
+    Lobatto Methods.
+    In: Engquist B. (eds). Encyclopedia of Applied and Computational Mathematics. Springer, Berlin, Heidelberg. 2015.
+    doi: 10.1007/978-3-540-70529-1_123.
+
 """
 function TableauLobattoIIIB(::Type{T}, s) where {T}
     Tableau{T}(Symbol("LobattoIIIB($s)"), 2s-2, get_lobatto_b_coefficients(s), get_lobatto_weights(s), get_lobatto_nodes(s))
@@ -197,15 +203,18 @@ end
 """
 Lobatto IIIC tableau with s stages
 
-Reference: F. H. Chipman.
-           A-stable Runge-Kutta processes.
-           BIT, Volume 11, Pages 384-388, 1971.
-           doi: 10.1007/BF01939406.
+References:
 
-           Laurent O. Jay.
-           Lobatto Methods.
-           In: Engquist B. (eds). Encyclopedia of Applied and Computational Mathematics. Springer, Berlin, Heidelberg. 2015.
-           doi: 10.1007/978-3-540-70529-1_123.
+    F. H. Chipman.
+    A-stable Runge-Kutta processes.
+    BIT, Volume 11, Pages 384-388, 1971.
+    doi: 10.1007/BF01939406.
+
+    Laurent O. Jay.
+    Lobatto Methods.
+    In: Engquist B. (eds). Encyclopedia of Applied and Computational Mathematics. Springer, Berlin, Heidelberg. 2015.
+    doi: 10.1007/978-3-540-70529-1_123.
+
 """
 function TableauLobattoIIIC(::Type{T}, s) where {T}
     Tableau{T}(Symbol("LobattoIIIC($s)"), 2s-2, get_lobatto_c_coefficients(s), get_lobatto_weights(s), get_lobatto_nodes(s))
@@ -214,15 +223,18 @@ end
 """
 Lobatto IIIC̄ tableau with s stages
 
-Reference: John C. Butcher.
-           Integration processes based on Radau quadrature formulas
-           Mathematics of Computation, Volume 18, Pages 233-244, 1964.
-           doi: 10.1090/S0025-5718-1964-0165693-1.
+References:
 
-           Laurent O. Jay.
-           Lobatto Methods.
-           In: Engquist B. (eds). Encyclopedia of Applied and Computational Mathematics. Springer, Berlin, Heidelberg. 2015.
-           doi: 10.1007/978-3-540-70529-1_123.
+    John C. Butcher.
+    Integration processes based on Radau quadrature formulas
+    Mathematics of Computation, Volume 18, Pages 233-244, 1964.
+    doi: 10.1090/S0025-5718-1964-0165693-1.
+
+    Laurent O. Jay.
+    Lobatto Methods.
+    In: Engquist B. (eds). Encyclopedia of Applied and Computational Mathematics. Springer, Berlin, Heidelberg. 2015.
+    doi: 10.1007/978-3-540-70529-1_123.
+
 """
 function TableauLobattoIIIC̄(::Type{T}, s) where {T}
     Tableau{T}(Symbol("LobattoIIIC̄($s)"), 2s-2, get_lobatto_c̄_coefficients(s), get_lobatto_weights(s), get_lobatto_nodes(s))
@@ -231,15 +243,18 @@ end
 """
 Lobatto IIID tableau with s stages
 
-Reference: R.P.K. Chan.
-           On symmetric Runge-Kutta methods of high order.
-           Computing, Volume 45, Pages 301-309, 1990.
-           doi: 10.1007/BF02238798
+References:
 
-           Laurent O. Jay.
-           Lobatto Methods.
-           In: Engquist B. (eds). Encyclopedia of Applied and Computational Mathematics. Springer, Berlin, Heidelberg. 2015.
-           doi: 10.1007/978-3-540-70529-1_123.
+    R.P.K. Chan.
+    On symmetric Runge-Kutta methods of high order.
+    Computing, Volume 45, Pages 301-309, 1990.
+    doi: 10.1007/BF02238798
+
+    Laurent O. Jay.
+    Lobatto Methods.
+    In: Engquist B. (eds). Encyclopedia of Applied and Computational Mathematics. Springer, Berlin, Heidelberg. 2015.
+    doi: 10.1007/978-3-540-70529-1_123.
+
 """
 function TableauLobattoIIID(::Type{T}, s) where {T}
     Tableau{T}(Symbol("LobattoIIID($s)"), 2s-2, get_lobatto_d_coefficients(s), get_lobatto_weights(s), get_lobatto_nodes(s))
@@ -248,15 +263,18 @@ end
 """
 Lobatto IIIE tableau with s stages
 
-Reference: R.P.K. Chan.
-           On symmetric Runge-Kutta methods of high order.
-           Computing, Volume 45, Pages 301-309, 1990.
-           doi: 10.1007/BF02238798
+References:
 
-           Laurent O. Jay.
-           Lobatto Methods.
-           In: Engquist B. (eds). Encyclopedia of Applied and Computational Mathematics. Springer, Berlin, Heidelberg. 2015.
-           doi: 10.1007/978-3-540-70529-1_123.
+    R.P.K. Chan.
+    On symmetric Runge-Kutta methods of high order.
+    Computing, Volume 45, Pages 301-309, 1990.
+    doi: 10.1007/BF02238798
+
+    Laurent O. Jay.
+    Lobatto Methods.
+    In: Engquist B. (eds). Encyclopedia of Applied and Computational Mathematics. Springer, Berlin, Heidelberg. 2015.
+    doi: 10.1007/978-3-540-70529-1_123.
+
 """
 function TableauLobattoIIIE(::Type{T}, s) where {T}
     Tableau{T}(Symbol("LobattoIIIE($s)"), 2s-2, get_lobatto_e_coefficients(s), get_lobatto_weights(s), get_lobatto_nodes(s))
@@ -265,9 +283,12 @@ end
 """
 Lobatto IIIF tableau with s stages
 
-Reference: Wang Fangzong and Liao Xiaobing.
-           A Class of Lobatto Methods of Order 2s.
-           Journal of Applied Mathematics, Volume 46, Pages 6-10, 2016.
+References:
+
+    Wang Fangzong and Liao Xiaobing.
+    A Class of Lobatto Methods of Order 2s.
+    Journal of Applied Mathematics, Volume 46, Pages 6-10, 2016.
+
 """
 function TableauLobattoIIIF(::Type{T}, s) where {T}
     Tableau{T}(Symbol("LobattoIIIF($s)"), 2s,   get_lobatto_f_coefficients(s), get_lobatto_weights(s), get_lobatto_nodes(s))

@@ -2,10 +2,12 @@
 """
 Tableau of one-stage, 1st order implicit (backward) Euler method
 
-Reference: Augustin-Louis Cauchy.
-           Équations différentielles ordinaires. Cours inédit (fragment). Douzième leçon.
-           Ed. Christian Gilain, Etudes Vivantes, 1981.
-           Page 102, Equation (5), Θ=1.
+Reference:
+
+    Augustin-Louis Cauchy.
+    Équations différentielles ordinaires. Cours inédit (fragment). Douzième leçon.
+    Ed. Christian Gilain, Etudes Vivantes, 1981.
+    Page 102, Equation (5), Θ=1.
 """
 function TableauImplicitEuler(::Type{T}=Float64) where {T}
     a = ones(BigFloat, 1, 1)
@@ -22,10 +24,12 @@ TableauBackwardEuler = TableauImplicitEuler
 """
 Tableau of two-stage, 2nd order implicit midpoint method
 
-Reference: Augustin-Louis Cauchy.
-           Équations différentielles ordinaires. Cours inédit (fragment). Douzième leçon.
-           Ed. Christian Gilain, Etudes Vivantes, 1981.
-           Page 102, Equation (5), Θ=1/2.
+Reference:
+
+    Augustin-Louis Cauchy.
+    Équations différentielles ordinaires. Cours inédit (fragment). Douzième leçon.
+    Ed. Christian Gilain, Etudes Vivantes, 1981.
+    Page 102, Equation (5), Θ=1/2.
 """
 function TableauImplicitMidpoint(::Type{T}=Float64) where {T}
     a = ones(BigFloat, 1, 1) ./ 2
@@ -39,10 +43,12 @@ end
 """
 Tableau of symmetric and symplectic three-stage, 4th order Runge-Kutta method
 
-Reference: Shan Zhao and Guo-Wei Wei.
-           A unified discontinuous Galerkin framework for time integration.
-           Mathematical Methods in the Applied Sciences, Volume 37, Issue 7, Pages 1042-1071, 2014.
-           doi: 10.1002/mma.2863.
+Reference:
+
+    Shan Zhao and Guo-Wei Wei.
+    A unified discontinuous Galerkin framework for time integration.
+    Mathematical Methods in the Applied Sciences, Volume 37, Issue 7, Pages 1042-1071, 2014.
+    doi: 10.1002/mma.2863.
 """
 function TableauSRK3(::Type{T}=Float64) where {T}
     a = @big [[ 5/36         2/9        5/36-√15/10 ]

@@ -104,9 +104,12 @@ get_radau_2_coefficients(s) = get_radau_2_coefficients(BigFloat, s)
 """
 Radau IA tableau with s stages
 
-Reference: Byron Leonard Ehle
-           On Padé approximations to the exponential function and a-stable methods for the numerical solution of initial value problems.
-           Research Report CSRR 2010, Dept. AACS, University of Waterloo, 1969.
+References:
+
+    Byron Leonard Ehle
+    On Padé approximations to the exponential function and a-stable methods for the numerical solution of initial value problems.
+    Research Report CSRR 2010, Dept. AACS, University of Waterloo, 1969.
+
 """
 function TableauRadauIA(::Type{T}, s) where {T}
     Tableau{T}(Symbol("RadauIA($s)"), 2s-1, get_radau_1_coefficients(s), get_radau_1_weights(s), get_radau_1_nodes(s))
@@ -118,19 +121,22 @@ TableauRadauIA(s) = TableauRadauIA(Float64, s)
 """
 Radau IIA tableau with s stages
 
-Reference: Byron Leonard Ehle
-           On Padé approximations to the exponential function and a-stable methods for the numerical solution of initial value problems.
-           Research Report CSRR 2010, Dept. AACS, University of Waterloo, 1969.
+References:
 
-           Owe Axelsson.
-           A class of A-stable methods.
-           BIT, Volume 9, Pages 185-199, 1969.
-           doi: 10.1007/BF01946812.
+    Byron Leonard Ehle
+    On Padé approximations to the exponential function and a-stable methods for the numerical solution of initial value problems.
+    Research Report CSRR 2010, Dept. AACS, University of Waterloo, 1969.
 
-           Ernst Hairer and Gerhard Wanner.
-           Radau Methods.
-           In: Engquist B. (eds). Encyclopedia of Applied and Computational Mathematics. Springer, Berlin, Heidelberg. 2015.
-           doi: 10.1007/978-3-540-70529-1_139.
+    Owe Axelsson.
+    A class of A-stable methods.
+    BIT, Volume 9, Pages 185-199, 1969.
+    doi: 10.1007/BF01946812.
+
+    Ernst Hairer and Gerhard Wanner.
+    Radau Methods.
+    In: Engquist B. (eds). Encyclopedia of Applied and Computational Mathematics. Springer, Berlin, Heidelberg. 2015.
+    doi: 10.1007/978-3-540-70529-1_139.
+
 """
 function TableauRadauIIA(::Type{T}, s) where {T}
     Tableau{T}(Symbol("RadauIIA($s)"), 2s-1, get_radau_2_coefficients(s), get_radau_2_weights(s), get_radau_2_nodes(s))
