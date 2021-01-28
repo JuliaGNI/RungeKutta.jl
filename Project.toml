@@ -1,7 +1,7 @@
 name = "RungeKutta"
 uuid = "fb486d5c-30a0-4a8a-8415-a8b4ace5a6f7"
 authors = ["Michael Kraus"]
-version = "0.2.4"
+version = "0.2.5"
 
 [deps]
 DelimitedFiles = "8bb1440f-4735-579b-a4ab-409b98df4dab"
