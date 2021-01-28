@@ -42,9 +42,10 @@ module RungeKutta
 
     include("tableaus/dirk.jl")
 
-    export TableauKraaijevangerSpijker,
-           TableauQinZhang,
-           TableauCrouzeix
+    export TableauCrankNicolson,
+           TableauCrouzeix,
+           TableauKraaijevangerSpijker,
+           TableauQinZhang
 
     include("tableaus/erk.jl")
 
@@ -65,7 +66,6 @@ module RungeKutta
 
     export TableauImplicitEuler, TableauBackwardEuler,
            TableauImplicitMidpoint,
-           TableauCrankNicolson,
            TableauSRK3
 
     include("tableaus/gauss.jl")
@@ -83,31 +83,32 @@ module RungeKutta
 
     TableauList = (
        # explicit
-       explicit_euler    = TableauExplicitEuler,
-       forward_euler     = TableauForwardEuler,
-       explicit_midpoint = TableauExplicitMidpoint, 
-       heun2             = TableauHeun2,
-       heun3             = TableauHeun3,
-       ralston2          = TableauRalston2,
-       ralston3          = TableauRalston3,
-       runge             = TableauRunge,
-       runge2            = TableauRunge2,
-       kutta             = TableauKutta,
-       kutta3            = TableauKutta3,
-       rk416             = TableauRK416,
-       rk4               = TableauRK4,
-       rk438             = TableauRK438,
-       ssprk3            = TableauSSPRK3,
+       forward_euler         = TableauForwardEuler,
+       explicit_euler        = TableauExplicitEuler,
+       explicit_midpoint     = TableauExplicitMidpoint, 
+       heun2                 = TableauHeun2,
+       heun3                 = TableauHeun3,
+       ralston2              = TableauRalston2,
+       ralston3              = TableauRalston3,
+       runge                 = TableauRunge,
+       runge2                = TableauRunge2,
+       kutta                 = TableauKutta,
+       kutta3                = TableauKutta3,
+       rk4                   = TableauRK4,
+       rk416                 = TableauRK416,
+       rk438                 = TableauRK438,
+       ssprk2                = TableauSSPRK2,
+       ssprk3                = TableauSSPRK3,
        # dirk
+       crank_nicolson        = TableauCrankNicolson,
+       crouzeix              = TableauCrouzeix,
        kraaijevanger_spijker = TableauKraaijevangerSpijker,
        qin_zhang             = TableauQinZhang,
-       crouzeix              = TableauCrouzeix,
        # firk
-       implicit_euler    = TableauImplicitEuler,
-       backward_euler    = TableauBackwardEuler,
-       implicit_midpoint = TableauImplicitMidpoint,
-       crank_nicolson    = TableauCrankNicolson,
-       srk3              = TableauSRK3,
+       backward_euler        = TableauBackwardEuler,
+       implicit_euler        = TableauImplicitEuler,
+       implicit_midpoint     = TableauImplicitMidpoint,
+       srk3                  = TableauSRK3,
     )
 
     export TableauList
