@@ -5,6 +5,8 @@ Tableau of one-stage, 1st order explicit (forward) Euler method
 Reference: Leonhard Euler
            Institutiones calculi differentialis cum eius vsu in analysi finitorum ac doctrina serierum.
            Imp. Acad. Imper. Scient. Petropolitanae, Opera Omnia, Vol.X, [I.6], 1755.
+           In: Opera Omnia, 1st Series, Volume 11, Institutiones Calculi Integralis. Teubner, Leipzig, Pages 424-434, 1913.
+           Sectio secunda. Caput VII. De integratione aequationum differentialium per approximationem. Problema 85.
 """
 function TableauExplicitEuler(::Type{T}=Float64) where {T}
     a = zeros(BigFloat, 1, 1)
@@ -18,7 +20,15 @@ end
 "Alias for [`TableauExplicitEuler`](@ref)"
 TableauForwardEuler = TableauExplicitEuler
 
-"Tableau of explicit two-stage, 2nd order midpoint method"
+"""
+Tableau of explicit two-stage, 2nd order midpoint method
+
+Referene: Carl Runge
+          Über die numerische Auflösung von Differentialgleichungen.
+          Mathematische Annalen, Volume 46, Pages 167-178, 1895.
+          doi: 10.1007/BF01446807.
+          Equation (2)
+"""
 function TableauExplicitMidpoint(::Type{T}=Float64) where {T}
     a = @big [[ 0     0    ]
               [ 1//2  0    ]]

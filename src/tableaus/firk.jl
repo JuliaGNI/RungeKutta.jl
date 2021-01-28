@@ -1,5 +1,12 @@
 
-"Tableau of one-stage, 1st order implicit (backward) Euler method"
+"""
+Tableau of one-stage, 1st order implicit (backward) Euler method
+
+Reference: Augustin-Louis Cauchy.
+           Équations différentielles ordinaires. Cours inédit (fragment). Douzième leçon.
+           Ed. Christian Gilain, Etudes Vivantes, 1981.
+           Page 102, Equation (5), Θ=1.
+"""
 function TableauImplicitEuler(::Type{T}=Float64) where {T}
     a = ones(BigFloat, 1, 1)
     b = ones(BigFloat, 1)
@@ -12,7 +19,14 @@ end
 "Alias for [`TableauImplicitEuler`](@ref)"
 TableauBackwardEuler = TableauImplicitEuler
 
-"Tableau of two-stage, 2nd order implicit midpoint method"
+"""
+Tableau of two-stage, 2nd order implicit midpoint method
+
+Reference: Augustin-Louis Cauchy.
+           Équations différentielles ordinaires. Cours inédit (fragment). Douzième leçon.
+           Ed. Christian Gilain, Etudes Vivantes, 1981.
+           Page 102, Equation (5), Θ=1/2.
+"""
 function TableauImplicitMidpoint(::Type{T}=Float64) where {T}
     a = ones(BigFloat, 1, 1) ./ 2
     b = ones(BigFloat, 1)
