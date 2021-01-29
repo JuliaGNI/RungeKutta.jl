@@ -9,6 +9,7 @@ Reference:
     Imp. Acad. Imper. Scient. Petropolitanae, Opera Omnia, Vol.X, [I.6], 1755.
     In: Opera Omnia, 1st Series, Volume 11, Institutiones Calculi Integralis. Teubner, Leipzig, Pages 424-434, 1913.
     Sectio secunda. Caput VII. De integratione aequationum differentialium per approximationem. Problema 85.
+
 """
 function TableauExplicitEuler(::Type{T}=Float64) where {T}
     a = zeros(BigFloat, 1, 1)
@@ -25,11 +26,14 @@ TableauForwardEuler = TableauExplicitEuler
 """
 Tableau of explicit two-stage, 2nd order midpoint method
 
-Referene: Carl Runge
-          Über die numerische Auflösung von Differentialgleichungen.
-          Mathematische Annalen, Volume 46, Pages 167-178, 1895.
-          doi: 10.1007/BF01446807.
-          Equation (2)
+Reference:
+
+    Carl Runge
+    Über die numerische Auflösung von Differentialgleichungen.
+    Mathematische Annalen, Volume 46, Pages 167-178, 1895.
+    doi: 10.1007/BF01446807.
+    Equation (2)
+
 """
 function TableauExplicitMidpoint(::Type{T}=Float64) where {T}
     a = @big [[ 0     0    ]
@@ -50,6 +54,7 @@ Reference:
     Neue Methoden zur approximativen Integration der Differentialgleichungen einer unabhängigen Veränderlichen.
     Zeitschrift für Mathematik und Physik, Volume 45, Pages 23-38, 1900.
     Algorithm II.
+
 """
 function TableauHeun2(::Type{T}=Float64) where {T}
     a = @big [[ 0      0    ]
@@ -70,6 +75,7 @@ Reference:
     Neue Methoden zur approximativen Integration der Differentialgleichungen einer unabhängigen Veränderlichen.
     Zeitschrift für Mathematik und Physik, Volume 45, Pages 23-38, 1900.
     Algorithm VI.
+
 """
 function TableauHeun3(::Type{T}=Float64) where {T}
     a = @big [[ 0      0      0    ]
@@ -92,6 +98,7 @@ Reference:
     Mathematics of Computation, Volume 16, Pages 431-437, 1962.
     doi: 10.1090/S0025-5718-1962-0150954-0.
     Equation (3.5)
+
 """
 function TableauRalston2(::Type{T}=Float64) where {T}
     a = @big [[ 0      0    ]
@@ -113,6 +120,7 @@ Reference:
     Mathematics of Computation, Volume 16, Pages 431-437, 1962.
     doi: 10.1090/S0025-5718-1962-0150954-0.
     Equation (4.10)
+
 """
 function TableauRalston3(::Type{T}=Float64) where {T}
     a = @big [[ 0      0      0    ]
@@ -128,11 +136,14 @@ end
 """
 Tableau of Runge's two-stage, 2nd order method
 
-Referene: Carl Runge
-          Über die numerische Auflösung von Differentialgleichungen.
-          Mathematische Annalen, Volume 46, Pages 167-178, 1895.
-          doi: 10.1007/BF01446807.
-          Equation (3)
+Reference:
+
+    Carl Runge
+    Über die numerische Auflösung von Differentialgleichungen.
+    Mathematische Annalen, Volume 46, Pages 167-178, 1895.
+    doi: 10.1007/BF01446807.
+    Equation (3)
+
 """
 function TableauRunge(::Type{T}=Float64) where {T}
     a = @big [[ 0      0    ]
@@ -156,6 +167,7 @@ Reference:
     Beitrag zur Näherungsweisen Integration totaler Differentialgleichungen
     Zeitschrift für Mathematik und Physik, Volume 46, Pages 435–453, 1901.
     Page 440
+
 """
 function TableauKutta(::Type{T}=Float64) where {T}
     a = @big [[ 0      0      0    ]
@@ -180,6 +192,7 @@ Reference:
     Beitrag zur Näherungsweisen Integration totaler Differentialgleichungen
     Zeitschrift für Mathematik und Physik, Volume 46, Pages 435–453, 1901.
     Page 443
+
 """
 function TableauRK416(::Type{T}=Float64) where {T}
     a = @big [[ 0      0      0      0    ]
@@ -205,6 +218,7 @@ Reference:
     Beitrag zur Näherungsweisen Integration totaler Differentialgleichungen
     Zeitschrift für Mathematik und Physik, Volume 46, Pages 435–453, 1901.
     Page 441
+
 """
 function TableauRK438(::Type{T}=Float64) where {T}
     a = @big [[ 0      0      0      0    ]
@@ -230,6 +244,7 @@ Reference:
     Journal of Computational Physics, Volume 77, Issue 2, Pages 439-471, 1988.
     doi: 10.1016/0021-9991(88)90177-5.
     Equation (2.16)
+
 """
 TableauSSPRK2 = TableauHeun2
 
@@ -243,6 +258,7 @@ Reference:
     Journal of Computational Physics, Volume 77, Issue 2, Pages 439-471, 1988.
     doi: 10.1016/0021-9991(88)90177-5.
     Equation (2.18)
+
 """
 function TableauSSPRK3(::Type{T}=Float64) where {T}
     a = @big [[ 0      0      0    ]
