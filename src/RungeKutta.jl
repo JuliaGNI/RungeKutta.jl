@@ -79,7 +79,8 @@ module RungeKutta
 
     include("tableaus/radau.jl")
 
-    export TableauRadauIA, TableauRadauIIA
+    export TableauRadauIA, TableauRadauIIA,
+           TableauRadauIB, TableauRadauIIB
 
     TableauList = (
        # explicit
