@@ -118,6 +118,32 @@ end
 TableauRadauIA(s) = TableauRadauIA(Float64, s)
 
 
+@doc raw"""
+Radau IB tableau with s stages
+
+Coefficients are taken as $a^B = \frac{1}{2} ( a^A + \bar{a}^A )$ where $a^A$ are the coefficients
+of the Radau IA method and $\bar{a}^A$ are computed such that the symplecticity conditions
+$b_{i} \bar{a}_{i,j} + \bar{b}_{j} a_{j,i} = b_{i} \bar{b}_{j}$ and $b_{i} = \bar{b}_i$ hold for
+all $1 \le i,j \le s$.
+
+Reference:
+
+    Sun Geng
+    Construction of high order symplectic Runge-Kutta methods
+    Journal of Computational Mathematics, Volume 11, Pages 250-260, 1993.
+
+"""
+function TableauRadauIB(::Type{T}, s) where {T}
+    a = get_radau_1_coefficients(BigFloat,s)
+    b = get_radau_1_weights(BigFloat,s)
+    ā = get_symplectic_conjugate_coefficients(a,b)
+
+    Tableau{T}(Symbol("RadauIB($s)"), 2s-1, (a .+ ā) ./ 2, b, get_radau_1_nodes(s))
+end
+
+TableauRadauIB(s) = TableauRadauIB(Float64, s)
+
+
 """
 Radau IIA tableau with s stages
 
@@ -143,3 +169,29 @@ function TableauRadauIIA(::Type{T}, s) where {T}
 end
 
 TableauRadauIIA(s) = TableauRadauIIA(Float64, s)
+
+
+@doc raw"""
+Radau IIB tableau with s stages
+
+Coefficients are taken as $a^B = \frac{1}{2} ( a^A + \bar{a}^A )$ where $a^A$ are the coefficients
+of the Radau IIA method and $\bar{a}^A$ are computed such that the symplecticity conditions
+$b_{i} \bar{a}_{i,j} + \bar{b}_{j} a_{j,i} = b_{i} \bar{b}_{j}$ and $b_{i} = \bar{b}_i$ hold for
+all $1 \le i,j \le s$.
+
+Reference:
+
+    Sun Geng
+    Construction of high order symplectic Runge-Kutta methods
+    Journal of Computational Mathematics, Volume 11, Pages 250-260, 1993.
+
+"""
+function TableauRadauIIB(::Type{T}, s) where {T}
+    a = get_radau_2_coefficients(BigFloat,s)
+    b = get_radau_2_weights(BigFloat,s)
+    ā = get_symplectic_conjugate_coefficients(a,b)
+
+    Tableau{T}(Symbol("RadauIIB($s)"), 2s-1, (a .+ ā) ./ 2, b, get_radau_2_nodes(s))
+end
+
+TableauRadauIIB(s) = TableauRadauIIB(Float64, s)
