@@ -149,6 +149,7 @@ end
     @test nstages(PartitionedTableauGauss(1)) == 1
     @test issymplectic(PartitionedTableauGauss(1))
     @test issymmetric(PartitionedTableauGauss(1))
+    @test all(all.(check_symmetry(PartitionedTableauGauss(1))))
 
     @test !isexplicit(PartitionedTableauGauss(1))
     @test  isimplicit(PartitionedTableauGauss(1))
@@ -160,6 +161,7 @@ end
     @test nstages(PartitionedTableauGauss(2)) == 2
     @test issymplectic(PartitionedTableauGauss(2))
     @test issymmetric(PartitionedTableauGauss(2))
+    @test all(all.(check_symmetry(PartitionedTableauGauss(2))))
 
     @test !isexplicit(PartitionedTableauGauss(2))
     @test  isimplicit(PartitionedTableauGauss(2))
