@@ -1,3 +1,5 @@
+import LinearAlgebra
+
 using RungeKutta: get_lobatto_nodes, get_lobatto_weights,
                   get_lobatto_a_coefficients, get_lobatto_b_coefficients,
                   get_lobatto_c_coefficients, get_lobatto_c̄_coefficients,
@@ -8,6 +10,7 @@ using RungeKutta: get_lobatto_nodes, get_lobatto_weights,
 
     @test_throws ErrorException get_lobatto_nodes(1)
     @test_throws ErrorException get_lobatto_weights(1)
+    @test_throws ErrorException get_lobatto_nullvector(1)
     @test_throws ErrorException get_lobatto_a_coefficients(1)
     @test_throws ErrorException get_lobatto_b_coefficients(1)
     @test_throws ErrorException get_lobatto_c_coefficients(1)
@@ -16,6 +19,28 @@ using RungeKutta: get_lobatto_nodes, get_lobatto_weights,
     @test_throws ErrorException get_lobatto_e_coefficients(1)
     @test_throws ErrorException get_lobatto_f_coefficients(1)
     @test_throws ErrorException get_lobatto_g_coefficients(1)
+
+
+    function _get_lobatto_nullvector(s)
+        if s == 2
+            d = [+1.0, -1.0]
+        elseif s == 3
+            d = [+1.0, -2.0, +1.0]
+        elseif s == 4
+            d = [+1.0, -√5, +√5, -1.0]
+        elseif s == 5
+            d = [+3.0, -7.0, +8.0, -7.0, +3.0]
+        else
+            @error("We don't have a d vector for s=$(s) stages.")
+        end
+        return LinearAlgebra.normalize(d) * sign(d[begin])
+    end
+
+
+    @test get_lobatto_nullvector(2; normalize=true) ≈ _get_lobatto_nullvector(2)
+    @test get_lobatto_nullvector(3; normalize=true) ≈ _get_lobatto_nullvector(3)
+    @test get_lobatto_nullvector(4; normalize=true) ≈ _get_lobatto_nullvector(4)
+    @test get_lobatto_nullvector(5; normalize=true) ≈ _get_lobatto_nullvector(5)
 
 
     function _getTableauLobattoIIIA2(T=Float64)

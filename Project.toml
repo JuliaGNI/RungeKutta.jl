@@ -4,6 +4,7 @@ authors = ["Michael Kraus"]
 version = "0.2.5"
 
 [deps]
+CompactBasisFunctions = "a09551c4-f815-4143-809e-dd1986753ba7"
 DelimitedFiles = "8bb1440f-4735-579b-a4ab-409b98df4dab"
 GenericLinearAlgebra = "14197337-ba66-59df-a3e3-ca00e7dcff7a"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
@@ -12,6 +13,7 @@ Polynomials = "f27b6e38-b328-58d1-80ce-0feddd5e7a45"
 PrettyTables = "08abe8d2-0d0c-5749-adfa-8a2ac140af0d"
 
 [compat]
+CompactBasisFunctions = "0.2"
 GenericLinearAlgebra = "0.2"
 Polynomials = "1"
 PrettyTables = "0.10, 0.11"

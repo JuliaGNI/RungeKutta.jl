@@ -1,5 +1,6 @@
 
-import LinearAlgebra: factorial
+import CompactBasisFunctions: Lagrange
+import LinearAlgebra
 
 
 @doc raw"""
@@ -36,12 +37,27 @@ function get_lobatto_weights(::Type{T}, s) where {T}
         throw(ErrorException("Lobatto weights for one stage are not defined."))
     end
 
-    P(k,x) = Polynomials.derivative(Polynomial(T[-1, 0, 1])^k, k)(x) / factorial(k) / 2^k
+    P(k,x) = Polynomials.derivative(Polynomial(T[-1, 0, 1])^k, k)(x) / LinearAlgebra.factorial(k) / 2^k
     c = get_lobatto_nodes(T,s)
     b = [ 1 / ( s*(s-1) * P(s-1, 2c[i] - 1)^2 ) for i in 1:s ]
 end
 
 get_lobatto_weights(s) = get_lobatto_weights(BigFloat, s)
+
+
+function get_lobatto_nullvector(::Type{T}, s; normalize=false) where {T}
+    if s == 1
+        throw(ErrorException("Lobatto nullvector for one stage is not defined."))
+    end
+
+    q = get_lobatto_nodes(s)
+    l = Lagrange(q)
+    v = [l'[x, j] for x in q, j in eachindex(l)]
+    w = LinearAlgebra.nullspace(v')[:,begin]
+    normalize ? T.(LinearAlgebra.normalize(w) .* sign(w[begin])) : T.(w)
+end
+
+get_lobatto_nullvector(s; kwargs...) = get_lobatto_nullvector(BigFloat, s; kwargs...)
 
 
 @doc raw"""

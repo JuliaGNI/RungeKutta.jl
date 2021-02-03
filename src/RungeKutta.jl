@@ -75,7 +75,8 @@ module RungeKutta
     include("tableaus/lobatto.jl")
 
     export TableauLobattoIIIA, TableauLobattoIIIB, TableauLobattoIIIC, TableauLobattoIIIC̄,
-           TableauLobattoIIID, TableauLobattoIIIE, TableauLobattoIIIF, TableauLobattoIIIG
+           TableauLobattoIIID, TableauLobattoIIIE, TableauLobattoIIIF, TableauLobattoIIIG,
+           get_lobatto_nullvector
 
     include("tableaus/radau.jl")
 
