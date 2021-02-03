@@ -7,3 +7,13 @@ end
 function issymmetric(tab::Tableau{T}; kwargs...) where {T}
     all(check_symmetry(tab; kwargs...))
 end
+
+
+function check_symmetry(tab::PartitionedTableau{T}; kwargs...) where {T}
+    (check_symmetry(tab.q; kwargs...),
+     check_symmetry(tab.p; kwargs...))
+end
+
+function issymmetric(tab::PartitionedTableau{T}; kwargs...) where {T}
+    issymmetric(tab.q) && issymmetric(tab.p)
+end

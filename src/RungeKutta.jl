@@ -1,15 +1,23 @@
 module RungeKutta
 
+    using DelimitedFiles
+    using Markdown
+    using PrettyTables
+
     import GenericLinearAlgebra
+    import LinearAlgebra: istril
     import Polynomials
     import Polynomials: Polynomial
+
 
     include("utils.jl")
 
     include("tableau.jl")
+    include("tableau_partitioned.jl")
 
-    export Tableau,
-           isexplicit,
+    export Tableau, PartitionedTableau
+
+    export isexplicit,
            isimplicit,
            isdiagnonallyimplicit,
            isfullyimplicit
@@ -83,6 +91,15 @@ module RungeKutta
     export TableauRadauIA, TableauRadauIIA,
            TableauRadauIB, TableauRadauIIB
 
+    include("tableaus/prk.jl")
+
+    export TableauLobattoIIIAIIIB,
+           TableauLobattoIIIBIIIA,
+           TableauLobattoIIICIIIC̄,
+           TableauLobattoIIIC̄IIIC,
+           PartitionedTableauGauss
+
+           
     TableauList = (
        # explicit
        forward_euler         = TableauForwardEuler,
@@ -113,6 +130,9 @@ module RungeKutta
        srk3                  = TableauSRK3,
     )
 
-    export TableauList
+    PartitionedTableauList = (
+    )
+
+    export TableauList, PartitionedTableauList
 
 end
