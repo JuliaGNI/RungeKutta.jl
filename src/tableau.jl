@@ -19,6 +19,23 @@ Fields:
  * `a`: coefficients $a_{ij}$ with $ 1 \le i,j \le s$
  * `b`: weights $b_{i}$  with $ 1 \le i \le s$
  * `c`: nodes $c_{i}$  with $ 1 \le i \le s$
+
+Constructors:
+```julia
+Tableau{T}(name, o, s, a, b, c)
+Tableau{T}(name, o, a, b, c)
+Tableau(name::Symbol, o::Int, s::Int, a::AbstractMatrix, b::AbstractVector, c::AbstractVector)
+Tableau(name::Symbol, o::Int, a::AbstractMatrix, b::AbstractVector, c::AbstractVector)
+Tableau(name::Symbol, o::Int, t::AbstractMatrix)
+```
+
+The last constructor accepts an $(s+1) \times (s+1)$ array that holds the whole tableau in the form
+of a Butcher tableau, i.e.,
+
+ c | a
+---|---
+   | b
+
 """
 struct Tableau{T}
     name::Symbol
@@ -110,6 +127,13 @@ Base.convert(::Type{Array{T}}, tab::Tableau) where {T} = convert(Matrix{T}, tab)
 Base.convert(::Type{Array}, tab::Tableau{T}) where {T} = convert(Matrix{T}, tab)
 
 
+"""
+```julia
+from_file(dir::AbstractString, name::AbstractString)
+```
+
+Read Runge-Kutta tableau from the file `<name>.tsv` in the directory `dir`.
+"""
 function from_file(dir::AbstractString, name::AbstractString)
     file = string(dir, "/", name, ".tsv")
 
@@ -159,6 +183,13 @@ function from_file(dir::AbstractString, name::AbstractString)
     Tableau(Symbol(name), o, tab_array)
 end
 
+"""
+```julia
+to_file(dir::AbstractString, tab::Tableau)
+```
+
+Write Runge-Kutta tableau to the file `<tab.name>.tsv` in the directory `dir`.
+"""
 function to_file(dir::AbstractString, tab::Tableau{T}) where {T}
     # tab_array = zeros(T, S+1, S+1)
     # tab_array[1:S, 2:S+1] = tab.a
@@ -208,7 +239,13 @@ const tf_butcher_tableau = TextFormat(
     row                 = ' '
 )
 
-"Pretty-print Runge-Kutta tableau."
+"""
+```julia
+Base.show(io::IO, tab::Tableau)
+```
+
+Pretty-print Runge-Kutta tableau.
+"""
 function Base.show(io::IO, tab::Tableau)
     print(io, "\nRunge-Kutta Tableau $(tab.name) with $(tab.s) stages and order $(tab.o):\n")
     arr = convert(Matrix{Any}, tab)
@@ -222,7 +259,13 @@ function Base.show(io::IO, tab::Tableau)
                     noheader = true)
 end
 
-"Markdown-print Runge-Kutta tableau."
+"""
+```julia
+Base.show(io::IO, ::MIME"text/markdown", tab::Tableau)
+```
+
+Generate and print a nice markdown table for the Runge-Kutta tableau.
+"""
 function Base.show(io::IO, ::MIME"text/markdown", tab::Tableau)
     show(io, "text/markdown", Markdown.parse("Runge-Kutta Tableau $(tab.name) with $(tab.s) stages and order $(tab.o):"))
 
