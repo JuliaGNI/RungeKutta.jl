@@ -57,8 +57,19 @@ struct Tableau{T}
     end
 end
 
-Tableau(name::Symbol, o::Int, s::Int, a::AbstractMatrix{T}, b::AbstractVector{T}, c::AbstractVector{T}) where {T} = Tableau{T}(name,o,s,a,b,c)
-Tableau(name::Symbol, o::Int, a::AbstractMatrix{T}, b::AbstractVector{T}, c::AbstractVector{T}) where {T} = Tableau{T}(name,o,a,b,c)
+Tableau(name::Symbol, o::Int, s::Int, a::AbstractMatrix{AT}, b::AbstractVector{BT}, c::AbstractVector{CT}) where {AT,BT,CT} = Tableau{promote_type(AT,BT,CT)}(name,o,s,a,b,c)
+Tableau(name::Symbol, o::Int, a::AbstractMatrix, b::AbstractVector, c::AbstractVector) = Tableau(name,o,length(c),a,b,c)
+
+function Tableau(name::Symbol, o::Int, t::AbstractMatrix{T}) where {T}
+    @assert size(t,1) == size(t,2)
+
+    local s = size(t,1)-1
+    local a = copy(t[1:s, 2:s+1])
+    local b = copy(t[s+1, 2:s+1])
+    local c = copy(t[1:s, 1    ])
+
+    Tableau{T}(name, o, s, a, b, c)
+end
 
 
 Base.hash(tab::Tableau, h::UInt) = hash(tab.o, hash(tab.s, hash(tab.a, hash(tab.b, hash(tab.c, hash(tab.â, hash(tab.b̂, hash(tab.ĉ, hash(:Tableau, h)))))))))
@@ -83,17 +94,6 @@ Base.isequal(tab1::Tableau{T1}, tab2::Tableau{T2}) where {T1,T2} = (tab1 == tab2
 
 Base.eltype(::Tableau{T}) where {T} = T
 
-function from_array(arr::AbstractMatrix{T}, name::Symbol, o::Int) where {T}
-    @assert size(arr,1) == size(arr,2)
-
-    local s = size(arr,1)-1
-    local a = copy(arr[1:s, 2:s+1])
-    local b = copy(arr[s+1, 2:s+1])
-    local c = copy(arr[1:s, 1    ])
-
-    Tableau{T}(name, o, a, b, c)
-end
-
 function to_array(tab::Tableau{T}) where {T}
     local s = tab.s
     local arr = zeros(T, s+1, s+1)
@@ -103,7 +103,13 @@ function to_array(tab::Tableau{T}) where {T}
     return arr
 end
 
-"Read Runge-Kutta tableau from file."
+Base.convert(::Type{Tableau}, t::AbstractMatrix; name::Symbol=:nonamespecified, o::Int=0) = Tableau(name, o, t)
+Base.convert(::Type{Matrix{T}}, tab::Tableau) where {T} = convert(Matrix{T}, to_array(tab))
+Base.convert(::Type{Matrix}, tab::Tableau{T}) where {T} = convert(Matrix{T}, tab)
+Base.convert(::Type{Array{T}}, tab::Tableau) where {T} = convert(Matrix{T}, tab)
+Base.convert(::Type{Array}, tab::Tableau{T}) where {T} = convert(Matrix{T}, tab)
+
+
 function from_file(dir::AbstractString, name::AbstractString)
     file = string(dir, "/", name, ".tsv")
 
@@ -150,10 +156,9 @@ function from_file(dir::AbstractString, name::AbstractString)
 
     @info("Reading Runge-Kutta tableau $(name) with $(s) stages and order $(o) from file\n$(file)")
 
-    from_array(tab_array, Symbol(name), o)
+    Tableau(Symbol(name), o, tab_array)
 end
 
-"Write Runge-Kutta tableau to file."
 function to_file(dir::AbstractString, tab::Tableau{T}) where {T}
     # tab_array = zeros(T, S+1, S+1)
     # tab_array[1:S, 2:S+1] = tab.a
@@ -161,7 +166,7 @@ function to_file(dir::AbstractString, tab::Tableau{T}) where {T}
     # tab_array[1:S, 1] = tab.c
     # tab_array[S+1, 1] = tab.order
 
-    tab_array = to_array(tab)
+    tab_array = convert(Matrix, tab)
     header = string("# ", tab.o, " ", tab.s, " ", T, "\n")
     file   = string(dir, "/", tab.name, ".tsv")
 
@@ -174,9 +179,6 @@ function to_file(dir::AbstractString, tab::Tableau{T}) where {T}
 
     # TODO Write data in original format (e.g., Rational).
 end
-
-Base.convert(::Type{Tableau}, x::AbstractMatrix; name::Symbol=:nonamespecified, o::Int=0) = from_array(x, name, o)
-Base.convert(::Type{Matrix{T}}, tab::Tableau) where {T} = convert(Matrix{T}, to_array(tab))
 
 name(tab::Tableau) = tab.name
 order(tab::Tableau) = tab.o
@@ -209,7 +211,7 @@ const tf_butcher_tableau = TextFormat(
 "Pretty-print Runge-Kutta tableau."
 function Base.show(io::IO, tab::Tableau)
     print(io, "\nRunge-Kutta Tableau $(tab.name) with $(tab.s) stages and order $(tab.o):\n")
-    arr = convert(Array{Any}, to_array(tab))
+    arr = convert(Matrix{Any}, tab)
     arr[tab.s+1,1] = ""
     pretty_table(io, arr,
                     tf = tf_butcher_tableau,
@@ -224,7 +226,7 @@ end
 function Base.show(io::IO, ::MIME"text/markdown", tab::Tableau)
     show(io, "text/markdown", Markdown.parse("Runge-Kutta Tableau $(tab.name) with $(tab.s) stages and order $(tab.o):"))
 
-    tab_arr = convert(Array{Any}, to_array(tab))
+    tab_arr = convert(Matrix{Any}, tab)
     tab_arr[tab.s+1,1] = ""
 
     strio = IOBuffer()

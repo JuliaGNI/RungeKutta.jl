@@ -1,4 +1,4 @@
-using RungeKutta: name, order, eachstage, nstages, coefficients, weights, nodes, to_array, from_array, to_file, from_file
+using RungeKutta: name, order, eachstage, nstages, coefficients, weights, nodes, to_array, to_file, from_file
 
 @testset "$(rpad("Tableau",80))" begin
 
@@ -48,8 +48,13 @@ using RungeKutta: name, order, eachstage, nstages, coefficients, weights, nodes,
             @test tab1.b̂ == tab2.b̂ == tab3.b̂ == tab4.b̂ == zero(b)
             @test tab1.ĉ == tab2.ĉ == tab3.ĉ == tab4.ĉ == zero(c)
             
-            @test tab1 == from_array(to_array(tab1), tab1.name, tab1.o)
-            @test tab1 == convert(Tableau, convert(Matrix{T}, tab1); name=tab1.name, o=tab1.o)
+            @test tab1 == Tableau(tab1.name, tab1.o, to_array(tab1))
+            @test tab1 == Tableau(tab1.name, tab1.o, convert(Matrix, tab1))
+            @test tab1 == Tableau(tab1.name, tab1.o, convert(Array, tab1))
+            @test tab1 == convert(Tableau, convert(Matrix, tab1); name=tab1.name, o=tab1.o)
+            @test tab1 == convert(Tableau, convert(Array,  tab1); name=tab1.name, o=tab1.o)
+            @test convert(Matrix, tab1) == convert(Matrix{T}, tab1)
+            @test convert(Array,  tab1) == convert(Array{T},  tab1)
 
             @test startswith(repr(tab1), "\nRunge-Kutta Tableau")
             @test startswith(repr(MIME("text/markdown"), tab1), "Runge-Kutta Tableau")
