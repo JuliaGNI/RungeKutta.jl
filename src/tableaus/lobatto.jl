@@ -57,7 +57,7 @@ function get_lobatto_nullvector(::Type{T}, s; normalize=false) where {T}
     normalize ? T.(LinearAlgebra.normalize(w) .* sign(w[begin])) : T.(w)
 end
 
-get_lobatto_nullvector(s; kwargs...) = get_lobatto_nullvector(BigFloat, s; kwargs...)
+get_lobatto_nullvector(s; kwargs...) = get_lobatto_nullvector(Float64, s; kwargs...)
 
 
 @doc raw"""
