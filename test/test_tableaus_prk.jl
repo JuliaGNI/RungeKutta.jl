@@ -2,6 +2,10 @@ using RungeKutta: name, order, nstages, coefficients, weights, nodes
 
 @testset "$(rpad("Partitioned Tableaus",80))" begin
 
+    @test typeof(PartitionedTableau(:PRK4, TableauRK4(), TableauRK4())) <: PartitionedTableau
+    @test PartitionedTableau(:PRK4, TableauRK4(), TableauRK4()) == PartitionedTableau(:PRK4, TableauRK4())
+    
+
     @test typeof(PartitionedTableauGauss(1)) <: PartitionedTableau
     @test order(PartitionedTableauGauss(1)) == 2
     @test nstages(PartitionedTableauGauss(1)) == 1
