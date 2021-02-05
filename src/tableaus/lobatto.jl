@@ -44,7 +44,15 @@ end
 
 get_lobatto_weights(s) = get_lobatto_weights(BigFloat, s)
 
+"""
+```julia
+get_lobatto_nullvector(::Type, s; normalize=false)
+get_lobatto_nullvector(s; kwargs...)
+```
 
+Computes the nullvector of the matrix containing the derivatives of the
+Lagrange basis on the `s` Lobatto nodes evaluated on these nodes.
+"""
 function get_lobatto_nullvector(::Type{T}, s; normalize=false) where {T}
     if s == 1
         throw(ErrorException("Lobatto nullvector for one stage is not defined."))
