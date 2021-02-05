@@ -1,5 +1,5 @@
-using RungeKutta: get_radau_1_nodes, get_radau_1_weights, get_radau_1_coefficients,
-                  get_radau_2_nodes, get_radau_2_weights, get_radau_2_coefficients
+using RungeKutta.Tableaus: get_radau_1_nodes, get_radau_1_weights, get_radau_1_coefficients,
+                           get_radau_2_nodes, get_radau_2_weights, get_radau_2_coefficients
 
 @testset "$(rpad("Radau Tableaus",80))" begin
 

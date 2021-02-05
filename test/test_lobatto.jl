@@ -1,6 +1,6 @@
 import LinearAlgebra
 
-using RungeKutta: get_lobatto_nodes, get_lobatto_weights,
+using RungeKutta.Tableaus: get_lobatto_nodes, get_lobatto_weights,
                   get_lobatto_a_coefficients, get_lobatto_b_coefficients,
                   get_lobatto_c_coefficients, get_lobatto_c̄_coefficients,
                   get_lobatto_d_coefficients, get_lobatto_e_coefficients,
