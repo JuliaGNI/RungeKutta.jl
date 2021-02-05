@@ -1,3 +1,7 @@
+```@meta
+CurrentModule = RungeKutta
+```
+
 # Tableau
 
 The [`Tableau`](@ref) type is the main data structure in RungeKutta.jl.

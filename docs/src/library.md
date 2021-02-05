@@ -5,5 +5,5 @@ CurrentModule = RungeKutta
 # Runge Kutta Library Functions
 
 ```@autodocs
-Modules = [RungeKutta]
+Modules = [RungeKutta, RungeKutta.Tableaus, RungeKutta.PartitionedTableaus]
 ```

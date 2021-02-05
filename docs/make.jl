@@ -11,15 +11,14 @@ module RungeKuttaWeaves
     using Plots
     using PrettyTables
     using RungeKutta
-    using RungeKutta: to_array
-    using RungeKutta: get_gauss_nodes, get_gauss_weights, get_gauss_coefficients
-    using RungeKutta: get_lobatto_nodes, get_lobatto_weights,
-                      get_lobatto_a_coefficients, get_lobatto_b_coefficients,
-                      get_lobatto_c_coefficients, get_lobatto_c̄_coefficients,
-                      get_lobatto_d_coefficients, get_lobatto_e_coefficients,
-                      get_lobatto_f_coefficients, get_lobatto_g_coefficients
-    using RungeKutta: get_radau_1_nodes, get_radau_1_weights, get_radau_1_coefficients,
-                      get_radau_2_nodes, get_radau_2_weights, get_radau_2_coefficients
+    using RungeKutta.Tableaus: get_gauss_nodes, get_gauss_weights, get_gauss_coefficients
+    using RungeKutta.Tableaus: get_lobatto_nodes, get_lobatto_weights,
+                               get_lobatto_a_coefficients, get_lobatto_b_coefficients,
+                               get_lobatto_c_coefficients, get_lobatto_c̄_coefficients,
+                               get_lobatto_d_coefficients, get_lobatto_e_coefficients,
+                               get_lobatto_f_coefficients, get_lobatto_g_coefficients
+    using RungeKutta.Tableaus: get_radau_1_nodes, get_radau_1_weights, get_radau_1_coefficients,
+                               get_radau_2_nodes, get_radau_2_weights, get_radau_2_coefficients
     using SymPy
     using SymPy: latex
 
@@ -27,7 +26,7 @@ module RungeKuttaWeaves
     function Base.show(io::IO, ::MIME"text/markdown", tab::Tableau{Sym})
         show(io, "text/markdown", Markdown.parse("Runge-Kutta Tableau $(tab.name) with $(tab.s) stages and order $(tab.o):"))
 
-        tab_arr = simplify.(to_array(tab))
+        tab_arr = simplify.(convert(Matrix, tab))
         str_arr = latex.(tab_arr)
         str_arr[tab.s+1,1] = ""
 
