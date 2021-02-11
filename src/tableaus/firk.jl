@@ -2,6 +2,12 @@
 """
 Tableau of one-stage, 1st order implicit (backward) Euler method
 
+```julia
+TableauImplicitEuler(::Type{T}=Float64) where {T}
+```
+
+The constructor takes one optional argument, that is the element type of the tableau.
+
 Reference:
 
     Augustin-Louis Cauchy.
@@ -25,6 +31,12 @@ TableauBackwardEuler = TableauImplicitEuler
 """
 Tableau of two-stage, 2nd order implicit midpoint method
 
+```julia
+TableauImplicitMidpoint(::Type{T}=Float64) where {T}
+```
+
+The constructor takes one optional argument, that is the element type of the tableau.
+
 Reference:
 
     Augustin-Louis Cauchy.
@@ -44,6 +56,12 @@ end
 
 """
 Tableau of symmetric and symplectic three-stage, 4th order Runge-Kutta method
+
+```julia
+TableauSRK3(::Type{T}=Float64) where {T}
+```
+
+The constructor takes one optional argument, that is the element type of the tableau.
 
 Reference:
 

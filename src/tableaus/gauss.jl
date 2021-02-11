@@ -50,6 +50,13 @@ get_gauss_coefficients(s) = get_gauss_coefficients(BigFloat, s)
 """
 Gauss tableau with s stages
 
+```julia
+TableauGauss(::Type{T}, s)
+TableauGauss(s) = TableauGauss(Float64, s)
+```
+
+The constructor takes the number of stages `s` and optionally the element type `T` of the tableau.
+
 References:
 
     John C. Butcher.

@@ -189,6 +189,13 @@ get_lobatto_g_coefficients(s) = get_lobatto_g_coefficients(BigFloat, s)
 """
 Lobatto IIIA tableau with s stages
 
+```julia
+TableauLobattoIIIA(::Type{T}, s)
+TableauLobattoIIIA(s) = TableauLobattoIIIA(Float64, s)
+```
+
+The constructor takes the number of stages `s` and optionally the element type `T` of the tableau.
+
 References:
 
     Byron Leonard Ehle
@@ -208,6 +215,13 @@ end
 """
 Lobatto IIIB tableau with s stages
 
+```julia
+TableauLobattoIIIB(::Type{T}, s)
+TableauLobattoIIIB(s) = TableauLobattoIIIB(Float64, s)
+```
+
+The constructor takes the number of stages `s` and optionally the element type `T` of the tableau.
+
 References:
 
     Byron Leonard Ehle.
@@ -226,6 +240,13 @@ end
 
 """
 Lobatto IIIC tableau with s stages
+
+```julia
+TableauLobattoIIIC(::Type{T}, s)
+TableauLobattoIIIC(s) = TableauLobattoIIIC(Float64, s)
+```
+
+The constructor takes the number of stages `s` and optionally the element type `T` of the tableau.
 
 References:
 
@@ -247,6 +268,13 @@ end
 """
 Lobatto IIIC̄ tableau with s stages
 
+```julia
+TableauLobattoIIIC̄(::Type{T}, s)
+TableauLobattoIIIC̄(s) = TableauLobattoIIIC̄(Float64, s)
+```
+
+The constructor takes the number of stages `s` and optionally the element type `T` of the tableau.
+
 References:
 
     John C. Butcher.
@@ -266,6 +294,13 @@ end
 
 """
 Lobatto IIID tableau with s stages
+
+```julia
+TableauLobattoIIID(::Type{T}, s)
+TableauLobattoIIID(s) = TableauLobattoIIID(Float64, s)
+```
+
+The constructor takes the number of stages `s` and optionally the element type `T` of the tableau.
 
 References:
 
@@ -287,6 +322,13 @@ end
 """
 Lobatto IIIE tableau with s stages
 
+```julia
+TableauLobattoIIIE(::Type{T}, s)
+TableauLobattoIIIE(s) = TableauLobattoIIIE(Float64, s)
+```
+
+The constructor takes the number of stages `s` and optionally the element type `T` of the tableau.
+
 References:
 
     R.P.K. Chan.
@@ -307,6 +349,13 @@ end
 """
 Lobatto IIIF tableau with s stages
 
+```julia
+TableauLobattoIIIF(::Type{T}, s)
+TableauLobattoIIIF(s) = TableauLobattoIIIF(Float64, s)
+```
+
+The constructor takes the number of stages `s` and optionally the element type `T` of the tableau.
+
 References:
 
     Wang Fangzong and Liao Xiaobing.
@@ -320,6 +369,13 @@ end
 
 @doc raw"""
 Lobatto IIIG tableau with s stages
+
+```julia
+TableauLobattoIIIG(::Type{T}, s)
+TableauLobattoIIIG(s) = TableauLobattoIIIG(Float64, s)
+```
+
+The constructor takes the number of stages `s` and optionally the element type `T` of the tableau.
 
 Symplectizied algorithm for [`TableauLobattoIIIF`](@ref)
 

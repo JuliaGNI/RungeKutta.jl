@@ -2,9 +2,15 @@
 """
 Tableau of one-stage, 1st order explicit (forward) Euler method
 
+```julia
+TableauExplicitEuler(::Type{T}=Float64) where {T}
+```
+
+The constructor takes one optional argument, that is the element type of the tableau.
+
 Reference:
 
-    Leonhard Euler
+    Leonhard Euler.
     Institutiones calculi differentialis cum eius vsu in analysi finitorum ac doctrina serierum.
     Imp. Acad. Imper. Scient. Petropolitanae, Opera Omnia, Vol.X, [I.6], 1755.
     In: Opera Omnia, 1st Series, Volume 11, Institutiones Calculi Integralis. Teubner, Leipzig, Pages 424-434, 1913.
@@ -26,9 +32,15 @@ TableauForwardEuler = TableauExplicitEuler
 """
 Tableau of explicit two-stage, 2nd order midpoint method
 
+```julia
+TableauExplicitMidpoint(::Type{T}=Float64) where {T}
+```
+
+The constructor takes one optional argument, that is the element type of the tableau.
+
 Reference:
 
-    Carl Runge
+    Carl Runge.
     Über die numerische Auflösung von Differentialgleichungen.
     Mathematische Annalen, Volume 46, Pages 167-178, 1895.
     doi: 10.1007/BF01446807.
@@ -47,6 +59,12 @@ end
 
 """
 Tableau of Heun's two-stage, 2nd order method
+
+```julia
+TableauHeun2(::Type{T}=Float64) where {T}
+```
+
+The constructor takes one optional argument, that is the element type of the tableau.
 
 Reference:
 
@@ -68,6 +86,12 @@ end
 
 """
 Tableau of Heun's three-stage, 3rd order method
+
+```julia
+TableauHeun3(::Type{T}=Float64) where {T}
+```
+
+The constructor takes one optional argument, that is the element type of the tableau.
 
 Reference:
 
@@ -91,6 +115,12 @@ end
 """
 Tableau of Ralston's two-stage, 2nd order method
 
+```julia
+TableauRalston2(::Type{T}=Float64) where {T}
+```
+
+The constructor takes one optional argument, that is the element type of the tableau.
+
 Reference:
 
     Anthony Ralston.
@@ -112,6 +142,12 @@ end
 
 """
 Tableau of Ralston's three-stage, 3rd order method
+
+```julia
+TableauRalston3(::Type{T}=Float64) where {T}
+```
+
+The constructor takes one optional argument, that is the element type of the tableau.
 
 Reference:
 
@@ -135,6 +171,12 @@ end
 
 """
 Tableau of Runge's two-stage, 2nd order method
+
+```julia
+TableauRunge(::Type{T}=Float64) where {T}
+```
+
+The constructor takes one optional argument, that is the element type of the tableau.
 
 Reference:
 
@@ -161,6 +203,12 @@ TableauRunge2 = TableauRunge
 """
 Tableau of Kutta's three-stage, 3rd order method
 
+```julia
+TableauKutta(::Type{T}=Float64) where {T}
+```
+
+The constructor takes one optional argument, that is the element type of the tableau.
+
 Reference:
 
     Wilhelm Kutta
@@ -185,6 +233,12 @@ TableauKutta3 = TableauKutta
 
 """
 Tableau of explicit Runge-Kutta method of order four (1/6 rule)
+
+```julia
+TableauRK416(::Type{T}=Float64) where {T}
+```
+
+The constructor takes one optional argument, that is the element type of the tableau.
 
 Reference:
 
@@ -212,6 +266,12 @@ TableauRK4 = TableauRK416
 """
 Tableau of explicit Runge-Kutta method of order four (3/8 rule)
 
+```julia
+TableauRK438(::Type{T}=Float64) where {T}
+```
+
+The constructor takes one optional argument, that is the element type of the tableau.
+
 Reference:
 
     Wilhelm Kutta
@@ -237,6 +297,12 @@ Tableau of 2rd order Strong Stability Preserving method with two stages and CFL 
 
 Alias for [`TableauHeun2`](@ref)
 
+```julia
+TableauSSPRK2(::Type{T}=Float64) where {T}
+```
+
+The constructor takes one optional argument, that is the element type of the tableau.
+
 Reference:
 
     Chi-Wang Shu, Stanley Osher.
@@ -250,6 +316,12 @@ TableauSSPRK2 = TableauHeun2
 
 """
 Tableau of 3rd order Strong Stability Preserving method with three stages and CFL ≤ 1
+
+```julia
+TableauSSPRK3(::Type{T}=Float64) where {T}
+```
+
+The constructor takes one optional argument, that is the element type of the tableau.
 
 Reference:
 

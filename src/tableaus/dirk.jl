@@ -2,6 +2,12 @@
 """
 Tableau of Crank-Nicolson two-stage, 2nd order method
 
+```julia
+TableauCrankNicolson(::Type{T}=Float64) where {T}
+```
+
+The constructor takes one optional argument, that is the element type of the tableau.
+
 Reference:
 
     J. Crank and P. Nicolson.
@@ -22,6 +28,12 @@ end
 
 """
 Tableau of Kraaijevanger and Spijker's two-stage, 2nd order method
+
+```julia
+TableauKraaijevangerSpijker(::Type{T}=Float64) where {T}
+```
+
+The constructor takes one optional argument, that is the element type of the tableau.
 
 Reference:
 
@@ -44,6 +56,12 @@ end
 """
 Tableau of Qin and Zhang's symplectic two-stage, 2nd order method
 
+```julia
+TableauQinZhang(::Type{T}=Float64) where {T}
+```
+
+The constructor takes one optional argument, that is the element type of the tableau.
+
 Reference:
 
     M.-Z. Qin and M.-Q. Zhang.
@@ -63,6 +81,12 @@ end
 
 """
 Tableau of Crouzeix's two-stage, 3rd order method
+
+```julia
+TableauCrouzeix(::Type{T}=Float64) where {T}
+```
+
+The constructor takes one optional argument, that is the element type of the tableau.
 
 Reference:
 

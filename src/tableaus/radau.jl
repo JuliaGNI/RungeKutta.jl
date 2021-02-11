@@ -104,6 +104,13 @@ get_radau_2_coefficients(s) = get_radau_2_coefficients(BigFloat, s)
 """
 Radau IA tableau with s stages
 
+```julia
+TableauRadauIA(::Type{T}, s)
+TableauRadauIA(s) = TableauRadauIA(Float64, s)
+```
+
+The constructor takes the number of stages `s` and optionally the element type `T` of the tableau.
+
 References:
 
     Byron Leonard Ehle
@@ -120,6 +127,13 @@ TableauRadauIA(s) = TableauRadauIA(Float64, s)
 
 @doc raw"""
 Radau IB tableau with s stages
+
+```julia
+TableauRadauIB(::Type{T}, s)
+TableauRadauIB(s) = TableauRadauIB(Float64, s)
+```
+
+The constructor takes the number of stages `s` and optionally the element type `T` of the tableau.
 
 Coefficients are taken as $a^B = \frac{1}{2} ( a^A + \bar{a}^A )$ where $a^A$ are the coefficients
 of the Radau IA method and $\bar{a}^A$ are computed such that the symplecticity conditions
@@ -147,6 +161,13 @@ TableauRadauIB(s) = TableauRadauIB(Float64, s)
 """
 Radau IIA tableau with s stages
 
+```julia
+TableauRadauIIA(::Type{T}, s)
+TableauRadauIIA(s) = TableauRadauIIA(Float64, s)
+```
+
+The constructor takes the number of stages `s` and optionally the element type `T` of the tableau.
+
 References:
 
     Byron Leonard Ehle
@@ -173,6 +194,13 @@ TableauRadauIIA(s) = TableauRadauIIA(Float64, s)
 
 @doc raw"""
 Radau IIB tableau with s stages
+
+```julia
+TableauRadauIIB(::Type{T}, s)
+TableauRadauIIB(s) = TableauRadauIIB(Float64, s)
+```
+
+The constructor takes the number of stages `s` and optionally the element type `T` of the tableau.
 
 Coefficients are taken as $a^B = \frac{1}{2} ( a^A + \bar{a}^A )$ where $a^A$ are the coefficients
 of the Radau IIA method and $\bar{a}^A$ are computed such that the symplecticity conditions
