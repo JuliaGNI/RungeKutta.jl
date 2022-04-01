@@ -6,6 +6,7 @@ module RungeKutta
     using Reexport
 
     import GenericLinearAlgebra
+    import GeometricBase.Utils: @big
     import LinearAlgebra: istril
     import Polynomials
     import Polynomials: Polynomial
