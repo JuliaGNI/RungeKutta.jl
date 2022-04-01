@@ -11,9 +11,11 @@ The constructor takes the number of stages `s` and optionally the element type `
 
 This partitioned tableau uses [`TableauGauss`](@ref) for both coefficients `a` and `ā`.
 """
-function PartitionedTableauGauss(s::Int)
-    PartitionedTableau(Symbol("PGauss", s), TableauGauss(s))
+function PartitionedTableauGauss(::Type{T}, s::Int) where {T}
+    PartitionedTableau(Symbol("PGauss", s), TableauGauss(T, s))
 end
+
+PartitionedTableauGauss(s) = PartitionedTableauGauss(Float64, s)
 
 
 """
