@@ -272,7 +272,7 @@ function Base.show(io::IO, ::MIME"text/markdown", tab::Tableau)
 
     strio = IOBuffer()
     pretty_table(strio, tab_arr,
-                    backend = :latex,
+                    backend = Val(:latex),
                     vlines = [1],
                     hlines = [tab.s],
                     noheader = true)
