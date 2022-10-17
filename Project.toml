@@ -19,7 +19,7 @@ CompactBasisFunctions = "0.2"
 GenericLinearAlgebra = "0.2, 0.3"
 GeometricBase = "0.1, 0.2, 0.3, 0.4"
 Polynomials = "1, 2, 3"
-PrettyTables = "1"
+PrettyTables = "1, 2"
 Reexport = "1"
 julia = "1.6"
 
