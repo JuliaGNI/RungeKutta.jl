@@ -32,10 +32,8 @@ PartitionedTableau(name::Symbol, q::Tableau, p::Tableau)
 PartitionedTableau(name::Symbol, q::Tableau)
 ```
 """
-struct PartitionedTableau{T}
-    name::Symbol
-    o::Int
-    s::Int
+struct PartitionedTableau{T} <: AbstractPartitionedTableau{T}
+    @TableauHeader
 
     q::Tableau{T}
     p::Tableau{T}

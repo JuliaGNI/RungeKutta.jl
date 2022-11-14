@@ -35,10 +35,8 @@ of a Butcher tableau, i.e.,
    | b
 
 """
-struct Tableau{T}
-    name::Symbol
-    o::Int
-    s::Int
+struct Tableau{T} <: AbstractTableau{T}
+    @TableauHeader
 
     a::Matrix{T}
     b::Vector{T}

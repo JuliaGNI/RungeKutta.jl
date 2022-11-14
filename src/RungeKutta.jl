@@ -6,7 +6,7 @@ module RungeKutta
     using Reexport
 
     import GenericLinearAlgebra
-    import GeometricBase.Utils: @big
+    import GeometricBase.Utils: @big, @define
     import LinearAlgebra: istril
     import Polynomials
     import Polynomials: Polynomial
@@ -14,6 +14,7 @@ module RungeKutta
 
     include("utils.jl")
 
+    include("abstract.jl")
     include("tableau.jl")
     include("tableau_partitioned.jl")
 
