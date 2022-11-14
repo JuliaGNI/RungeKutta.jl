@@ -1,0 +1,7 @@
+# Gauss-Legendre Runge-Kutta Methods
+
+```julia; echo=false; results="raw"
+for s in 1:3
+    show(stdout, "text/markdown", Tableau(Symbol("Gauss($s)"), 2s, get_gauss_coefficients(Sym, s), get_gauss_weights(Sym, s), get_gauss_nodes(Sym, s)))
+end
+```
