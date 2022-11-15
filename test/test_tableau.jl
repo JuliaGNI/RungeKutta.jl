@@ -40,6 +40,11 @@ using RungeKutta: name, order, eachstage, nstages, coefficients, weights, nodes,
             @test weights(tab1) == b
             @test nodes(tab1) == c
 
+            @test ismissing(tab1.R∞)
+            @test ismissing(tab2.R∞)
+            @test ismissing(tab3.R∞)
+            @test ismissing(tab4.R∞)
+
             @test tab1.a == tab2.a == tab3.a == tab4.a == a
             @test tab1.b == tab2.b == tab3.b == tab4.b == b
             @test tab1.c == tab2.c == tab3.c == tab4.c == c

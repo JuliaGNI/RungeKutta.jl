@@ -17,6 +17,7 @@ Fields:
  * `a`: coefficients $a_{ij}$ with $ 1 \le i,j \le s$
  * `b`: weights $b_{i}$  with $ 1 \le i \le s$
  * `c`: nodes $c_{i}$  with $ 1 \le i \le s$
+ * `R∞`: stability function at infinity
 
 Constructors:
 ```julia
@@ -35,7 +36,7 @@ of a Butcher tableau, i.e.,
    | b
 
 """
-struct Tableau{T} <: AbstractTableau{T}
+struct Tableau{T, RT <: Union{T,Missing}} <: AbstractTableau{T}
     @TableauHeader
 
     a::Matrix{T}
@@ -46,7 +47,9 @@ struct Tableau{T} <: AbstractTableau{T}
     b̂::Vector{T}
     ĉ::Vector{T}
 
-    function Tableau{T}(name,o,s,a,b,c) where {T}
+    R∞::RT
+
+    function Tableau{T}(name, o, s, a, b, c; R∞=missing) where {T}
         @assert s > 0 "Number of stages must be > 0"
         @assert s == size(a,1) == size(a,2) == length(b) == length(c)
 
@@ -62,18 +65,18 @@ struct Tableau{T} <: AbstractTableau{T}
         b̂ .= b .- b̃
         ĉ .= c .- c̃
 
-        new(name,o,s,ã,b̃,c̃,â,b̂,ĉ)
+        new{T, typeof(R∞)}(name,o,s,ã,b̃,c̃,â,b̂,ĉ,R∞)
     end
 
-    function Tableau{T}(name,o,a,b,c) where {T}
-        Tableau{T}(name,o,length(c),a,b,c)
+    function Tableau{T}(name, o, a, b, c; kwargs...) where {T}
+        Tableau{T}(name, o, length(c), a, b, c; kwargs...)
     end
 end
 
-Tableau(name::Symbol, o::Int, s::Int, a::AbstractMatrix{AT}, b::AbstractVector{BT}, c::AbstractVector{CT}) where {AT,BT,CT} = Tableau{promote_type(AT,BT,CT)}(name,o,s,a,b,c)
-Tableau(name::Symbol, o::Int, a::AbstractMatrix, b::AbstractVector, c::AbstractVector) = Tableau(name,o,length(c),a,b,c)
+Tableau(name::Symbol, o::Int, s::Int, a::AbstractMatrix{AT}, b::AbstractVector{BT}, c::AbstractVector{CT}; kwargs...) where {AT,BT,CT} = Tableau{promote_type(AT,BT,CT)}(name,o,s,a,b,c; kwargs...)
+Tableau(name::Symbol, o::Int, a::AbstractMatrix, b::AbstractVector, c::AbstractVector; kwargs...) = Tableau(name,o,length(c),a,b,c; kwargs...)
 
-function Tableau(name::Symbol, o::Int, t::AbstractMatrix{T}) where {T}
+function Tableau(name::Symbol, o::Int, t::AbstractMatrix{T}; kwargs...) where {T}
     @assert size(t,1) == size(t,2)
 
     local s = size(t,1)-1
@@ -81,7 +84,7 @@ function Tableau(name::Symbol, o::Int, t::AbstractMatrix{T}) where {T}
     local b = copy(t[s+1, 2:s+1])
     local c = copy(t[1:s, 1    ])
 
-    Tableau{T}(name, o, s, a, b, c)
+    Tableau{T}(name, o, s, a, b, c; kwargs...)
 end
 
 

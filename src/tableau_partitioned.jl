@@ -18,6 +18,7 @@ Fields:
  * `s`: number of stages
  * `q`: Tableau for `q`
  * `p`: Tableau for `p`
+ * `R∞`: stability function at infinity
 
 The actual tableaus are stored in `q` and `p`:
  * `a`: coefficients $a_{ij}$ with $ 1 \le i,j \le s$
@@ -32,25 +33,27 @@ PartitionedTableau(name::Symbol, q::Tableau, p::Tableau)
 PartitionedTableau(name::Symbol, q::Tableau)
 ```
 """
-struct PartitionedTableau{T} <: AbstractPartitionedTableau{T}
+struct PartitionedTableau{T, RT <: Union{T,Missing}} <: AbstractPartitionedTableau{T}
     @TableauHeader
 
     q::Tableau{T}
     p::Tableau{T}
 
-    function PartitionedTableau{T}(name, o, q, p) where {T}
+    R∞::RT
+
+    function PartitionedTableau{T}(name, o, q, p; R∞=missing) where {T}
         @assert q.s == p.s
-        new(name, o, q.s, q, p)
+        new{T, typeof(R∞)}(name, o, q.s, q, p, R∞)
     end
 
-    function PartitionedTableau{T}(name, q, p) where {T}
-        PartitionedTableau{T}(name, min(q.o, p.o), q, p)
+    function PartitionedTableau{T}(name, q, p; kwargs...) where {T}
+        PartitionedTableau{T}(name, min(q.o, p.o), q, p; kwargs...)
     end
 end
 
-PartitionedTableau(name::Symbol, q::Tableau{T}, p::Tableau{T}) where {T} = PartitionedTableau{T}(name, q, p)
-PartitionedTableau(name::Symbol, q::Tableau) = PartitionedTableau(name, q, q)
-PartitionedTableau(q::Tableau) = PartitionedTableau(q.name, q, q)
+PartitionedTableau(name::Symbol, q::Tableau{T}, p::Tableau{T}; kwargs...) where {T} = PartitionedTableau{T}(name, q, p; kwargs...)
+PartitionedTableau(name::Symbol, q::Tableau) = PartitionedTableau(name, q, q; R∞=q.R∞)
+PartitionedTableau(q::Tableau) = PartitionedTableau(q.name, q)
 
 Base.hash(tab::PartitionedTableau, h::UInt) = hash(tab.o, hash(tab.s, hash(tab.q, hash(tab.p, hash(:PartitionedTableau, h)))))
 

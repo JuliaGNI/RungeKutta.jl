@@ -28,6 +28,11 @@ using RungeKutta: name, order, eachstage, nstages
             @test eachstage(tab1) == 1:s
             @test nstages(tab1) == s
 
+            @test ismissing(tab1.R∞)
+            @test ismissing(tab2.R∞)
+            @test ismissing(tab3.R∞)
+            @test ismissing(tab4.R∞)
+
         end
 
     end
