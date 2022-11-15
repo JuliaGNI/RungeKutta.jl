@@ -33,7 +33,7 @@ PartitionedTableau(name::Symbol, q::Tableau, p::Tableau)
 PartitionedTableau(name::Symbol, q::Tableau)
 ```
 """
-struct PartitionedTableau{T, RT <: Union{T,Missing}} <: AbstractPartitionedTableau{T}
+struct PartitionedTableau{T, RT <: Union{Real,Missing}} <: AbstractPartitionedTableau{T}
     @TableauHeader
 
     q::Tableau{T}
@@ -61,11 +61,13 @@ Base.:(==)(tab1::PartitionedTableau, tab2::PartitionedTableau) = (
                                             tab1.o == tab2.o
                                          && tab1.s == tab2.s
                                          && tab1.q == tab2.q
-                                         && tab1.p == tab2.p)
+                                         && tab1.p == tab2.p
+                                         && ((ismissing(tab1.R∞) && ismissing(tab2.R∞)) || (tab1.R∞ == tab2.R∞)))
 
 Base.isapprox(tab1::PartitionedTableau, tab2::PartitionedTableau; kwargs...) = (
                                             tab1.o == tab2.o
                                          && tab1.s == tab2.s
+                                         && ((ismissing(tab1.R∞) && ismissing(tab2.R∞)) || (tab1.R∞ == tab2.R∞))
                                          && isapprox(tab1.q, tab2.q; kwargs...)
                                          && isapprox(tab1.p, tab2.p; kwargs...))
  

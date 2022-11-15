@@ -36,7 +36,7 @@ of a Butcher tableau, i.e.,
    | b
 
 """
-struct Tableau{T, RT <: Union{T,Missing}} <: AbstractTableau{T}
+struct Tableau{T, RT <: Union{Real,Missing}} <: AbstractTableau{T}
     @TableauHeader
 
     a::Matrix{T}
@@ -97,11 +97,13 @@ Base.:(==)(tab1::Tableau, tab2::Tableau) = (tab1.o == tab2.o
                                          && tab1.c == tab2.c
                                          && tab1.â == tab2.â
                                          && tab1.b̂ == tab2.b̂
-                                         && tab1.ĉ == tab2.ĉ)
+                                         && tab1.ĉ == tab2.ĉ
+                                         && ((ismissing(tab1.R∞) && ismissing(tab2.R∞)) || (tab1.R∞ == tab2.R∞)))
 
 Base.isapprox(tab1::Tableau, tab2::Tableau; kwargs...) = (
                                             tab1.o == tab2.o
                                          && tab1.s == tab2.s
+                                         && ((ismissing(tab1.R∞) && ismissing(tab2.R∞)) || (tab1.R∞ == tab2.R∞))
                                          && isapprox(tab1.a, tab2.a; kwargs...)
                                          && isapprox(tab1.b, tab2.b; kwargs...)
                                          && isapprox(tab1.c, tab2.c; kwargs...))
