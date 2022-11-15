@@ -12,6 +12,7 @@ using RungeKutta: name, order, nstages, coefficients, weights, nodes
     @test issymplectic(PartitionedTableauGauss(1))
     @test issymmetric(PartitionedTableauGauss(1))
     @test all(all.(check_symmetry(PartitionedTableauGauss(1))))
+    @test PartitionedTableauGauss(1).R∞ == -1
 
     @test !isexplicit(PartitionedTableauGauss(1))
     @test  isimplicit(PartitionedTableauGauss(1))
@@ -24,6 +25,7 @@ using RungeKutta: name, order, nstages, coefficients, weights, nodes
     @test issymplectic(PartitionedTableauGauss(2))
     @test issymmetric(PartitionedTableauGauss(2))
     @test all(all.(check_symmetry(PartitionedTableauGauss(2))))
+    @test PartitionedTableauGauss(2).R∞ == +1
 
     @test !isexplicit(PartitionedTableauGauss(2))
     @test  isimplicit(PartitionedTableauGauss(2))
@@ -36,6 +38,7 @@ using RungeKutta: name, order, nstages, coefficients, weights, nodes
     @test nstages(TableauLobattoIIIAIIIB(2)) == 2
     @test issymplectic(TableauLobattoIIIAIIIB(2))
     @test issymmetric(TableauLobattoIIIAIIIB(2))
+    @test TableauLobattoIIIAIIIB(2).R∞ == -1
 
     @test  isexplicit(TableauLobattoIIIAIIIB(2))
     @test !isimplicit(TableauLobattoIIIAIIIB(2))
@@ -47,6 +50,7 @@ using RungeKutta: name, order, nstages, coefficients, weights, nodes
     @test nstages(TableauLobattoIIIAIIIB(3)) == 3
     @test issymplectic(TableauLobattoIIIAIIIB(3))
     @test issymmetric(TableauLobattoIIIAIIIB(3))
+    @test TableauLobattoIIIAIIIB(3).R∞ == +1
 
     @test !isexplicit(TableauLobattoIIIAIIIB(3))
     @test  isimplicit(TableauLobattoIIIAIIIB(3))
@@ -59,6 +63,7 @@ using RungeKutta: name, order, nstages, coefficients, weights, nodes
     @test nstages(TableauLobattoIIIBIIIA(2)) == 2
     @test issymplectic(TableauLobattoIIIBIIIA(2))
     @test issymmetric(TableauLobattoIIIBIIIA(2))
+    @test TableauLobattoIIIBIIIA(2).R∞ == -1
 
     @test  isexplicit(TableauLobattoIIIBIIIA(2))
     @test !isimplicit(TableauLobattoIIIBIIIA(2))
@@ -70,6 +75,7 @@ using RungeKutta: name, order, nstages, coefficients, weights, nodes
     @test nstages(TableauLobattoIIIBIIIA(3)) == 3
     @test issymplectic(TableauLobattoIIIBIIIA(3))
     @test issymmetric(TableauLobattoIIIBIIIA(3))
+    @test TableauLobattoIIIBIIIA(3).R∞ == +1
 
     @test !isexplicit(TableauLobattoIIIBIIIA(3))
     @test  isimplicit(TableauLobattoIIIBIIIA(3))
@@ -82,6 +88,7 @@ using RungeKutta: name, order, nstages, coefficients, weights, nodes
     @test nstages(TableauLobattoIIICIIIC̄(2)) == 2
     @test  issymplectic(TableauLobattoIIICIIIC̄(2))
     @test !issymmetric(TableauLobattoIIICIIIC̄(2))
+    @test TableauLobattoIIICIIIC̄(2).R∞ == -1
 
     @test !isexplicit(TableauLobattoIIICIIIC̄(2))
     @test  isimplicit(TableauLobattoIIICIIIC̄(2))
@@ -93,6 +100,7 @@ using RungeKutta: name, order, nstages, coefficients, weights, nodes
     @test nstages(TableauLobattoIIICIIIC̄(3)) == 3
     @test  issymplectic(TableauLobattoIIICIIIC̄(3))
     @test !issymmetric(TableauLobattoIIICIIIC̄(3))
+    @test TableauLobattoIIICIIIC̄(3).R∞ == +1
 
     @test !isexplicit(TableauLobattoIIICIIIC̄(3))
     @test  isimplicit(TableauLobattoIIICIIIC̄(3))
@@ -105,6 +113,7 @@ using RungeKutta: name, order, nstages, coefficients, weights, nodes
     @test nstages(TableauLobattoIIIC̄IIIC(2)) == 2
     @test  issymplectic(TableauLobattoIIIC̄IIIC(2))
     @test !issymmetric(TableauLobattoIIIC̄IIIC(2))
+    @test TableauLobattoIIIC̄IIIC(2).R∞ == -1
 
     @test !isexplicit(TableauLobattoIIIC̄IIIC(2))
     @test  isimplicit(TableauLobattoIIIC̄IIIC(2))
@@ -116,6 +125,7 @@ using RungeKutta: name, order, nstages, coefficients, weights, nodes
     @test nstages(TableauLobattoIIIC̄IIIC(3)) == 3
     @test  issymplectic(TableauLobattoIIIC̄IIIC(3))
     @test !issymmetric(TableauLobattoIIIC̄IIIC(3))
+    @test TableauLobattoIIIC̄IIIC(3).R∞ == +1
 
     @test !isexplicit(TableauLobattoIIIC̄IIIC(3))
     @test  isimplicit(TableauLobattoIIIC̄IIIC(3))

@@ -44,8 +44,7 @@ get_symplectic_conjugate_coefficients(a, b) = get_symplectic_conjugate_coefficie
 get_symplectic_conjugate_coefficients(tab::Tableau) = Tableau(tab.name, tab.s, get_symplectic_conjugate_coefficients(tab.a, tab.b), tab.b, tab.c)
 
 
-function symplecticize(tab::Tableau; name=nothing, T=Float64)
+function symplecticize(tab::Tableau; name=nothing, T=Float64, R∞=tab.R∞)
     a̅ = get_symplectic_conjugate_coefficients(tab.a, tab.b)
-    Tableau{T}(name === nothing ? Symbol(tab.name, "S") : name, tab.o, (tab.a .+ a̅) ./ 2, tab.b, tab.c)
+    Tableau{T}(name === nothing ? Symbol(tab.name, "S") : name, tab.o, (tab.a .+ a̅) ./ 2, tab.b, tab.c; R∞=R∞)
 end
-

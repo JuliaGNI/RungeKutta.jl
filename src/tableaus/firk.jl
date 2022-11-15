@@ -22,7 +22,7 @@ function TableauImplicitEuler(::Type{T}=Float64) where {T}
     c = ones(BigFloat, 1)
     o = 1
 
-    Tableau{T}(:implicit_euler, o, a, b, c)
+    Tableau{T}(:implicit_euler, o, a, b, c; R∞=0)
 end
 
 "Alias for [`TableauImplicitEuler`](@ref)"
@@ -51,7 +51,7 @@ function TableauImplicitMidpoint(::Type{T}=Float64) where {T}
     c = ones(BigFloat, 1) ./ 2
     o = 2
 
-    Tableau{T}(:implicit_midpoint, o, a, b, c)
+    Tableau{T}(:implicit_midpoint, o, a, b, c; R∞=-1)
 end
 
 """
@@ -79,5 +79,5 @@ function TableauSRK3(::Type{T}=Float64) where {T}
     c = @big  [ 1/2-√15/10,  1/2,       1/2+√15/10  ]
     o = 4
 
-    Tableau{T}(:SRK3, o, a, b, c)
+    Tableau{T}(:SRK3, o, a, b, c; R∞=-1)
 end

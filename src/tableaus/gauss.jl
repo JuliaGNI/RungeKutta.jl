@@ -71,7 +71,7 @@ References:
 
 """
 function TableauGauss(::Type{T}, s) where {T}
-    Tableau{T}(Symbol("Gauss($s)"), 2s, get_gauss_coefficients(s), get_gauss_weights(s), get_gauss_nodes(s))
+    Tableau{T}(Symbol("Gauss($s)"), 2s, get_gauss_coefficients(s), get_gauss_weights(s), get_gauss_nodes(s); R∞=(-1)^s)
 end
 
 TableauGauss(s) = TableauGauss(Float64, s)

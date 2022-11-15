@@ -5,6 +5,7 @@ using RungeKutta: name, order, nstages, coefficients, weights, nodes
     @test typeof(TableauExplicitEuler()) <: Tableau
     @test order(TableauExplicitEuler()) == 1
     @test nstages(TableauExplicitEuler()) == 1
+    @test TableauExplicitEuler().R∞ == Inf
 
     @test  isexplicit(TableauExplicitEuler())
     @test !isimplicit(TableauExplicitEuler())
@@ -114,6 +115,7 @@ end
     @test typeof(TableauImplicitEuler()) <: Tableau
     @test order(TableauImplicitEuler()) == 1
     @test nstages(TableauImplicitEuler()) == 1
+    @test TableauImplicitEuler().R∞ == 0
 
     @test !isexplicit(TableauImplicitEuler())
     @test  isimplicit(TableauImplicitEuler())
@@ -127,6 +129,7 @@ end
     @test nstages(TableauImplicitMidpoint()) == 1
     @test issymplectic(TableauImplicitMidpoint())
     @test issymmetric(TableauImplicitMidpoint())
+    @test TableauImplicitMidpoint().R∞ == -1
 
     @test !isexplicit(TableauImplicitMidpoint())
     @test  isimplicit(TableauImplicitMidpoint())

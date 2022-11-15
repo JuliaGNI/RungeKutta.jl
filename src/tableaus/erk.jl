@@ -23,7 +23,7 @@ function TableauExplicitEuler(::Type{T}=Float64) where {T}
     c = zeros(BigFloat, 1)
     o = 1
 
-    Tableau{T}(:explicit_euler, o, a, b, c)
+    Tableau{T}(:explicit_euler, o, a, b, c; R∞=Inf)
 end
 
 "Alias for [`TableauExplicitEuler`](@ref)"

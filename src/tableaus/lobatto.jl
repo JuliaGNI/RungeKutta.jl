@@ -209,7 +209,7 @@ References:
 
 """
 function TableauLobattoIIIA(::Type{T}, s) where {T}
-    Tableau{T}(Symbol("LobattoIIIA($s)"), 2s-2, get_lobatto_a_coefficients(s), get_lobatto_weights(s), get_lobatto_nodes(s))
+    Tableau{T}(Symbol("LobattoIIIA($s)"), 2s-2, get_lobatto_a_coefficients(s), get_lobatto_weights(s), get_lobatto_nodes(s); R∞=(-1)^(s+1))
 end
 
 """
@@ -235,7 +235,7 @@ References:
 
 """
 function TableauLobattoIIIB(::Type{T}, s) where {T}
-    Tableau{T}(Symbol("LobattoIIIB($s)"), 2s-2, get_lobatto_b_coefficients(s), get_lobatto_weights(s), get_lobatto_nodes(s))
+    Tableau{T}(Symbol("LobattoIIIB($s)"), 2s-2, get_lobatto_b_coefficients(s), get_lobatto_weights(s), get_lobatto_nodes(s); R∞=(-1)^(s+1))
 end
 
 """
@@ -262,7 +262,7 @@ References:
 
 """
 function TableauLobattoIIIC(::Type{T}, s) where {T}
-    Tableau{T}(Symbol("LobattoIIIC($s)"), 2s-2, get_lobatto_c_coefficients(s), get_lobatto_weights(s), get_lobatto_nodes(s))
+    Tableau{T}(Symbol("LobattoIIIC($s)"), 2s-2, get_lobatto_c_coefficients(s), get_lobatto_weights(s), get_lobatto_nodes(s); R∞=(-1)^(s+1))
 end
 
 """
@@ -289,7 +289,7 @@ References:
 
 """
 function TableauLobattoIIIC̄(::Type{T}, s) where {T}
-    Tableau{T}(Symbol("LobattoIIIC̄($s)"), 2s-2, get_lobatto_c̄_coefficients(s), get_lobatto_weights(s), get_lobatto_nodes(s))
+    Tableau{T}(Symbol("LobattoIIIC̄($s)"), 2s-2, get_lobatto_c̄_coefficients(s), get_lobatto_weights(s), get_lobatto_nodes(s); R∞=(-1)^(s+1))
 end
 
 """
@@ -316,7 +316,7 @@ References:
 
 """
 function TableauLobattoIIID(::Type{T}, s) where {T}
-    Tableau{T}(Symbol("LobattoIIID($s)"), 2s-2, get_lobatto_d_coefficients(s), get_lobatto_weights(s), get_lobatto_nodes(s))
+    Tableau{T}(Symbol("LobattoIIID($s)"), 2s-2, get_lobatto_d_coefficients(s), get_lobatto_weights(s), get_lobatto_nodes(s); R∞=(-1)^s)
 end
 
 """
@@ -343,7 +343,7 @@ References:
 
 """
 function TableauLobattoIIIE(::Type{T}, s) where {T}
-    Tableau{T}(Symbol("LobattoIIIE($s)"), 2s-2, get_lobatto_e_coefficients(s), get_lobatto_weights(s), get_lobatto_nodes(s))
+    Tableau{T}(Symbol("LobattoIIIE($s)"), 2s-2, get_lobatto_e_coefficients(s), get_lobatto_weights(s), get_lobatto_nodes(s); R∞=(-1)^s)
 end
 
 """
@@ -364,7 +364,7 @@ References:
 
 """
 function TableauLobattoIIIF(::Type{T}, s) where {T}
-    Tableau{T}(Symbol("LobattoIIIF($s)"), 2s,   get_lobatto_f_coefficients(s), get_lobatto_weights(s), get_lobatto_nodes(s))
+    Tableau{T}(Symbol("LobattoIIIF($s)"), 2s,   get_lobatto_f_coefficients(s), get_lobatto_weights(s), get_lobatto_nodes(s); R∞=(-1)^s)
 end
 
 @doc raw"""
@@ -384,7 +384,7 @@ the symplecticity conditions $b_{i} \bar{a}_{i,j} + \bar{b}_{j} a_{j,i} = b_{i} 
 for all $1 \le i,j \le s$.
 """
 function TableauLobattoIIIG(::Type{T}, s) where {T}
-    Tableau{T}(Symbol("LobattoIIIG($s)"), 2s,   get_lobatto_g_coefficients(s), get_lobatto_weights(s), get_lobatto_nodes(s))
+    Tableau{T}(Symbol("LobattoIIIG($s)"), 2s,   get_lobatto_g_coefficients(s), get_lobatto_weights(s), get_lobatto_nodes(s); R∞=(-1)^s)
 end
 
 

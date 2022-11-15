@@ -6,7 +6,7 @@
         c = [1//2]
         o = 2
 
-        Tableau{T}(:Gauss1, o, a, b, c)
+        Tableau{T}(:Gauss1, o, a, b, c; R∞ = -1)
     end
 
     function _getTableauGLRK2(T=Float64)
@@ -18,7 +18,7 @@
         c = [1/2-√3/6, 1/2+√3/6]
         o = 4
 
-        Tableau{T}(:Gauss2, o, a, b, c)
+        Tableau{T}(:Gauss2, o, a, b, c; R∞ = +1)
     end
 
     function _getTableauGLRK3(T=Float64)
@@ -31,7 +31,7 @@
         c = [1/2-√15/10,  1/2,        1/2+√15/10 ]
         o = 6
 
-        Tableau{T}(:Gauss3, o, a, b, c)
+        Tableau{T}(:Gauss3, o, a, b, c; R∞ = -1)
     end
 
     function _getTableauGLRK4(T=Float64)
@@ -70,7 +70,7 @@
 
         o = 8
 
-        Tableau{T}(:Gauss4, o, a, b, c)
+        Tableau{T}(:Gauss4, o, a, b, c; R∞ = +1)
     end
 
     function _getTableauGLRK5(T=Float64)
@@ -120,7 +120,7 @@
 
         o = 10
 
-        Tableau{T}(:Gauss5, o, a, b, c)
+        Tableau{T}(:Gauss5, o, a, b, c; R∞ = -1)
     end
 
     function _getTableauGLRK6(T=Float64)
@@ -183,7 +183,7 @@
 
         o = 12
 
-        Tableau{T}(:Gauss6, o, a, b, c)
+        Tableau{T}(:Gauss6, o, a, b, c; R∞ = +1)
     end
 
 
