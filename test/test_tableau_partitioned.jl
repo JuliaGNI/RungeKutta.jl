@@ -8,7 +8,7 @@ using RungeKutta: name, order, eachstage, nstages
             q = Tableau(:qTest, 2s, rand(T,s,s), rand(T,s), rand(T,s))
             p = Tableau(:pTest, 2s, rand(T,s,s), rand(T,s), rand(T,s))
             
-            tab1 = PartitionedTableau{T}(:Test, 2s, s, q, p)
+            tab1 = PartitionedTableau{T}(:Test, 2s, q, p)
             tab2 = PartitionedTableau{T}(:Test, q, p)
             tab3 = PartitionedTableau(:Test, q, p)
             tab4 = PartitionedTableau(:Test, q)

@@ -26,7 +26,7 @@ The actual tableaus are stored in `q` and `p`:
 
 Constructors:
 ```julia
-PartitionedTableau{T}(name, o, s, q, p)
+PartitionedTableau{T}(name, o, q, p)
 PartitionedTableau{T}(name, q, p)
 PartitionedTableau(name::Symbol, q::Tableau, p::Tableau)
 PartitionedTableau(name::Symbol, q::Tableau)
@@ -38,13 +38,13 @@ struct PartitionedTableau{T} <: AbstractPartitionedTableau{T}
     q::Tableau{T}
     p::Tableau{T}
 
-    function PartitionedTableau{T}(name, o, s, q, p) where {T}
-        @assert s == q.s == p.s
-        new(name, o, s, q, p)
+    function PartitionedTableau{T}(name, o, q, p) where {T}
+        @assert q.s == p.s
+        new(name, o, q.s, q, p)
     end
 
     function PartitionedTableau{T}(name, q, p) where {T}
-        new(name, min(q.o, p.o), q.s, q, p)
+        PartitionedTableau{T}(name, min(q.o, p.o), q, p)
     end
 end
 
