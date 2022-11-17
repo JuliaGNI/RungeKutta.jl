@@ -39,8 +39,11 @@
         @test B̂.b == E.b
         @test B̂.c == E.c
 
-        @test  issymplectic(Â)
-        @test  issymplectic(B̂)
+        @test issymplectic(Â)
+        @test issymplectic(B̂)
+
+        @test issymplectic(SymplecticTableau(A))
+        @test issymplectic(SymplecticPartitionedTableau(A))
     end
 
     for s in 2:10
