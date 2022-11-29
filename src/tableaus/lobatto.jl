@@ -212,6 +212,14 @@ function TableauLobattoIIIA(::Type{T}, s) where {T}
     Tableau{T}(Symbol("LobattoIIIA($s)"), 2s-2, get_lobatto_a_coefficients(s), get_lobatto_weights(s), get_lobatto_nodes(s); R∞=(-1)^(s+1))
 end
 
+function TableauLobattoIIIĀ(::Type{T}, s) where {T}
+    a = get_lobatto_a_coefficients(s)
+    b = get_lobatto_weights(s)
+    ā = get_symplectic_conjugate_coefficients(a,b)
+    Tableau{T}(Symbol("LobattoIIIĀ($s)"), 2s-2, ā, b, get_lobatto_nodes(s); R∞=(-1)^(s+1))
+end
+
+
 """
 Lobatto IIIB tableau with s stages
 
@@ -237,6 +245,14 @@ References:
 function TableauLobattoIIIB(::Type{T}, s) where {T}
     Tableau{T}(Symbol("LobattoIIIB($s)"), 2s-2, get_lobatto_b_coefficients(s), get_lobatto_weights(s), get_lobatto_nodes(s); R∞=(-1)^(s+1))
 end
+
+function TableauLobattoIIIB̄(::Type{T}, s) where {T}
+    a = get_lobatto_b_coefficients(s)
+    b = get_lobatto_weights(s)
+    ā = get_symplectic_conjugate_coefficients(a,b)
+    Tableau{T}(Symbol("LobattoIIIB̄($s)"), 2s-2, ā, b, get_lobatto_nodes(s); R∞=(-1)^(s+1))
+end
+
 
 """
 Lobatto IIIC tableau with s stages
@@ -319,6 +335,14 @@ function TableauLobattoIIID(::Type{T}, s) where {T}
     Tableau{T}(Symbol("LobattoIIID($s)"), 2s-2, get_lobatto_d_coefficients(s), get_lobatto_weights(s), get_lobatto_nodes(s); R∞=(-1)^s)
 end
 
+function TableauLobattoIIID̄(::Type{T}, s) where {T}
+    a = get_lobatto_d_coefficients(s)
+    b = get_lobatto_weights(s)
+    ā = get_symplectic_conjugate_coefficients(a,b)
+    Tableau{T}(Symbol("LobattoIIID̄($s)"), 2s-2, ā, b, get_lobatto_nodes(s); R∞=(-1)^s)
+end
+
+
 """
 Lobatto IIIE tableau with s stages
 
@@ -346,6 +370,14 @@ function TableauLobattoIIIE(::Type{T}, s) where {T}
     Tableau{T}(Symbol("LobattoIIIE($s)"), 2s-2, get_lobatto_e_coefficients(s), get_lobatto_weights(s), get_lobatto_nodes(s); R∞=(-1)^s)
 end
 
+function TableauLobattoIIIĒ(::Type{T}, s) where {T}
+    a = get_lobatto_e_coefficients(s)
+    b = get_lobatto_weights(s)
+    ā = get_symplectic_conjugate_coefficients(a,b)
+    Tableau{T}(Symbol("LobattoIIIĒ($s)"), 2s-2, ā, b, get_lobatto_nodes(s); R∞=(-1)^s)
+end
+
+
 """
 Lobatto IIIF tableau with s stages
 
@@ -367,6 +399,14 @@ function TableauLobattoIIIF(::Type{T}, s) where {T}
     Tableau{T}(Symbol("LobattoIIIF($s)"), 2s,   get_lobatto_f_coefficients(s), get_lobatto_weights(s), get_lobatto_nodes(s); R∞=(-1)^s)
 end
 
+function TableauLobattoIIIF̄(::Type{T}, s) where {T}
+    a = get_lobatto_f_coefficients(s)
+    b = get_lobatto_weights(s)
+    ā = get_symplectic_conjugate_coefficients(a,b)
+    Tableau{T}(Symbol("LobattoIIIF̄($s)"), 2s, ā, b, get_lobatto_nodes(s); R∞=(-1)^s)
+end
+
+
 @doc raw"""
 Lobatto IIIG tableau with s stages
 
@@ -387,12 +427,25 @@ function TableauLobattoIIIG(::Type{T}, s) where {T}
     Tableau{T}(Symbol("LobattoIIIG($s)"), 2s,   get_lobatto_g_coefficients(s), get_lobatto_weights(s), get_lobatto_nodes(s); R∞=(-1)^s)
 end
 
+function TableauLobattoIIIḠ(::Type{T}, s) where {T}
+    a = get_lobatto_g_coefficients(s)
+    b = get_lobatto_weights(s)
+    ā = get_symplectic_conjugate_coefficients(a,b)
+    Tableau{T}(Symbol("LobattoIIIḠ($s)"), 2s, ā, b, get_lobatto_nodes(s); R∞=(-1)^s)
+end
+
 
 TableauLobattoIIIA(s) = TableauLobattoIIIA(Float64, s)
+TableauLobattoIIIĀ(s) = TableauLobattoIIIĀ(Float64, s)
 TableauLobattoIIIB(s) = TableauLobattoIIIB(Float64, s)
+TableauLobattoIIIB̄(s) = TableauLobattoIIIB̄(Float64, s)
 TableauLobattoIIIC(s) = TableauLobattoIIIC(Float64, s)
 TableauLobattoIIIC̄(s) = TableauLobattoIIIC̄(Float64, s)
 TableauLobattoIIID(s) = TableauLobattoIIID(Float64, s)
+TableauLobattoIIID̄(s) = TableauLobattoIIID̄(Float64, s)
 TableauLobattoIIIE(s) = TableauLobattoIIIE(Float64, s)
+TableauLobattoIIIĒ(s) = TableauLobattoIIIĒ(Float64, s)
 TableauLobattoIIIF(s) = TableauLobattoIIIF(Float64, s)
+TableauLobattoIIIF̄(s) = TableauLobattoIIIF̄(Float64, s)
 TableauLobattoIIIG(s) = TableauLobattoIIIG(Float64, s)
+TableauLobattoIIIḠ(s) = TableauLobattoIIIḠ(Float64, s)

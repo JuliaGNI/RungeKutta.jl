@@ -9,8 +9,15 @@ module PartitionedTableaus
 
     export TableauLobattoIIIAIIIB,
            TableauLobattoIIIBIIIA,
+           TableauLobattoIIIAIIIĀ,
+           TableauLobattoIIIBIIIB̄,
            TableauLobattoIIICIIIC̄,
            TableauLobattoIIIC̄IIIC,
+           TableauLobattoIIIDIIID̄,
+           TableauLobattoIIIEIIIĒ,
+           TableauLobattoIIIFIIIF̄,
+           TableauLobattoIIIF̄IIIF,
+           TableauLobattoIIIGIIIḠ,
            PartitionedTableauGauss
 
 

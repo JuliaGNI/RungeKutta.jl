@@ -314,13 +314,19 @@ using RungeKutta.Tableaus: get_lobatto_nodes, get_lobatto_weights,
 
 
     @test_throws ErrorException TableauLobattoIIIA(1)
+    @test_throws ErrorException TableauLobattoIIIĀ(1)
     @test_throws ErrorException TableauLobattoIIIB(1)
+    @test_throws ErrorException TableauLobattoIIIB̄(1)
     @test_throws ErrorException TableauLobattoIIIC(1)
     @test_throws ErrorException TableauLobattoIIIC̄(1)
     @test_throws ErrorException TableauLobattoIIID(1)
+    @test_throws ErrorException TableauLobattoIIID̄(1)
     @test_throws ErrorException TableauLobattoIIIE(1)
+    @test_throws ErrorException TableauLobattoIIIĒ(1)
     @test_throws ErrorException TableauLobattoIIIF(1)
+    @test_throws ErrorException TableauLobattoIIIF̄(1)
     @test_throws ErrorException TableauLobattoIIIG(1)
+    @test_throws ErrorException TableauLobattoIIIḠ(1)
 
 
     @test TableauLobattoIIIA(2) ≈ _getTableauLobattoIIIA2()
@@ -360,5 +366,30 @@ using RungeKutta.Tableaus: get_lobatto_nodes, get_lobatto_weights,
     @test TableauLobattoIIIG(2) ≈ _getTableauLobattoIIIG2()
     @test TableauLobattoIIIG(3) ≈ _getTableauLobattoIIIG3()
     @test TableauLobattoIIIG(4) ≈ _getTableauLobattoIIIG4()
+
+    @test TableauLobattoIIIA(2) ≈ TableauLobattoIIIB̄(2)
+    @test TableauLobattoIIIA(3) ≈ TableauLobattoIIIB̄(3)
+    @test TableauLobattoIIIA(4) ≈ TableauLobattoIIIB̄(4)
+    @test TableauLobattoIIIA(5) ≈ TableauLobattoIIIB̄(5)
+
+    @test TableauLobattoIIIB(2) ≈ TableauLobattoIIIĀ(2)
+    @test TableauLobattoIIIB(3) ≈ TableauLobattoIIIĀ(3)
+    @test TableauLobattoIIIB(4) ≈ TableauLobattoIIIĀ(4)
+    @test TableauLobattoIIIB(5) ≈ TableauLobattoIIIĀ(5)
+
+    @test TableauLobattoIIID(2) ≈ TableauLobattoIIID̄(2)
+    @test TableauLobattoIIID(3) ≈ TableauLobattoIIID̄(3)
+    @test TableauLobattoIIID(4) ≈ TableauLobattoIIID̄(4)
+    @test TableauLobattoIIID(5) ≈ TableauLobattoIIID̄(5)
+
+    @test TableauLobattoIIIE(2) ≈ TableauLobattoIIIĒ(2)
+    @test TableauLobattoIIIE(3) ≈ TableauLobattoIIIĒ(3)
+    @test TableauLobattoIIIE(4) ≈ TableauLobattoIIIĒ(4)
+    @test TableauLobattoIIIE(5) ≈ TableauLobattoIIIĒ(5)
+
+    @test TableauLobattoIIIG(2) ≈ TableauLobattoIIIḠ(2)
+    @test TableauLobattoIIIG(3) ≈ TableauLobattoIIIḠ(3)
+    @test TableauLobattoIIIG(4) ≈ TableauLobattoIIIḠ(4)
+    @test TableauLobattoIIIG(5) ≈ TableauLobattoIIIḠ(5)
 
 end

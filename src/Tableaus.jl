@@ -41,8 +41,20 @@ module Tableaus
 
     include("tableaus/lobatto.jl")
 
-    export TableauLobattoIIIA, TableauLobattoIIIB, TableauLobattoIIIC, TableauLobattoIIIC̄,
-           TableauLobattoIIID, TableauLobattoIIIE, TableauLobattoIIIF, TableauLobattoIIIG
+    export TableauLobattoIIIA,
+           TableauLobattoIIIĀ,
+           TableauLobattoIIIB,
+           TableauLobattoIIIB̄,
+           TableauLobattoIIIC,
+           TableauLobattoIIIC̄,
+           TableauLobattoIIID,
+           TableauLobattoIIID̄,
+           TableauLobattoIIIE,
+           TableauLobattoIIIĒ,
+           TableauLobattoIIIF,
+           TableauLobattoIIIF̄,
+           TableauLobattoIIIG,
+           TableauLobattoIIIḠ
     export get_lobatto_nullvector
 
     include("tableaus/radau.jl")
