@@ -1,0 +1,7 @@
+# Radau-IA Runge-Kutta Methods
+
+```julia; echo=false; results="raw"
+for s in 2:3
+    show(stdout, "text/markdown", Tableau(Symbol("RadauIA($s)"), 2s-1, get_radau_1_coefficients(Sym, s), get_radau_1_weights(Sym, s), get_radau_1_nodes(Sym, s)))
+end
+```
