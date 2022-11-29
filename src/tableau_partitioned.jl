@@ -53,6 +53,7 @@ end
 
 PartitionedTableau(name::Symbol, q::Tableau{T}, p::Tableau{T}; kwargs...) where {T} = PartitionedTableau{T}(name, q, p; kwargs...)
 PartitionedTableau(name::Symbol, q::Tableau) = PartitionedTableau(name, q, q; R∞=q.R∞)
+PartitionedTableau(q::Tableau, p::Tableau; kwargs...) = PartitionedTableau(Symbol(q.name, p.name), q, p; kwargs...)
 PartitionedTableau(q::Tableau) = PartitionedTableau(q.name, q)
 
 Base.hash(tab::PartitionedTableau, h::UInt) = hash(tab.o, hash(tab.s, hash(tab.q, hash(tab.p, hash(:PartitionedTableau, h)))))
