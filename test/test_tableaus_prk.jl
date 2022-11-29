@@ -9,6 +9,9 @@ using RungeKutta: name, order, nstages, coefficients, weights, nodes
     @test typeof(PartitionedTableauGauss(1)) <: PartitionedTableau
     @test typeof(PartitionedTableauGauss(2)) <: PartitionedTableau
 
+    @test PartitionedTableauGauss(1) == PartitionedTableauGauss(Float64, 1)
+    @test PartitionedTableauGauss(2) == PartitionedTableauGauss(Float64, 2)
+
     @test order(PartitionedTableauGauss(1)) == 2
     @test order(PartitionedTableauGauss(2)) == 4
 
@@ -62,6 +65,18 @@ using RungeKutta: name, order, nstages, coefficients, weights, nodes
     @test typeof(TableauLobattoIIIF̄IIIF(3)) <: PartitionedTableau
     @test typeof(TableauLobattoIIIGIIIḠ(2)) <: PartitionedTableau
     @test typeof(TableauLobattoIIIGIIIḠ(3)) <: PartitionedTableau
+
+    @test TableauLobattoIIIAIIIB(2) == TableauLobattoIIIAIIIB(Float64, 2)
+    @test TableauLobattoIIIBIIIA(2) == TableauLobattoIIIBIIIA(Float64, 2)
+    @test TableauLobattoIIIAIIIĀ(2) == TableauLobattoIIIAIIIĀ(Float64, 2)
+    @test TableauLobattoIIIBIIIB̄(2) == TableauLobattoIIIBIIIB̄(Float64, 2)
+    @test TableauLobattoIIICIIIC̄(2) == TableauLobattoIIICIIIC̄(Float64, 2)
+    @test TableauLobattoIIIC̄IIIC(2) == TableauLobattoIIIC̄IIIC(Float64, 2)
+    @test TableauLobattoIIIDIIID̄(2) == TableauLobattoIIIDIIID̄(Float64, 2)
+    @test TableauLobattoIIIEIIIĒ(2) == TableauLobattoIIIEIIIĒ(Float64, 2)
+    @test TableauLobattoIIIFIIIF̄(2) == TableauLobattoIIIFIIIF̄(Float64, 2)
+    @test TableauLobattoIIIF̄IIIF(2) == TableauLobattoIIIF̄IIIF(Float64, 2)
+    @test TableauLobattoIIIGIIIḠ(2) == TableauLobattoIIIGIIIḠ(Float64, 2)
 
     @test order(TableauLobattoIIIAIIIB(2)) == 2
     @test order(TableauLobattoIIIAIIIB(3)) == 4

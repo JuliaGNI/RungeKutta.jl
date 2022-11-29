@@ -12,7 +12,7 @@ The constructor takes the number of stages `s` and optionally the element type `
 This partitioned tableau uses [`TableauGauss`](@ref) for both coefficients `a` and `ā`.
 """
 function PartitionedTableauGauss(::Type{T}, s::Int) where {T}
-    PartitionedTableau(Symbol("PGauss", s), TableauGauss(T, s))
+    PartitionedTableau(Symbol("PGauss", s), TableauGauss(T,s))
 end
 
 PartitionedTableauGauss(s) = PartitionedTableauGauss(Float64, s)
@@ -30,8 +30,8 @@ The constructor takes the number of stages `s` and optionally the element type `
 
 This partitioned tableau uses [`TableauLobattoIIIA`](@ref) for `a` and [`TableauLobattoIIIB`](@ref) for `ā`.
 """
-function TableauLobattoIIIAIIIB(s)
-    PartitionedTableau(Symbol("LobattoIIIAIIIB", s), TableauLobattoIIIA(s), TableauLobattoIIIB(s); R∞=(-1)^(s+1))
+function TableauLobattoIIIAIIIB(::Type{T}, s::Int) where {T}
+    PartitionedTableau(Symbol("LobattoIIIAIIIB", s), TableauLobattoIIIA(T,s), TableauLobattoIIIB(T,s); R∞=(-1)^(s+1))
 end
 
 
@@ -47,8 +47,8 @@ The constructor takes the number of stages `s` and optionally the element type `
 
 This partitioned tableau uses [`TableauLobattoIIIB`](@ref) for `a` and [`TableauLobattoIIIA`](@ref) for `ā`.
 """
-function TableauLobattoIIIBIIIA(s)
-    PartitionedTableau(Symbol("LobattoIIIBIIIA", s), TableauLobattoIIIB(s), TableauLobattoIIIA(s); R∞=(-1)^(s+1))
+function TableauLobattoIIIBIIIA(::Type{T}, s::Int) where {T}
+    PartitionedTableau(Symbol("LobattoIIIBIIIA", s), TableauLobattoIIIB(T,s), TableauLobattoIIIA(T,s); R∞=(-1)^(s+1))
 end
 
 
@@ -64,8 +64,8 @@ The constructor takes the number of stages `s` and optionally the element type `
 
 This partitioned tableau uses [`TableauLobattoIIIA`](@ref) for `a` and [`TableauLobattoIIIĀ`](@ref) for `ā`.
 """
-function TableauLobattoIIIAIIIĀ(s)
-    PartitionedTableau(Symbol("LobattoIIIAIIIĀ", s), TableauLobattoIIIA(s), TableauLobattoIIIĀ(s); R∞=(-1)^(s+1))
+function TableauLobattoIIIAIIIĀ(::Type{T}, s::Int) where {T}
+    PartitionedTableau(Symbol("LobattoIIIAIIIĀ", s), TableauLobattoIIIA(T,s), TableauLobattoIIIĀ(T,s); R∞=(-1)^(s+1))
 end
 
 
@@ -81,8 +81,8 @@ The constructor takes the number of stages `s` and optionally the element type `
 
 This partitioned tableau uses [`TableauLobattoIIIB`](@ref) for `a` and [`TableauLobattoIIIB̄`](@ref) for `ā`.
 """
-function TableauLobattoIIIBIIIB̄(s)
-    PartitionedTableau(Symbol("LobattoIIIBIIIB̄", s), TableauLobattoIIIB(s), TableauLobattoIIIB̄(s); R∞=(-1)^(s+1))
+function TableauLobattoIIIBIIIB̄(::Type{T}, s::Int) where {T}
+    PartitionedTableau(Symbol("LobattoIIIBIIIB̄", s), TableauLobattoIIIB(T,s), TableauLobattoIIIB̄(T,s); R∞=(-1)^(s+1))
 end
 
 
@@ -98,8 +98,8 @@ The constructor takes the number of stages `s` and optionally the element type `
 
 This partitioned tableau uses [`TableauLobattoIIIC`](@ref) for `a` and [`TableauLobattoIIIC̄`](@ref) for `ā`.
 """
-function TableauLobattoIIICIIIC̄(s)
-    PartitionedTableau(Symbol("LobattoIIICIIIC̄", s), TableauLobattoIIIC(s), TableauLobattoIIIC̄(s); R∞=(-1)^(s+1))
+function TableauLobattoIIICIIIC̄(::Type{T}, s::Int) where {T}
+    PartitionedTableau(Symbol("LobattoIIICIIIC̄", s), TableauLobattoIIIC(T,s), TableauLobattoIIIC̄(T,s); R∞=(-1)^(s+1))
 end
 
 
@@ -115,8 +115,8 @@ The constructor takes the number of stages `s` and optionally the element type `
 
 This partitioned tableau uses [`TableauLobattoIIIC̄`](@ref) for `a` and [`TableauLobattoIIIC`](@ref) for `ā`.
 """
-function TableauLobattoIIIC̄IIIC(s)
-    PartitionedTableau(Symbol("LobattoIIIC̄IIIC", s), TableauLobattoIIIC̄(s), TableauLobattoIIIC(s); R∞=(-1)^(s+1))
+function TableauLobattoIIIC̄IIIC(::Type{T}, s::Int) where {T}
+    PartitionedTableau(Symbol("LobattoIIIC̄IIIC", s), TableauLobattoIIIC̄(T,s), TableauLobattoIIIC(T,s); R∞=(-1)^(s+1))
 end
 
 
@@ -132,8 +132,8 @@ The constructor takes the number of stages `s` and optionally the element type `
 
 This partitioned tableau uses [`TableauLobattoIIID`](@ref) for `a` and [`TableauLobattoIIID̄`](@ref) for `ā`.
 """
-function TableauLobattoIIIDIIID̄(s)
-    PartitionedTableau(Symbol("LobattoIIIDIIID̄", s), TableauLobattoIIID(s), TableauLobattoIIID̄(s); R∞=(-1)^s)
+function TableauLobattoIIIDIIID̄(::Type{T}, s::Int) where {T}
+    PartitionedTableau(Symbol("LobattoIIIDIIID̄", s), TableauLobattoIIID(T,s), TableauLobattoIIID̄(T,s); R∞=(-1)^s)
 end
 
 
@@ -149,8 +149,8 @@ The constructor takes the number of stages `s` and optionally the element type `
 
 This partitioned tableau uses [`TableauLobattoIIIE`](@ref) for `a` and [`TableauLobattoIIIĒ`](@ref) for `ā`.
 """
-function TableauLobattoIIIEIIIĒ(s)
-    PartitionedTableau(Symbol("LobattoIIIEIIIĒ", s), TableauLobattoIIIE(s), TableauLobattoIIIĒ(s); R∞=(-1)^s)
+function TableauLobattoIIIEIIIĒ(::Type{T}, s::Int) where {T}
+    PartitionedTableau(Symbol("LobattoIIIEIIIĒ", s), TableauLobattoIIIE(T,s), TableauLobattoIIIĒ(T,s); R∞=(-1)^s)
 end
 
 
@@ -166,8 +166,8 @@ The constructor takes the number of stages `s` and optionally the element type `
 
 This partitioned tableau uses [`TableauLobattoIIIF`](@ref) for `a` and [`TableauLobattoIIIF̄`](@ref) for `ā`.
 """
-function TableauLobattoIIIFIIIF̄(s)
-    PartitionedTableau(Symbol("LobattoIIIFIIIF̄", s), TableauLobattoIIIF(s), TableauLobattoIIIF̄(s); R∞=(-1)^s)
+function TableauLobattoIIIFIIIF̄(::Type{T}, s::Int) where {T}
+    PartitionedTableau(Symbol("LobattoIIIFIIIF̄", s), TableauLobattoIIIF(T,s), TableauLobattoIIIF̄(T,s); R∞=(-1)^s)
 end
 
 
@@ -183,8 +183,8 @@ The constructor takes the number of stages `s` and optionally the element type `
 
 This partitioned tableau uses [`TableauLobattoIIIF̄`](@ref) for `a` and [`TableauLobattoIIIF`](@ref) for `ā`.
 """
-function TableauLobattoIIIF̄IIIF(s)
-    PartitionedTableau(Symbol("LobattoIIIF̄IIIF", s), TableauLobattoIIIF̄(s), TableauLobattoIIIF(s); R∞=(-1)^s)
+function TableauLobattoIIIF̄IIIF(::Type{T}, s::Int) where {T}
+    PartitionedTableau(Symbol("LobattoIIIF̄IIIF", s), TableauLobattoIIIF̄(T,s), TableauLobattoIIIF(T,s); R∞=(-1)^s)
 end
 
 
@@ -200,6 +200,19 @@ The constructor takes the number of stages `s` and optionally the element type `
 
 This partitioned tableau uses [`TableauLobattoIIIG`](@ref) for `a` and [`TableauLobattoIIIḠ`](@ref) for `ā`.
 """
-function TableauLobattoIIIGIIIḠ(s)
-    PartitionedTableau(Symbol("LobattoIIIGIIIḠ", s), TableauLobattoIIIG(s), TableauLobattoIIIḠ(s); R∞=(-1)^s)
+function TableauLobattoIIIGIIIḠ(::Type{T}, s::Int) where {T}
+    PartitionedTableau(Symbol("LobattoIIIGIIIḠ", s), TableauLobattoIIIG(T,s), TableauLobattoIIIḠ(T,s); R∞=(-1)^s)
 end
+
+
+TableauLobattoIIIAIIIB(s) = TableauLobattoIIIAIIIB(Float64, s)
+TableauLobattoIIIBIIIA(s) = TableauLobattoIIIBIIIA(Float64, s)
+TableauLobattoIIIAIIIĀ(s) = TableauLobattoIIIAIIIĀ(Float64, s)
+TableauLobattoIIIBIIIB̄(s) = TableauLobattoIIIBIIIB̄(Float64, s)
+TableauLobattoIIICIIIC̄(s) = TableauLobattoIIICIIIC̄(Float64, s)
+TableauLobattoIIIC̄IIIC(s) = TableauLobattoIIIC̄IIIC(Float64, s)
+TableauLobattoIIIDIIID̄(s) = TableauLobattoIIIDIIID̄(Float64, s)
+TableauLobattoIIIEIIIĒ(s) = TableauLobattoIIIEIIIĒ(Float64, s)
+TableauLobattoIIIFIIIF̄(s) = TableauLobattoIIIFIIIF̄(Float64, s)
+TableauLobattoIIIF̄IIIF(s) = TableauLobattoIIIF̄IIIF(Float64, s)
+TableauLobattoIIIGIIIḠ(s) = TableauLobattoIIIGIIIḠ(Float64, s)
