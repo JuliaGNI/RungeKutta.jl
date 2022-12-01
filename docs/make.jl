@@ -31,16 +31,18 @@ module RungeKuttaWeaves
         str_arr[tab.s+1,1] = ""
 
         strio = IOBuffer()
-        pretty_table(strio, str_arr,
-                        backend = :latex,
+        pretty_table(strio, LatexCell.(str_arr),
+                        backend = Val(:latex),
                         vlines = [1],
                         hlines = [tab.s],
                         noheader = true)
         tab_latex = String(take!(strio))
 
         tab_markdown = replace(tab_latex, "tabular" => "array")
-        tab_markdown = replace(tab_markdown, "\\begin{table}" => "```math")
-        tab_markdown = replace(tab_markdown, "\\end{table}" => "```")
+        # tab_markdown = replace(tab_markdown, "\\begin{table}" => "```math")
+        # tab_markdown = replace(tab_markdown, "\\end{table}" => "```")
+        tab_markdown = "```math\n" * tab_markdown * "```\n"
+
 
         print(io, tab_markdown * "\n")
     end

@@ -274,7 +274,7 @@ function Base.show(io::IO, ::MIME"text/markdown", tab::Tableau)
     tab_arr[tab.s+1,1] = ""
 
     strio = IOBuffer()
-    pretty_table(strio, tab_arr,
+    pretty_table(strio, LatexCell.(tab_arr),
                     backend = Val(:latex),
                     vlines = [1],
                     hlines = [tab.s],
@@ -282,8 +282,9 @@ function Base.show(io::IO, ::MIME"text/markdown", tab::Tableau)
     tab_latex = String(take!(strio))
 
     tab_markdown = replace(tab_latex, "tabular" => "array")
-    tab_markdown = replace(tab_markdown, "\\begin{table}" => "```math")
-    tab_markdown = replace(tab_markdown, "\\end{table}" => "```")
+    # tab_markdown = replace(tab_markdown, "\\begin{table}" => "```math")
+    # tab_markdown = replace(tab_markdown, "\\end{table}" => "```")
+    tab_markdown = "```math\n" * tab_markdown * "```\n"
 
     print(io, tab_markdown)
 end
