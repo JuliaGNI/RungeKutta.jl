@@ -61,4 +61,3 @@ SymplecticTableau(tab::Tableau) = symplecticize(tab)
 
 Generates a partitioned tableau with tab and ist symplectic adjoint.
 """
-SymplecticPartitionedTableau(tab::Tableau) = PartitionedTableau(Symbol("Symplectic$(tab.name)"), tab, get_symplectic_conjugate_coefficients(tab))
