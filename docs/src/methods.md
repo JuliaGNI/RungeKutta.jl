@@ -1,10 +1,13 @@
 # Methods with Tabulated Coefficients
 
-RungeKutta.jl provides tabulated coefficients for various explicit and implicit (both diagonally and fully implicit) Runge-Kutta methods, in particular
+RungeKutta.jl provides tabulated coefficients for various explicit and implicit (both diagonally and fully implicit) Runge-Kutta methods.
+All constructors take an optional type argument, defaulting to `Float64`.
+
+
+## Explicit Methods
 
 | Function and Aliases                                           | Stages | Order |
 |:---------------------------------------------------------------|:-------|:------|
-| **Explicit Methods**                                           |        |       |
 | [`TableauExplicitEuler`](@ref), [`TableauForwardEuler`](@ref)  | 1      | 1     |
 | [`TableauExplicitMidpoint`](@ref)                              | 2      | 2     |
 | [`TableauHeun2`](@ref)                                         | 2      | 2     |
@@ -24,18 +27,23 @@ RungeKutta.jl provides tabulated coefficients for various explicit and implicit 
 | [`TableauRK438`](@ref)                                         | 4      | 4     |
 | [`TableauRK5`](@ref)                                           | 6      | 5     |
 | [`TableauSSPRK3`](@ref)                                        | 3      | 3     |
-| **Diagonally Implicit Methods**                                |        |       |
+
+## Diagonally Implicit Methods
+
+| Function and Aliases                                           | Stages | Order |
+|:---------------------------------------------------------------|:-------|:------|
 | [`TableauCrankNicolson`](@ref)                                 | 2      | 2     |
 | [`TableauKraaijevangerSpijker`](@ref)                          | 2      | 2     |
 | [`TableauQinZhang`](@ref)                                      | 2      | 2     |
 | [`TableauCrouzeix`](@ref)                                      | 2      | 3     |
-| **Fully Implicit Methods**                                     |        |       |
+
+## Fully Implicit Methods
+
+| Function and Aliases                                           | Stages | Order |
+|:---------------------------------------------------------------|:-------|:------|
 | [`TableauImplicitEuler`](@ref), [`TableauBackwardEuler`](@ref) | 1      | 1     |
 | [`TableauImplicitMidpoint`](@ref)                              | 2      | 2     |
 | [`TableauSRK3`](@ref)                                          | 3      | 4     |
-
-All constructors take an optional type argument, defaulting to `Float64`.
-
 
 ## Gauß, Lobatto and Radau Methods
 
