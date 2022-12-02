@@ -12,7 +12,7 @@ using RungeKutta: name, order, nstages, coefficients, weights, nodes
     @test !isdiagnonallyimplicit(TableauExplicitEuler())
     @test !isfullyimplicit(TableauExplicitEuler())
     
-    @test TableauExplicitEuler() == TableauExplicitEuler()
+    @test TableauExplicitEuler() == TableauForwardEuler()
 
     @test typeof(TableauExplicitMidpoint()) <: Tableau
     @test order(TableauExplicitMidpoint()) == 2
@@ -82,8 +82,8 @@ end
     @test typeof(TableauCrankNicolson()) <: Tableau
     @test order(TableauCrankNicolson()) == 2
     @test nstages(TableauCrankNicolson()) == 2
-    @test issymmetric(TableauCrankNicolson())
 
+    @test issymmetric(TableauCrankNicolson())
     @test !isexplicit(TableauCrankNicolson())
     @test  isimplicit(TableauCrankNicolson())
     @test  isdiagnonallyimplicit(TableauCrankNicolson())
@@ -121,24 +121,31 @@ end
     @test  isimplicit(TableauImplicitEuler())
     @test !isdiagnonallyimplicit(TableauImplicitEuler())
     @test  isfullyimplicit(TableauImplicitEuler())
+    @test !issymplectic(TableauImplicitEuler())
+    @test !issymmetric(TableauImplicitEuler())
 
-    @test TableauBackwardEuler() == TableauImplicitEuler()
+    @test TableauImplicitEuler() == TableauBackwardEuler()
 
     @test typeof(TableauImplicitMidpoint()) <: Tableau
     @test order(TableauImplicitMidpoint()) == 2
     @test nstages(TableauImplicitMidpoint()) == 1
-    @test issymplectic(TableauImplicitMidpoint())
-    @test issymmetric(TableauImplicitMidpoint())
     @test TableauImplicitMidpoint().R∞ == -1
 
     @test !isexplicit(TableauImplicitMidpoint())
     @test  isimplicit(TableauImplicitMidpoint())
     @test !isdiagnonallyimplicit(TableauImplicitMidpoint())
     @test  isfullyimplicit(TableauImplicitMidpoint())
+    @test issymplectic(TableauImplicitMidpoint())
+    @test issymmetric(TableauImplicitMidpoint())
 
     @test typeof(TableauSRK3()) <: Tableau
     @test order(TableauSRK3()) == 4
     @test nstages(TableauSRK3()) == 3
+
+    @test !isexplicit(TableauSRK3())
+    @test  isimplicit(TableauSRK3())
+    @test !isdiagnonallyimplicit(TableauSRK3())
+    @test  isfullyimplicit(TableauSRK3())
     @test issymplectic(TableauSRK3())
     @test issymmetric(TableauSRK3())
     
