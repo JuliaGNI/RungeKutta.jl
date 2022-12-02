@@ -28,7 +28,8 @@ function TableauImplicitEuler(::Type{T}=Float64) where {T}
 end
 
 "Alias for [`TableauImplicitEuler`](@ref)"
-TableauBackwardEuler = TableauImplicitEuler
+const TableauBackwardEuler = TableauImplicitEuler
+RungeKutta.reference(::Val{:BackwardEuler}) = reference(Val(:ImplicitEuler))
 
 
 RungeKutta.reference(::Val{:ImplicitMidpoint}) = """

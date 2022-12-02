@@ -29,7 +29,8 @@ function TableauExplicitEuler(::Type{T}=Float64) where {T}
 end
 
 "Alias for [`TableauExplicitEuler`](@ref)"
-TableauForwardEuler = TableauExplicitEuler
+const TableauForwardEuler = TableauExplicitEuler
+RungeKutta.reference(::Val{:ForwardEuler}) = reference(Val(:ExplicitEuler))
 
 
 RungeKutta.reference(::Val{:ExplicitMidpoint}) = """
@@ -100,7 +101,8 @@ Alias for [`TableauHeun2`](@ref)
     Numerical Methods for Ordinary Differential Equations. Wiley, 2016.
     Page 99
 """
-TableauRK21 = TableauHeun2
+const TableauRK21 = TableauHeun2
+RungeKutta.reference(::Val{:RK21}) = reference(Val(:Heun2))
 
 
 RungeKutta.reference(::Val{:Heun3}) = """
@@ -228,7 +230,8 @@ function TableauRunge(::Type{T}=Float64) where {T}
 end
 
 "Alias for [`TableauRunge`](@ref)"
-TableauRunge2 = TableauRunge
+const TableauRunge2 = TableauRunge
+RungeKutta.reference(::Val{:Runge2}) = reference(Val(:Runge))
 
 """
 Alias for [`TableauRunge`](@ref)
@@ -238,7 +241,8 @@ Alias for [`TableauRunge`](@ref)
     Numerical Methods for Ordinary Differential Equations. Wiley, 2016.
     Page 99
 """
-TableauRK22 = TableauRunge
+const TableauRK22 = TableauRunge
+RungeKutta.reference(::Val{:RK22}) = reference(Val(:Runge))
 
 
 RungeKutta.reference(::Val{:Kutta}) = """
@@ -272,7 +276,8 @@ function TableauKutta(::Type{T}=Float64) where {T}
 end
 
 "Alias for [`TableauKutta`](@ref)"
-TableauKutta3 = TableauKutta
+const TableauKutta3 = TableauKutta
+RungeKutta.reference(::Val{:Kutta3}) = reference(Val(:Kutta))
 
 """
 Alias for [`TableauKutta`](@ref) according to
@@ -281,7 +286,8 @@ Alias for [`TableauKutta`](@ref) according to
     Numerical Methods for Ordinary Differential Equations. Wiley, 2016.
     Page 99
 """
-TableauRK32 = TableauKutta
+const TableauRK32 = TableauKutta
+RungeKutta.reference(::Val{:RK32}) = reference(Val(:Kutta))
 
 
 RungeKutta.reference(::Val{:RK31}) = """
@@ -352,10 +358,12 @@ Alias for [`TableauRK416`](@ref) according to
     Numerical Methods for Ordinary Differential Equations. Wiley, 2016.
     Page 102
 """
-TableauRK41 = TableauRK416
+const TableauRK41 = TableauRK416
+RungeKutta.reference(::Val{:RK41}) = reference(Val(:RK416))
 
 "Alias for [`TableauRK416`](@ref)"
-TableauRK4 = TableauRK416
+const TableauRK4 = TableauRK416
+RungeKutta.reference(::Val{:RK4}) = reference(Val(:RK416))
 
 
 RungeKutta.reference(::Val{:RK42}) = """
