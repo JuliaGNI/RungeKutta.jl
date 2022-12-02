@@ -54,12 +54,12 @@ weave("src/gauss.jmd",
          doctype = "github",
          mod = RungeKuttaWeaves)
 
-weave("src/radauIA.jmd",
+weave("src/radau1.jmd",
          out_path = "src",
          doctype = "github",
          mod = RungeKuttaWeaves)
 
-weave("src/radauIIA.jmd",
+weave("src/radau2.jmd",
          out_path = "src",
          doctype = "github",
          mod = RungeKuttaWeaves)
@@ -87,8 +87,8 @@ makedocs(bib;
         "Diagnostics" => "diagnostics.md",
         "Tabulated Methods" => "methods.md",
         "Gauß Methods" => "gauss.md",
-        "Radau IA Methods" => "radauIA.md",
-        "Radau IIA Methods" => "radauIIA.md",
+        "Radau I Methods" => "radau1.md",
+        "Radau II Methods" => "radau2.md",
         "Lobatto III Methods" => "lobatto.md",
         "Library" => "library.md",
         "Bibliography" => "bibliography.md",
