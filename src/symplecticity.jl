@@ -21,44 +21,41 @@ function issymplectic(tab::PartitionedTableau; kwargs...)
 end
 
 
-function compute_symplecticity_error(tab::Tableau)
-    a, b = tab.a, tab.b
+function symplecticity_error(a::AbstractMatrix{T}, b::AbstractVector{T}) where {T}
     [b[i] * a[i,j] + b[j] * a[j,i] - b[i] * b[j] for i in axes(a,1), j in axes(a,2)]
 end
 
+symplecticity_error(tab::Tableau) = symplecticity_error(tab.a, tab.b)
 
-function get_symplectic_conjugate_coefficients!(ā::AbstractMatrix{T}, a::AbstractMatrix{T}, b::AbstractVector{T}) where {T}
-    @assert size(a) == size(ā)
+
+function symplectic_conjugate_coefficients(a::AbstractMatrix{T}, b::AbstractVector{T}) where {T}
     @assert length(b) == size(a,1) == size(a,2)
-
-    for i in axes(ā, 1)
-        for j in axes(ā, 2)
-            ā[i,j] = b[j] / b[i] * ( b[i] - a[j,i] )
-        end
-    end
-
-    return ā
+    convert(typeof(a), [b[j] / b[i] * ( b[i] - a[j,i] ) for i in axes(a, 2), j in axes(a, 1)])
 end
 
-get_symplectic_conjugate_coefficients(a, b) = get_symplectic_conjugate_coefficients!(zero(a), a, b)
-get_symplectic_conjugate_coefficients(tab::Tableau) = Tableau(tab.name, tab.s, get_symplectic_conjugate_coefficients(tab.a, tab.b), tab.b, tab.c)
-
-
-function symplecticize(tab::Tableau{TT}; name=nothing, T=TT, R∞=tab.R∞) where {TT}
-    ā = get_symplectic_conjugate_coefficients(tab.a, tab.b)
-    Tableau{T}(name === nothing ? Symbol(tab.name, "S") : name, tab.o, (tab.a .+ ā) ./ 2, tab.b, tab.c; R∞=R∞)
-end
 
 """
     SymplecticTableau(tab::Tableau)
 
 Generates a new tableau with symplectizied coefficients.
 """
-SymplecticTableau(tab::Tableau) = symplecticize(tab)
+function SymplecticTableau(tab::Tableau{TT}; name=Symbol("Symplectic", tab.name), T=TT, R∞=tab.R∞) where {TT}
+    a = (tab.a .+ symplectic_conjugate_coefficients(tab.a, tab.b)) ./ 2
+    Tableau{T}(name, tab.o, a, tab.b, tab.c; R∞=R∞)
+end
+
+"""
+    SymplecticConjugateTableau(tab::Tableau)
+
+Generates a new tableau with symplectic conjugate coefficients.
+"""
+function SymplecticConjugateTableau(tab::Tableau{TT}; name=tab.name, T=TT, R∞=tab.R∞) where {TT}
+    Tableau{T}(name, tab.s, symplectic_conjugate_coefficients(tab.a, tab.b), tab.b, tab.c; R∞=R∞)
+end
 
 """
     SymplecticPartitionedTableau(tab::Tableau)
 
 Generates a partitioned tableau with tab and ist symplectic adjoint.
 """
-SymplecticPartitionedTableau(tab::Tableau) = PartitionedTableau(Symbol("Symplectic$(tab.name)"), tab, get_symplectic_conjugate_coefficients(tab); R∞=tab.R∞)
+SymplecticPartitionedTableau(tab::Tableau{TT}; name=Symbol("Symplectic", tab.name), T=TT, R∞=tab.R∞) where {TT} = PartitionedTableau{T}(name, tab, SymplecticConjugateTableau(tab); R∞=R∞)

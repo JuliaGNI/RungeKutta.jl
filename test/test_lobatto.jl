@@ -301,15 +301,15 @@ using RungeKutta.Tableaus: get_lobatto_nodes, get_lobatto_weights,
 
 
     function _getTableauLobattoIIIG2(T=Float64)
-        symplecticize(_getTableauLobattoIIIF2(BigFloat); name=:LobattoIIIG2, T=T)
+        SymplecticTableau(_getTableauLobattoIIIF2(BigFloat); name=:LobattoIIIG2, T=T)
     end
 
     function _getTableauLobattoIIIG3(T=Float64)
-        symplecticize(_getTableauLobattoIIIF3(BigFloat); name=:LobattoIIIG3, T=T)
+        SymplecticTableau(_getTableauLobattoIIIF3(BigFloat); name=:LobattoIIIG3, T=T)
     end
 
     function _getTableauLobattoIIIG4(T=Float64)
-        symplecticize(_getTableauLobattoIIIF4(BigFloat); name=:LobattoIIIG4, T=T)
+        SymplecticTableau(_getTableauLobattoIIIF4(BigFloat); name=:LobattoIIIG4, T=T)
     end
 
 
@@ -373,32 +373,6 @@ using RungeKutta.Tableaus: get_lobatto_nodes, get_lobatto_weights,
     @test TableauLobattoIIIG(3) ≈ _getTableauLobattoIIIG3()
     @test TableauLobattoIIIG(4) ≈ _getTableauLobattoIIIG4()
 
-    @test TableauLobattoIIIA(2) ≈ TableauLobattoIIIB̄(2)
-    @test TableauLobattoIIIA(3) ≈ TableauLobattoIIIB̄(3)
-    @test TableauLobattoIIIA(4) ≈ TableauLobattoIIIB̄(4)
-    @test TableauLobattoIIIA(5) ≈ TableauLobattoIIIB̄(5)
-
-    @test TableauLobattoIIIB(2) ≈ TableauLobattoIIIĀ(2)
-    @test TableauLobattoIIIB(3) ≈ TableauLobattoIIIĀ(3)
-    @test TableauLobattoIIIB(4) ≈ TableauLobattoIIIĀ(4)
-    @test TableauLobattoIIIB(5) ≈ TableauLobattoIIIĀ(5)
-
-    @test TableauLobattoIIID(2) ≈ TableauLobattoIIID̄(2)
-    @test TableauLobattoIIID(3) ≈ TableauLobattoIIID̄(3)
-    @test TableauLobattoIIID(4) ≈ TableauLobattoIIID̄(4)
-    @test TableauLobattoIIID(5) ≈ TableauLobattoIIID̄(5)
-
-    @test TableauLobattoIIIE(2) ≈ TableauLobattoIIIĒ(2)
-    @test TableauLobattoIIIE(3) ≈ TableauLobattoIIIĒ(3)
-    @test TableauLobattoIIIE(4) ≈ TableauLobattoIIIĒ(4)
-    @test TableauLobattoIIIE(5) ≈ TableauLobattoIIIĒ(5)
-
-    @test TableauLobattoIIIG(2) ≈ TableauLobattoIIIḠ(2)
-    @test TableauLobattoIIIG(3) ≈ TableauLobattoIIIḠ(3)
-    @test TableauLobattoIIIG(4) ≈ TableauLobattoIIIḠ(4)
-    @test TableauLobattoIIIG(5) ≈ TableauLobattoIIIḠ(5)
-
-    
     @test reference(TableauLobattoIII(2)) == reference(Val(:LobattoIII))
     @test reference(TableauLobattoIIIA(2)) == reference(Val(:LobattoIIIA))
     @test reference(TableauLobattoIIIB(2)) == reference(Val(:LobattoIIIB))
@@ -406,5 +380,22 @@ using RungeKutta.Tableaus: get_lobatto_nodes, get_lobatto_weights,
     @test reference(TableauLobattoIIID(2)) == reference(Val(:LobattoIIID))
     @test reference(TableauLobattoIIIE(2)) == reference(Val(:LobattoIIIE))
     @test reference(TableauLobattoIIIF(2)) == reference(Val(:LobattoIIIF))
+
+
+    for s in 2:5
+        @test TableauLobattoIIIA(s) ≈ TableauLobattoIIIB̄(s)
+        @test TableauLobattoIIIB(s) ≈ TableauLobattoIIIĀ(s)
+        @test TableauLobattoIIID(s) ≈ TableauLobattoIIID̄(s)
+        @test TableauLobattoIIIE(s) ≈ TableauLobattoIIIĒ(s)
+        @test TableauLobattoIIIG(s) ≈ TableauLobattoIIIḠ(s)
+    
+        @test !issymplectic(TableauLobattoIII(s))
+        @test !issymplectic(TableauLobattoIIIA(s))
+        @test !issymplectic(TableauLobattoIIIB(s))
+        @test !issymplectic(TableauLobattoIIIC(s))
+        @test !issymplectic(TableauLobattoIIIC̄(s))
+        @test  issymplectic(TableauLobattoIIID(s))
+        @test  issymplectic(TableauLobattoIIIE(s))
+    end
 
 end

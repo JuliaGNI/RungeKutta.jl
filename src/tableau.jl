@@ -36,16 +36,16 @@ of a Butcher tableau, i.e.,
    | b
 
 """
-struct Tableau{T, RT <: Union{Real,Missing}} <: AbstractTableau{T}
+struct Tableau{T, S, RT <: Union{Real,Missing}} <: AbstractTableau{T}
     @TableauHeader
 
-    a::Matrix{T}
-    b::Vector{T}
-    c::Vector{T}
+    a::SMatrix{S,S,T}
+    b::SVector{S,T}
+    c::SVector{S,T}
 
-    â::Matrix{T}
-    b̂::Vector{T}
-    ĉ::Vector{T}
+    â::SMatrix{S,S,T}
+    b̂::SVector{S,T}
+    ĉ::SVector{S,T}
 
     R∞::RT
 
@@ -53,19 +53,15 @@ struct Tableau{T, RT <: Union{Real,Missing}} <: AbstractTableau{T}
         @assert s > 0 "Number of stages must be > 0"
         @assert s == size(a,1) == size(a,2) == length(b) == length(c)
 
-        ã = convert(Matrix{T}, a)
-        b̃ = convert(Vector{T}, b)
-        c̃ = convert(Vector{T}, c)
+        ã = SMatrix{s,s}(convert(Matrix{T}, a))
+        b̃ = SVector{s}(convert(Vector{T}, b))
+        c̃ = SVector{s}(convert(Vector{T}, c))
 
-        â = similar(ã)
-        b̂ = similar(b̃)
-        ĉ = similar(c̃)
+        â = SMatrix{s,s}(a .- ã)
+        b̂ = SVector{s}(b .- b̃)
+        ĉ = SVector{s}(c .- c̃)
 
-        â .= a .- ã
-        b̂ .= b .- b̃
-        ĉ .= c .- c̃
-
-        new{T, typeof(R∞)}(name,o,s,ã,b̃,c̃,â,b̂,ĉ,R∞)
+        new{T, s, typeof(R∞)}(name,o,s,ã,b̃,c̃,â,b̂,ĉ,R∞)
     end
 
     function Tableau{T}(name, o, a, b, c; kwargs...) where {T}

@@ -2,23 +2,26 @@
 
     for s in 1:10
         g = TableauGauss(s)
-        g̃ = get_symplectic_conjugate_coefficients(g)
+        g̃ = SymplecticConjugateTableau(g)
 
         @test g.a ≈ g̃.a atol=1E-15
         @test g.b == g̃.b
         @test g.c == g̃.c
 
-        @test compute_symplecticity_error(g) ≈ zeros(s,s)  atol=eps()
+        @test symplecticity_error(g) ≈ zeros(s,s)  atol=eps()
         @test check_symplecticity(g) == Array{Bool}(ones(s,s))
+
         @test issymplectic(g)
+        @test issymplectic(g̃)
+        @test issymplectic(SymplecticTableau(g))
+        @test issymplectic(SymplecticPartitionedTableau(g))
     end
 
     for s in 2:10
         A = TableauLobattoIIIA(s)
         B = TableauLobattoIIIB(s)
-        E = TableauLobattoIIIE(s)
-        Ã = get_symplectic_conjugate_coefficients(A)
-        B̃ = get_symplectic_conjugate_coefficients(B)
+        Ã = SymplecticConjugateTableau(A)
+        B̃ = SymplecticConjugateTableau(B)
 
         @test A.a ≈ B̃.a atol=1E-15
         @test A.b == Ã.b
@@ -28,8 +31,10 @@
         @test B.b == Ã.b
         @test B.c == Ã.c
 
-        Â = symplecticize(A)
-        B̂ = symplecticize(B)
+
+        Â = SymplecticTableau(A)
+        B̂ = SymplecticTableau(B)
+        E = TableauLobattoIIIE(s)
 
         @test Â.a ≈ E.a atol=1E-15
         @test Â.b == E.b
@@ -41,20 +46,9 @@
 
         @test issymplectic(Â)
         @test issymplectic(B̂)
-
-        @test issymplectic(SymplecticTableau(A))
+        @test issymplectic(E)
         @test issymplectic(SymplecticPartitionedTableau(A))
-    end
-
-    for s in 2:10
-        @test !issymplectic(TableauLobattoIIIA(s))
-        @test !issymplectic(TableauLobattoIIIB(s))
-        @test !issymplectic(TableauLobattoIIIC(s))
-        @test !issymplectic(TableauLobattoIIIC̄(s))
-        @test  issymplectic(TableauLobattoIIID(s))
-        @test  issymplectic(TableauLobattoIIIE(s))
-        @test !issymplectic(TableauRadauIA(s))
-        @test !issymplectic(TableauRadauIIA(s))
+        @test issymplectic(SymplecticPartitionedTableau(B))
     end
 
 end
