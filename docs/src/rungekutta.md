@@ -80,7 +80,7 @@ Furthermore, the following theorem holds:
 **Theorem (Butcher 1964)**: If the coefficients $(a_{ij}, b_{i}, c_{i})$ of a Runge-Kutta method satisfy $B(\sigma)$, $C(\eta)$, $D(\zeta)$ with $\sigma \le \eta + \zeta + 1$ and $\sigma \le 2 \eta + 2$, then the method is of order $\sigma$.
 
 
-### Gauß, Lobatto and Radau Methods
+## Gauß, Lobatto and Radau Methods
 
 Gauß methods are collocation methods using the nodes and weights of Gaußian quadrature formulas.
 The nodes are the zeros of the shifted Legendre polynomials of degree $s$,

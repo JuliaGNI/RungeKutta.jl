@@ -85,6 +85,7 @@ makedocs(bib;
         "Runge-Kutta Methods" => "rungekutta.md",
         "Tableau" => "tableau.md",
         "Diagnostics" => "diagnostics.md",
+        "Tabulated Methods" => "methods.md",
         "Gauß Methods" => "gauss.md",
         "Radau IA Methods" => "radauIA.md",
         "Radau IIA Methods" => "radauIIA.md",
