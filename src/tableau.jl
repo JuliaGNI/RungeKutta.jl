@@ -242,15 +242,7 @@ const tf_butcher_tableau = TextFormat(
     row                 = ' '
 )
 
-"""
-```julia
-Base.show(io::IO, tab::Tableau)
-```
-
-Pretty-print Runge-Kutta tableau.
-"""
-function Base.show(io::IO, tab::Tableau)
-    print(io, "\nRunge-Kutta Tableau $(tab.name) with $(tab.s) stages and order $(tab.o):\n")
+function show_coefficients(io::IO, tab::Tableau)
     arr = convert(Matrix{Any}, tab)
     arr[tab.s+1,1] = ""
     pretty_table(io, arr,
@@ -260,6 +252,25 @@ function Base.show(io::IO, tab::Tableau)
                     body_hlines_format = ('─','┼','─','─'),
                     equal_columns_width = true,
                     noheader = true)
+end
+
+function Base.string(tab::Tableau)
+    strio = IOBuffer()
+    show_coefficients(strio, tab)
+    String(take!(strio))
+end
+
+
+"""
+```julia
+Base.show(io::IO, tab::Tableau)
+```
+
+Pretty-print Runge-Kutta tableau.
+"""
+function Base.show(io::IO, tab::Tableau)
+    print(io, "\nRunge-Kutta Tableau $(tab.name) with $(tab.s) stages and order $(tab.o):\n")
+    show_coefficients(io, tab)
 end
 
 """
