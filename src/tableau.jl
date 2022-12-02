@@ -216,6 +216,7 @@ coefficients(tab::Tableau) = tab.a
 weights(tab::Tableau) = tab.b
 nodes(tab::Tableau) = tab.c
 
+description(tab::Tableau) = "$(tab.name) with $(tab.s) $(tab.s == 1 ? "stage" : "stages") and order $(tab.o)"
 reference(tab::Tableau) = reference(Val(tab.name))
 
 isexplicit(tab::Tableau) = istrilstrict(tab.a) && tab.c[1] == 0
@@ -265,7 +266,7 @@ Base.show(io::IO, tab::Tableau)
 Pretty-print Runge-Kutta tableau.
 """
 function Base.show(io::IO, tab::Tableau)
-    print(io, "\nRunge-Kutta Tableau $(tab.name) with $(tab.s) stages and order $(tab.o):\n")
+    print(io, "\nRunge-Kutta Tableau $(description(tab)):\n")
     show_coefficients(io, tab)
 end
 
