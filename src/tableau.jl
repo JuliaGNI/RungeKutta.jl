@@ -220,6 +220,8 @@ coefficients(tab::Tableau) = tab.a
 weights(tab::Tableau) = tab.b
 nodes(tab::Tableau) = tab.c
 
+reference(tab::Tableau) = reference(Val(tab.name))
+
 isexplicit(tab::Tableau) = istrilstrict(tab.a) && tab.c[1] == 0
 isimplicit(tab::Tableau) = !isexplicit(tab)
 isdiagnonallyimplicit(tab::Tableau) = tab.s != 1 && !istrilstrict(tab.a) && istril(tab.a)

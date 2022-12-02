@@ -186,16 +186,7 @@ get_lobatto_f_coefficients(s) = get_lobatto_f_coefficients(BigFloat, s)
 get_lobatto_g_coefficients(s) = get_lobatto_g_coefficients(BigFloat, s)
 
 
-"""
-Lobatto IIIA tableau with s stages
-
-```julia
-TableauLobattoIIIA(::Type{T}, s)
-TableauLobattoIIIA(s) = TableauLobattoIIIA(Float64, s)
-```
-
-The constructor takes the number of stages `s` and optionally the element type `T` of the tableau.
-
+RungeKutta.reference(::Val{:LobattoIIIA}) = """
 References:
 
     Byron Leonard Ehle
@@ -206,10 +197,21 @@ References:
     Lobatto Methods.
     In: Engquist B. (eds). Encyclopedia of Applied and Computational Mathematics. Springer, Berlin, Heidelberg. 2015.
     doi: 10.1007/978-3-540-70529-1_123
+"""
 
 """
+Lobatto IIIA tableau with s stages
+
+```julia
+TableauLobattoIIIA(::Type{T}, s)
+TableauLobattoIIIA(s) = TableauLobattoIIIA(Float64, s)
+```
+The constructor takes the number of stages `s` and optionally the element type `T` of the tableau.
+
+$(reference(Val(:LobattoIIIA)))
+"""
 function TableauLobattoIIIA(::Type{T}, s) where {T}
-    Tableau{T}(Symbol("LobattoIIIA($s)"), 2s-2, get_lobatto_a_coefficients(s), get_lobatto_weights(s), get_lobatto_nodes(s); R∞=(-1)^(s+1))
+    Tableau{T}(:LobattoIIIA, 2s-2, get_lobatto_a_coefficients(s), get_lobatto_weights(s), get_lobatto_nodes(s); R∞=(-1)^(s+1))
 end
 
 
@@ -220,7 +222,6 @@ Lobatto IIIĀ tableau with s stages
 TableauLobattoIIIĀ(::Type{T}, s)
 TableauLobattoIIIĀ(s) = TableauLobattoIIIĀ(Float64, s)
 ```
-
 The constructor takes the number of stages `s` and optionally the element type `T` of the tableau.
 
 Lobatto IIIĀ tableau is the conjugate symplectic to [`TableauLobattoIIIA`](@ref).
@@ -232,20 +233,11 @@ function TableauLobattoIIIĀ(::Type{T}, s) where {T}
     a = get_lobatto_a_coefficients(s)
     b = get_lobatto_weights(s)
     ā = get_symplectic_conjugate_coefficients(a,b)
-    Tableau{T}(Symbol("LobattoIIIĀ($s)"), 2s-2, ā, b, get_lobatto_nodes(s); R∞=(-1)^(s+1))
+    Tableau{T}(:LobattoIIIĀ, 2s-2, ā, b, get_lobatto_nodes(s); R∞=(-1)^(s+1))
 end
 
 
-"""
-Lobatto IIIB tableau with s stages
-
-```julia
-TableauLobattoIIIB(::Type{T}, s)
-TableauLobattoIIIB(s) = TableauLobattoIIIB(Float64, s)
-```
-
-The constructor takes the number of stages `s` and optionally the element type `T` of the tableau.
-
+RungeKutta.reference(::Val{:LobattoIIIB}) = """
 References:
 
     Byron Leonard Ehle.
@@ -256,10 +248,21 @@ References:
     Lobatto Methods.
     In: Engquist B. (eds). Encyclopedia of Applied and Computational Mathematics. Springer, Berlin, Heidelberg. 2015.
     doi: 10.1007/978-3-540-70529-1_123.
+"""
 
 """
+Lobatto IIIB tableau with s stages
+
+```julia
+TableauLobattoIIIB(::Type{T}, s)
+TableauLobattoIIIB(s) = TableauLobattoIIIB(Float64, s)
+```
+The constructor takes the number of stages `s` and optionally the element type `T` of the tableau.
+
+$(reference(Val(:LobattoIIIB)))
+"""
 function TableauLobattoIIIB(::Type{T}, s) where {T}
-    Tableau{T}(Symbol("LobattoIIIB($s)"), 2s-2, get_lobatto_b_coefficients(s), get_lobatto_weights(s), get_lobatto_nodes(s); R∞=(-1)^(s+1))
+    Tableau{T}(:LobattoIIIB, 2s-2, get_lobatto_b_coefficients(s), get_lobatto_weights(s), get_lobatto_nodes(s); R∞=(-1)^(s+1))
 end
 
 
@@ -270,7 +273,6 @@ Lobatto IIIB̄ tableau with s stages
 TableauLobattoIIIB̄(::Type{T}, s)
 TableauLobattoIIIB̄(s) = TableauLobattoIIIB̄(Float64, s)
 ```
-
 The constructor takes the number of stages `s` and optionally the element type `T` of the tableau.
 
 Lobatto IIIB̄ tableau is the conjugate symplectic to [`TableauLobattoIIIB`](@ref).
@@ -282,20 +284,11 @@ function TableauLobattoIIIB̄(::Type{T}, s) where {T}
     a = get_lobatto_b_coefficients(s)
     b = get_lobatto_weights(s)
     ā = get_symplectic_conjugate_coefficients(a,b)
-    Tableau{T}(Symbol("LobattoIIIB̄($s)"), 2s-2, ā, b, get_lobatto_nodes(s); R∞=(-1)^(s+1))
+    Tableau{T}(:LobattoIIIB̄, 2s-2, ā, b, get_lobatto_nodes(s); R∞=(-1)^(s+1))
 end
 
 
-"""
-Lobatto IIIC tableau with s stages
-
-```julia
-TableauLobattoIIIC(::Type{T}, s)
-TableauLobattoIIIC(s) = TableauLobattoIIIC(Float64, s)
-```
-
-The constructor takes the number of stages `s` and optionally the element type `T` of the tableau.
-
+RungeKutta.reference(::Val{:LobattoIIIC}) = """
 References:
 
     F. H. Chipman.
@@ -307,22 +300,25 @@ References:
     Lobatto Methods.
     In: Engquist B. (eds). Encyclopedia of Applied and Computational Mathematics. Springer, Berlin, Heidelberg. 2015.
     doi: 10.1007/978-3-540-70529-1_123.
+"""
 
 """
-function TableauLobattoIIIC(::Type{T}, s) where {T}
-    Tableau{T}(Symbol("LobattoIIIC($s)"), 2s-2, get_lobatto_c_coefficients(s), get_lobatto_weights(s), get_lobatto_nodes(s); R∞=(-1)^(s+1))
-end
-
-"""
-Lobatto IIIC̄ tableau with s stages
+Lobatto IIIC tableau with s stages
 
 ```julia
-TableauLobattoIIIC̄(::Type{T}, s)
-TableauLobattoIIIC̄(s) = TableauLobattoIIIC̄(Float64, s)
+TableauLobattoIIIC(::Type{T}, s)
+TableauLobattoIIIC(s) = TableauLobattoIIIC(Float64, s)
 ```
-
 The constructor takes the number of stages `s` and optionally the element type `T` of the tableau.
 
+$(reference(Val(:LobattoIIIC)))
+"""
+function TableauLobattoIIIC(::Type{T}, s) where {T}
+    Tableau{T}(:LobattoIIIC, 2s-2, get_lobatto_c_coefficients(s), get_lobatto_weights(s), get_lobatto_nodes(s); R∞=(-1)^(s+1))
+end
+
+
+RungeKutta.reference(::Val{:LobattoIIIC̄}) = """
 References:
 
     John C. Butcher.
@@ -334,23 +330,25 @@ References:
     Lobatto Methods.
     In: Engquist B. (eds). Encyclopedia of Applied and Computational Mathematics. Springer, Berlin, Heidelberg. 2015.
     doi: 10.1007/978-3-540-70529-1_123.
+"""
 
 """
+Lobatto IIIC̄ tableau with s stages
+
+```julia
+TableauLobattoIIIC̄(::Type{T}, s)
+TableauLobattoIIIC̄(s) = TableauLobattoIIIC̄(Float64, s)
+```
+The constructor takes the number of stages `s` and optionally the element type `T` of the tableau.
+
+$(reference(Val(:LobattoIIIC̄)))
+"""
 function TableauLobattoIIIC̄(::Type{T}, s) where {T}
-    Tableau{T}(Symbol("LobattoIIIC̄($s)"), 2s-2, get_lobatto_c̄_coefficients(s), get_lobatto_weights(s), get_lobatto_nodes(s); R∞=(-1)^(s+1))
+    Tableau{T}(:LobattoIIIC̄, 2s-2, get_lobatto_c̄_coefficients(s), get_lobatto_weights(s), get_lobatto_nodes(s); R∞=(-1)^(s+1))
 end
 
 
-"""
-Lobatto IIID tableau with s stages
-
-```julia
-TableauLobattoIIID(::Type{T}, s)
-TableauLobattoIIID(s) = TableauLobattoIIID(Float64, s)
-```
-
-The constructor takes the number of stages `s` and optionally the element type `T` of the tableau.
-
+RungeKutta.reference(::Val{:LobattoIIID}) = """
 References:
 
     R.P.K. Chan.
@@ -362,10 +360,21 @@ References:
     Lobatto Methods.
     In: Engquist B. (eds). Encyclopedia of Applied and Computational Mathematics. Springer, Berlin, Heidelberg. 2015.
     doi: 10.1007/978-3-540-70529-1_123.
+"""
 
 """
+Lobatto IIID tableau with s stages
+
+```julia
+TableauLobattoIIID(::Type{T}, s)
+TableauLobattoIIID(s) = TableauLobattoIIID(Float64, s)
+```
+The constructor takes the number of stages `s` and optionally the element type `T` of the tableau.
+
+$(reference(Val(:LobattoIIID)))
+"""
 function TableauLobattoIIID(::Type{T}, s) where {T}
-    Tableau{T}(Symbol("LobattoIIID($s)"), 2s-2, get_lobatto_d_coefficients(s), get_lobatto_weights(s), get_lobatto_nodes(s); R∞=(-1)^s)
+    Tableau{T}(:LobattoIIID, 2s-2, get_lobatto_d_coefficients(s), get_lobatto_weights(s), get_lobatto_nodes(s); R∞=(-1)^s)
 end
 
 
@@ -376,7 +385,6 @@ Lobatto IIID̄ tableau with s stages
 TableauLobattoIIID̄(::Type{T}, s)
 TableauLobattoIIID̄(s) = TableauLobattoIIID̄(Float64, s)
 ```
-
 The constructor takes the number of stages `s` and optionally the element type `T` of the tableau.
 
 Lobatto IIID̄ tableau is the conjugate symplectic to [`TableauLobattoIIID`](@ref).
@@ -388,20 +396,11 @@ function TableauLobattoIIID̄(::Type{T}, s) where {T}
     a = get_lobatto_d_coefficients(s)
     b = get_lobatto_weights(s)
     ā = get_symplectic_conjugate_coefficients(a,b)
-    Tableau{T}(Symbol("LobattoIIID̄($s)"), 2s-2, ā, b, get_lobatto_nodes(s); R∞=(-1)^s)
+    Tableau{T}(:LobattoIIID̄, 2s-2, ā, b, get_lobatto_nodes(s); R∞=(-1)^s)
 end
 
 
-"""
-Lobatto IIIE tableau with s stages
-
-```julia
-TableauLobattoIIIE(::Type{T}, s)
-TableauLobattoIIIE(s) = TableauLobattoIIIE(Float64, s)
-```
-
-The constructor takes the number of stages `s` and optionally the element type `T` of the tableau.
-
+RungeKutta.reference(::Val{:LobattoIIIE}) = """
 References:
 
     R.P.K. Chan.
@@ -413,10 +412,22 @@ References:
     Lobatto Methods.
     In: Engquist B. (eds). Encyclopedia of Applied and Computational Mathematics. Springer, Berlin, Heidelberg. 2015.
     doi: 10.1007/978-3-540-70529-1_123.
+"""
 
 """
+Lobatto IIIE tableau with s stages
+
+```julia
+TableauLobattoIIIE(::Type{T}, s)
+TableauLobattoIIIE(s) = TableauLobattoIIIE(Float64, s)
+```
+
+The constructor takes the number of stages `s` and optionally the element type `T` of the tableau.
+
+$(reference(Val(:LobattoIIIE)))
+"""
 function TableauLobattoIIIE(::Type{T}, s) where {T}
-    Tableau{T}(Symbol("LobattoIIIE($s)"), 2s-2, get_lobatto_e_coefficients(s), get_lobatto_weights(s), get_lobatto_nodes(s); R∞=(-1)^s)
+    Tableau{T}(:LobattoIIIE, 2s-2, get_lobatto_e_coefficients(s), get_lobatto_weights(s), get_lobatto_nodes(s); R∞=(-1)^s)
 end
 
 
@@ -427,7 +438,6 @@ Lobatto IIIĒ tableau with s stages
 TableauLobattoIIIĒ(::Type{T}, s)
 TableauLobattoIIIĒ(s) = TableauLobattoIIIĒ(Float64, s)
 ```
-
 The constructor takes the number of stages `s` and optionally the element type `T` of the tableau.
 
 Lobatto IIIĒ tableau is the conjugate symplectic to [`TableauLobattoIIIE`](@ref).
@@ -439,9 +449,17 @@ function TableauLobattoIIIĒ(::Type{T}, s) where {T}
     a = get_lobatto_e_coefficients(s)
     b = get_lobatto_weights(s)
     ā = get_symplectic_conjugate_coefficients(a,b)
-    Tableau{T}(Symbol("LobattoIIIĒ($s)"), 2s-2, ā, b, get_lobatto_nodes(s); R∞=(-1)^s)
+    Tableau{T}(:LobattoIIIĒ, 2s-2, ā, b, get_lobatto_nodes(s); R∞=(-1)^s)
 end
 
+
+RungeKutta.reference(::Val{:LobattoIIIF}) = """
+References:
+
+    Wang Fangzong and Liao Xiaobing.
+    A Class of Lobatto Methods of Order 2s.
+    Journal of Applied Mathematics, Volume 46, Pages 6-10, 2016.
+"""
 
 """
 Lobatto IIIF tableau with s stages
@@ -450,18 +468,12 @@ Lobatto IIIF tableau with s stages
 TableauLobattoIIIF(::Type{T}, s)
 TableauLobattoIIIF(s) = TableauLobattoIIIF(Float64, s)
 ```
-
 The constructor takes the number of stages `s` and optionally the element type `T` of the tableau.
 
-References:
-
-    Wang Fangzong and Liao Xiaobing.
-    A Class of Lobatto Methods of Order 2s.
-    Journal of Applied Mathematics, Volume 46, Pages 6-10, 2016.
-
+$(reference(Val(:LobattoIIIF)))
 """
 function TableauLobattoIIIF(::Type{T}, s) where {T}
-    Tableau{T}(Symbol("LobattoIIIF($s)"), 2s,   get_lobatto_f_coefficients(s), get_lobatto_weights(s), get_lobatto_nodes(s); R∞=(-1)^s)
+    Tableau{T}(:LobattoIIIF, 2s,   get_lobatto_f_coefficients(s), get_lobatto_weights(s), get_lobatto_nodes(s); R∞=(-1)^s)
 end
 
 
@@ -472,7 +484,6 @@ Lobatto IIIF̄ tableau with s stages
 TableauLobattoIIIF̄(::Type{T}, s)
 TableauLobattoIIIF̄(s) = TableauLobattoIIIF̄(Float64, s)
 ```
-
 The constructor takes the number of stages `s` and optionally the element type `T` of the tableau.
 
 The Lobatto IIIF̄ tableau is the conjugate symplectic to [`TableauLobattoIIIF`](@ref).
@@ -481,7 +492,7 @@ function TableauLobattoIIIF̄(::Type{T}, s) where {T}
     a = get_lobatto_f_coefficients(s)
     b = get_lobatto_weights(s)
     ā = get_symplectic_conjugate_coefficients(a,b)
-    Tableau{T}(Symbol("LobattoIIIF̄($s)"), 2s, ā, b, get_lobatto_nodes(s); R∞=(-1)^s)
+    Tableau{T}(:LobattoIIIF̄, 2s, ā, b, get_lobatto_nodes(s); R∞=(-1)^s)
 end
 
 
@@ -492,7 +503,6 @@ Lobatto IIIG tableau with s stages
 TableauLobattoIIIG(::Type{T}, s)
 TableauLobattoIIIG(s) = TableauLobattoIIIG(Float64, s)
 ```
-
 The constructor takes the number of stages `s` and optionally the element type `T` of the tableau.
 
 Symplectizied algorithm for [`TableauLobattoIIIF`](@ref)
@@ -502,7 +512,7 @@ the symplecticity conditions $b_{i} \bar{a}_{i,j} + \bar{b}_{j} a_{j,i} = b_{i} 
 for all $1 \le i,j \le s$.
 """
 function TableauLobattoIIIG(::Type{T}, s) where {T}
-    Tableau{T}(Symbol("LobattoIIIG($s)"), 2s,   get_lobatto_g_coefficients(s), get_lobatto_weights(s), get_lobatto_nodes(s); R∞=(-1)^s)
+    Tableau{T}(:LobattoIIIG, 2s,   get_lobatto_g_coefficients(s), get_lobatto_weights(s), get_lobatto_nodes(s); R∞=(-1)^s)
 end
 
 
@@ -513,7 +523,6 @@ Lobatto IIIḠ tableau with s stages
 TableauLobattoIIIḠ(::Type{T}, s)
 TableauLobattoIIIḠ(s) = TableauLobattoIIIḠ(Float64, s)
 ```
-
 The constructor takes the number of stages `s` and optionally the element type `T` of the tableau.
 
 Lobatto IIIḠ tableau is the conjugate symplectic to [`TableauLobattoIIIG`](@ref).
@@ -525,7 +534,7 @@ function TableauLobattoIIIḠ(::Type{T}, s) where {T}
     a = get_lobatto_g_coefficients(s)
     b = get_lobatto_weights(s)
     ā = get_symplectic_conjugate_coefficients(a,b)
-    Tableau{T}(Symbol("LobattoIIIḠ($s)"), 2s, ā, b, get_lobatto_nodes(s); R∞=(-1)^s)
+    Tableau{T}(:LobattoIIIḠ, 2s, ā, b, get_lobatto_nodes(s); R∞=(-1)^s)
 end
 
 

@@ -81,6 +81,8 @@ order(tab::PartitionedTableau) = tab.o
 nstages(tab::PartitionedTableau) = tab.s
 eachstage(tab::PartitionedTableau) = 1:tab.s
 
+reference(tab::PartitionedTableau) = reference(Val(tab.name))
+
 isexplicit(tab::PartitionedTableau) = istril(tab.q.a) && istril(tab.p.a) && all([tab.q.a[i,i] == 0 || tab.p.a[i,i] == 0 for i in 1:tab.s]) && (tab.q.c[1] == 0 || tab.p.c[1] == 0)
 isimplicit(tab::PartitionedTableau) = !isexplicit(tab)
 isdiagnonallyimplicit(tab::PartitionedTableau) = isimplicit(tab) && tab.s != 1 && istril(tab.q.a) && istril(tab.p.a)

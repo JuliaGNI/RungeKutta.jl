@@ -25,6 +25,8 @@ module RungeKutta
            isdiagnonallyimplicit,
            isfullyimplicit
 
+    export reference
+
     include("order_conditions.jl")
 
     export check_order_conditions_b,

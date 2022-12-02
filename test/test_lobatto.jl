@@ -392,4 +392,12 @@ using RungeKutta.Tableaus: get_lobatto_nodes, get_lobatto_weights,
     @test TableauLobattoIIIG(4) ≈ TableauLobattoIIIḠ(4)
     @test TableauLobattoIIIG(5) ≈ TableauLobattoIIIḠ(5)
 
+    @test reference(TableauLobattoIIIA(2)) == reference(Val(:LobattoIIIA))
+    @test reference(TableauLobattoIIIB(2)) == reference(Val(:LobattoIIIB))
+    @test reference(TableauLobattoIIIC(2)) == reference(Val(:LobattoIIIC))
+    @test reference(TableauLobattoIIIC̄(2)) == reference(Val(:LobattoIIIC̄))
+    @test reference(TableauLobattoIIID(2)) == reference(Val(:LobattoIIID))
+    @test reference(TableauLobattoIIIE(2)) == reference(Val(:LobattoIIIE))
+    @test reference(TableauLobattoIIIF(2)) == reference(Val(:LobattoIIIF))
+
 end

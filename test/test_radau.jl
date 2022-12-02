@@ -111,4 +111,9 @@ using RungeKutta.Tableaus: get_radau_1_nodes, get_radau_1_weights, get_radau_1_c
     @test TableauRadauIIB(2) ≈ _TableauRadauIIB2()
     @test TableauRadauIIB(3) ≈ _TableauRadauIIB3()
 
+    @test reference(TableauRadauIA(2))  == reference(Val(:RadauIA))
+    @test reference(TableauRadauIB(2))  == reference(Val(:RadauIB))
+    @test reference(TableauRadauIIA(2)) == reference(Val(:RadauIIA))
+    @test reference(TableauRadauIIB(2)) == reference(Val(:RadauIIB))
+
 end

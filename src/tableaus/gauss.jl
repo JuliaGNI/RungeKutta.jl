@@ -47,16 +47,7 @@ end
 get_gauss_coefficients(s) = get_gauss_coefficients(BigFloat, s)
 
 
-"""
-Gauss tableau with s stages
-
-```julia
-TableauGauss(::Type{T}, s)
-TableauGauss(s) = TableauGauss(Float64, s)
-```
-
-The constructor takes the number of stages `s` and optionally the element type `T` of the tableau.
-
+RungeKutta.reference(::Val{:Gauss}) = """
 References:
 
     John C. Butcher.
@@ -68,10 +59,21 @@ References:
     Gauss Methods. 
     In: Engquist B. (eds). Encyclopedia of Applied and Computational Mathematics. Springer, Berlin, Heidelberg. 2015.
     doi: 10.1007/978-3-540-70529-1_115.
+"""
 
 """
+Gauss tableau with s stages
+
+```julia
+TableauGauss(::Type{T}, s)
+TableauGauss(s) = TableauGauss(Float64, s)
+```
+The constructor takes the number of stages `s` and optionally the element type `T` of the tableau.
+
+$(reference(Val(:Gauss)))
+"""
 function TableauGauss(::Type{T}, s) where {T}
-    Tableau{T}(Symbol("Gauss($s)"), 2s, get_gauss_coefficients(s), get_gauss_weights(s), get_gauss_nodes(s); R∞=(-1)^s)
+    Tableau{T}(:Gauss, 2s, get_gauss_coefficients(s), get_gauss_weights(s), get_gauss_nodes(s); R∞=(-1)^s)
 end
 
 TableauGauss(s) = TableauGauss(Float64, s)

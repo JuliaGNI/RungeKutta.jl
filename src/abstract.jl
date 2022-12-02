@@ -11,3 +11,4 @@ end
 name(::AbstractTableau) = missing
 order(::AbstractTableau) = missing
 nstages(::AbstractTableau) = missing
+reference(::AbstractTableau) = missing

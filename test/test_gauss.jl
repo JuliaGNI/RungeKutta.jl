@@ -194,4 +194,6 @@
     @test TableauGauss(5) ≈ _getTableauGLRK5()
     @test TableauGauss(6) ≈ _getTableauGLRK6()
 
+    @test reference(TableauGauss(1)) == reference(Val(:Gauss))
+
 end

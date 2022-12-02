@@ -101,6 +101,14 @@ end
 get_radau_2_coefficients(s) = get_radau_2_coefficients(BigFloat, s)
 
 
+RungeKutta.reference(::Val{:RadauIA}) = """
+References:
+
+    Byron Leonard Ehle
+    On Padé approximations to the exponential function and a-stable methods for the numerical solution of initial value problems.
+    Research Report CSRR 2010, Dept. AACS, University of Waterloo, 1969.
+"""
+
 """
 Radau IA tableau with s stages
 
@@ -108,22 +116,24 @@ Radau IA tableau with s stages
 TableauRadauIA(::Type{T}, s)
 TableauRadauIA(s) = TableauRadauIA(Float64, s)
 ```
-
 The constructor takes the number of stages `s` and optionally the element type `T` of the tableau.
 
-References:
-
-    Byron Leonard Ehle
-    On Padé approximations to the exponential function and a-stable methods for the numerical solution of initial value problems.
-    Research Report CSRR 2010, Dept. AACS, University of Waterloo, 1969.
-
+$(reference(Val(:RadauIA)))
 """
 function TableauRadauIA(::Type{T}, s) where {T}
-    Tableau{T}(Symbol("RadauIA($s)"), 2s-1, get_radau_1_coefficients(s), get_radau_1_weights(s), get_radau_1_nodes(s); R∞=0)
+    Tableau{T}(:RadauIA, 2s-1, get_radau_1_coefficients(s), get_radau_1_weights(s), get_radau_1_nodes(s); R∞=0)
 end
 
 TableauRadauIA(s) = TableauRadauIA(Float64, s)
 
+
+RungeKutta.reference(::Val{:RadauIB}) = """
+Reference:
+
+    Sun Geng
+    Construction of high order symplectic Runge-Kutta methods
+    Journal of Computational Mathematics, Volume 11, Pages 250-260, 1993.
+"""
 
 @doc raw"""
 Radau IB tableau with s stages
@@ -132,7 +142,6 @@ Radau IB tableau with s stages
 TableauRadauIB(::Type{T}, s)
 TableauRadauIB(s) = TableauRadauIB(Float64, s)
 ```
-
 The constructor takes the number of stages `s` and optionally the element type `T` of the tableau.
 
 Coefficients are taken as $a^B = \frac{1}{2} ( a^A + \bar{a}^A )$ where $a^A$ are the coefficients
@@ -140,34 +149,20 @@ of the Radau IA method and $\bar{a}^A$ are computed such that the symplecticity 
 $b_{i} \bar{a}_{i,j} + \bar{b}_{j} a_{j,i} = b_{i} \bar{b}_{j}$ and $b_{i} = \bar{b}_i$ hold for
 all $1 \le i,j \le s$.
 
-Reference:
-
-    Sun Geng
-    Construction of high order symplectic Runge-Kutta methods
-    Journal of Computational Mathematics, Volume 11, Pages 250-260, 1993.
-
+$(reference(Val(:RadauIB)))
 """
 function TableauRadauIB(::Type{T}, s) where {T}
     a = get_radau_1_coefficients(BigFloat,s)
     b = get_radau_1_weights(BigFloat,s)
     ā = get_symplectic_conjugate_coefficients(a,b)
 
-    Tableau{T}(Symbol("RadauIB($s)"), 2s-1, (a .+ ā) ./ 2, b, get_radau_1_nodes(s); R∞=0)
+    Tableau{T}(:RadauIB, 2s-1, (a .+ ā) ./ 2, b, get_radau_1_nodes(s); R∞=0)
 end
 
 TableauRadauIB(s) = TableauRadauIB(Float64, s)
 
 
-"""
-Radau IIA tableau with s stages
-
-```julia
-TableauRadauIIA(::Type{T}, s)
-TableauRadauIIA(s) = TableauRadauIIA(Float64, s)
-```
-
-The constructor takes the number of stages `s` and optionally the element type `T` of the tableau.
-
+RungeKutta.reference(::Val{:RadauIIA}) = """
 References:
 
     Byron Leonard Ehle
@@ -183,14 +178,33 @@ References:
     Radau Methods.
     In: Engquist B. (eds). Encyclopedia of Applied and Computational Mathematics. Springer, Berlin, Heidelberg. 2015.
     doi: 10.1007/978-3-540-70529-1_139.
+"""
 
 """
+Radau IIA tableau with s stages
+
+```julia
+TableauRadauIIA(::Type{T}, s)
+TableauRadauIIA(s) = TableauRadauIIA(Float64, s)
+```
+The constructor takes the number of stages `s` and optionally the element type `T` of the tableau.
+
+$(reference(Val(:RadauIIA)))
+"""
 function TableauRadauIIA(::Type{T}, s) where {T}
-    Tableau{T}(Symbol("RadauIIA($s)"), 2s-1, get_radau_2_coefficients(s), get_radau_2_weights(s), get_radau_2_nodes(s); R∞=0)
+    Tableau{T}(:RadauIIA, 2s-1, get_radau_2_coefficients(s), get_radau_2_weights(s), get_radau_2_nodes(s); R∞=0)
 end
 
 TableauRadauIIA(s) = TableauRadauIIA(Float64, s)
 
+
+RungeKutta.reference(::Val{:RadauIIB}) = """
+Reference:
+
+    Sun Geng
+    Construction of high order symplectic Runge-Kutta methods
+    Journal of Computational Mathematics, Volume 11, Pages 250-260, 1993.
+"""
 
 @doc raw"""
 Radau IIB tableau with s stages
@@ -199,7 +213,6 @@ Radau IIB tableau with s stages
 TableauRadauIIB(::Type{T}, s)
 TableauRadauIIB(s) = TableauRadauIIB(Float64, s)
 ```
-
 The constructor takes the number of stages `s` and optionally the element type `T` of the tableau.
 
 Coefficients are taken as $a^B = \frac{1}{2} ( a^A + \bar{a}^A )$ where $a^A$ are the coefficients
@@ -207,19 +220,14 @@ of the Radau IIA method and $\bar{a}^A$ are computed such that the symplecticity
 $b_{i} \bar{a}_{i,j} + \bar{b}_{j} a_{j,i} = b_{i} \bar{b}_{j}$ and $b_{i} = \bar{b}_i$ hold for
 all $1 \le i,j \le s$.
 
-Reference:
-
-    Sun Geng
-    Construction of high order symplectic Runge-Kutta methods
-    Journal of Computational Mathematics, Volume 11, Pages 250-260, 1993.
-
+$(reference(Val(:RadauIIB)))
 """
 function TableauRadauIIB(::Type{T}, s) where {T}
     a = get_radau_2_coefficients(BigFloat,s)
     b = get_radau_2_weights(BigFloat,s)
     ā = get_symplectic_conjugate_coefficients(a,b)
 
-    Tableau{T}(Symbol("RadauIIB($s)"), 2s-1, (a .+ ā) ./ 2, b, get_radau_2_nodes(s); R∞=0)
+    Tableau{T}(:RadauIIB, 2s-1, (a .+ ā) ./ 2, b, get_radau_2_nodes(s); R∞=0)
 end
 
 TableauRadauIIB(s) = TableauRadauIIB(Float64, s)
