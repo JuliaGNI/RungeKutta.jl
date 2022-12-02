@@ -4,6 +4,7 @@ module RungeKutta
     using Markdown
     using PrettyTables
     using Reexport
+    using StaticArrays
 
     import GenericLinearAlgebra
     import GeometricBase.Utils: @big, @define
