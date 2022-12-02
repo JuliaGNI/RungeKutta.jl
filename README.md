@@ -46,11 +46,11 @@ The `Tableau` type has the following fields
 
 The following tableaus are implemented (prepend `Tableau` to the name to call the respective constructor):
 
-- *explicit*: ExplicitEuler/ForwardEuler, ExplicitMidpoint, Heun2, Heun3, Ralston2, Ralston3, Runge/Runge2, Kutta/Kutta3, RK4/RK416, RK438, SSPRK3
+- *explicit*: ExplicitEuler/ForwardEuler, ExplicitMidpoint, Heun2, Heun3, Ralston2, Ralston3, Runge2, Kutta3, RK21, RK22, RK31, RK32, RK4, RK41, RK42, RK416, RK438, RK5, SSPRK2, SSPRK3
 
-- *diagonally implicit*: KraaijevangerSpijker, QinZhang, Crouzeix
+- *diagonally implicit*: CrankNicolson, Crouzeix, KraaijevangerSpijker, QinZhang
 
-- *fully implicit*: ImplicitEuler/BackwardEuler, ImplicitMidpoint, CrankNicolson, SRK3
+- *fully implicit*: ImplicitEuler/BackwardEuler, ImplicitMidpoint, SRK3
 
 In addition there exist functions to compute Gauss, Lobatto and Radau tableaus with an arbitrary number of stages s:
 
