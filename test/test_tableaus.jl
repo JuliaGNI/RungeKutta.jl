@@ -30,6 +30,8 @@ using RungeKutta: name, order, nstages, coefficients, weights, nodes
     @test nstages(TableauHeun2()) == 2
     @test reference(TableauHeun2()) == reference(Val(:Heun2))
 
+    @test TableauHeun2() == TableauRK21()
+
     @test typeof(TableauHeun3()) <: Tableau
     @test order(TableauHeun3()) == 3
     @test nstages(TableauHeun3()) == 3
@@ -51,6 +53,7 @@ using RungeKutta: name, order, nstages, coefficients, weights, nodes
     @test reference(TableauRunge()) == reference(Val(:Runge))
 
     @test TableauRunge2() == TableauRunge()
+    @test TableauRunge2() == TableauRK22()
 
     @test typeof(TableauKutta()) <: Tableau
     @test order(TableauKutta()) == 3
@@ -58,23 +61,40 @@ using RungeKutta: name, order, nstages, coefficients, weights, nodes
     @test reference(TableauKutta()) == reference(Val(:Kutta))
 
     @test TableauKutta3() == TableauKutta()
+    @test TableauKutta3() == TableauRK32()
+
+    @test typeof(TableauRK31()) <: Tableau
+    @test order(TableauRK31()) == 3
+    @test nstages(TableauRK31()) == 3
+    @test reference(TableauRK31()) == reference(Val(:RK31))
 
     @test typeof(TableauRK416()) <: Tableau
     @test order(TableauRK416()) == 4
     @test nstages(TableauRK416()) == 4
     @test reference(TableauRK416()) == reference(Val(:RK416))
 
-    @test TableauRK4() == TableauRK416()
+    @test TableauRK416() == TableauRK4()
+    @test TableauRK416() == TableauRK41()
 
-    @test  isexplicit(TableauRK4())
-    @test !isimplicit(TableauRK4())
-    @test !isdiagnonallyimplicit(TableauRK4())
-    @test !isfullyimplicit(TableauRK4())
+    @test  isexplicit(TableauRK416())
+    @test !isimplicit(TableauRK416())
+    @test !isdiagnonallyimplicit(TableauRK416())
+    @test !isfullyimplicit(TableauRK416())
     
+    @test typeof(TableauRK42()) <: Tableau
+    @test order(TableauRK42()) == 4
+    @test nstages(TableauRK42()) == 4
+    @test reference(TableauRK42()) == reference(Val(:RK42))
+
     @test typeof(TableauRK438()) <: Tableau
     @test order(TableauRK438()) == 4
     @test nstages(TableauRK438()) == 4
     @test reference(TableauRK438()) == reference(Val(:RK438))
+
+    @test typeof(TableauRK5()) <: Tableau
+    @test order(TableauRK5()) == 5
+    @test nstages(TableauRK5()) == 6
+    @test reference(TableauRK5()) == reference(Val(:RK5))
 
     @test typeof(TableauSSPRK2()) <: Tableau
     @test order(TableauSSPRK2()) == 2

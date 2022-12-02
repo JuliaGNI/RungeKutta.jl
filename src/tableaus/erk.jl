@@ -92,6 +92,16 @@ function TableauHeun2(::Type{T}=Float64) where {T}
     Tableau{T}(:Heun2, o, a, b, c)
 end
 
+"""
+Alias for [`TableauHeun2`](@ref)
+    according to
+
+    John C. Butcher
+    Numerical Methods for Ordinary Differential Equations. Wiley, 2016.
+    Page 99
+"""
+TableauRK21 = TableauHeun2
+
 
 RungeKutta.reference(::Val{:Heun3}) = """
 Reference:
@@ -209,9 +219,9 @@ $(reference(Val(:Runge)))
 """
 function TableauRunge(::Type{T}=Float64) where {T}
     a = @big [[ 0      0    ]
-              [ 1      0    ]]
-    b = @big  [ 1//2,  1//2 ]
-    c = @big  [ 0,     1    ]
+              [ 1//2   0    ]]
+    b = @big  [ 0,     1    ]
+    c = @big  [ 0,     1//2 ]
     o = 2
 
     Tableau{T}(:Runge, o, a, b, c)
@@ -220,13 +230,23 @@ end
 "Alias for [`TableauRunge`](@ref)"
 TableauRunge2 = TableauRunge
 
+"""
+Alias for [`TableauRunge`](@ref)
+    according to
+
+    John C. Butcher
+    Numerical Methods for Ordinary Differential Equations. Wiley, 2016.
+    Page 99
+"""
+TableauRK22 = TableauRunge
+
 
 RungeKutta.reference(::Val{:Kutta}) = """
 Reference:
 
     Wilhelm Kutta
     Beitrag zur Näherungsweisen Integration totaler Differentialgleichungen
-    Zeitschrift für Mathematik und Physik, Volume 46, Pages 435–453, 1901.
+    Zeitschrift für Mathematik und Physik, Volume 46, Pages 435-453, 1901.
     Page 440
 """
 
@@ -254,13 +274,52 @@ end
 "Alias for [`TableauKutta`](@ref)"
 TableauKutta3 = TableauKutta
 
+"""
+Alias for [`TableauKutta`](@ref) according to
+
+    John C. Butcher
+    Numerical Methods for Ordinary Differential Equations. Wiley, 2016.
+    Page 99
+"""
+TableauRK32 = TableauKutta
+
+
+RungeKutta.reference(::Val{:RK31}) = """
+Reference:
+
+    John C. Butcher
+    Numerical Methods for Ordinary Differential Equations. Wiley, 2016.
+    Page 99
+"""
+
+"""
+Tableau of a three-stage, 3rd order method
+
+```julia
+TableauKutta(::Type{T}=Float64) where {T}
+```
+The constructor takes one optional argument, that is the element type of the tableau.
+
+$(reference(Val(:RK31)))
+"""
+function TableauRK31(::Type{T}=Float64) where {T}
+    a = @big [[ 0      0      0    ]
+              [ 2//3   0      0    ]
+              [ 1//3   1//3   0    ]]
+    b = @big  [ 1//4,  0,     3//4 ]
+    c = @big  [ 0,     2//3,  2//3 ]
+    o = 3
+
+    Tableau{T}(:RK31, o, a, b, c)
+end
+
 
 RungeKutta.reference(::Val{:RK416}) = """
 Reference:
 
     Wilhelm Kutta
     Beitrag zur Näherungsweisen Integration totaler Differentialgleichungen
-    Zeitschrift für Mathematik und Physik, Volume 46, Pages 435–453, 1901.
+    Zeitschrift für Mathematik und Physik, Volume 46, Pages 435-453, 1901.
     Page 443
 """
 
@@ -286,8 +345,48 @@ function TableauRK416(::Type{T}=Float64) where {T}
     Tableau{T}(:RK416, o, a, b, c)
 end
 
+"""
+Alias for [`TableauRK416`](@ref) according to
+
+    John C. Butcher
+    Numerical Methods for Ordinary Differential Equations. Wiley, 2016.
+    Page 102
+"""
+TableauRK41 = TableauRK416
+
 "Alias for [`TableauRK416`](@ref)"
 TableauRK4 = TableauRK416
+
+
+RungeKutta.reference(::Val{:RK42}) = """
+Reference:
+
+    John C. Butcher
+    Numerical Methods for Ordinary Differential Equations. Wiley, 2016.
+    Page 102
+"""
+
+"""
+Tableau of explicit Runge-Kutta method of order four with four stages
+
+```julia
+TableauRK42(::Type{T}=Float64) where {T}
+```
+The constructor takes one optional argument, that is the element type of the tableau.
+
+$(reference(Val(:RK42)))
+"""
+function TableauRK42(::Type{T}=Float64) where {T}
+    a = @big [[ 0      0      0      0    ]
+              [ 1//4   0      0      0    ]
+              [ 0      1//2   0      0    ]
+              [ 1     -2      1      0    ]]
+    b = @big  [ 1//6,  0,     2//3,  1//6 ]
+    c = @big  [ 0,     1//4,  1//2,  1    ]
+    o = 4
+
+    Tableau{T}(:RK42, o, a, b, c)
+end
 
 
 RungeKutta.reference(::Val{:RK438}) = """
@@ -295,7 +394,7 @@ Reference:
 
     Wilhelm Kutta
     Beitrag zur Näherungsweisen Integration totaler Differentialgleichungen
-    Zeitschrift für Mathematik und Physik, Volume 46, Pages 435–453, 1901.
+    Zeitschrift für Mathematik und Physik, Volume 46, Pages 435-453, 1901.
     Page 441
 """
 
@@ -319,6 +418,39 @@ function TableauRK438(::Type{T}=Float64) where {T}
     o = 4
 
     Tableau{T}(:RK438, o, a, b, c)
+end
+
+
+RungeKutta.reference(::Val{:RK5}) = """
+Reference:
+
+    John C. Butcher
+    Numerical Methods for Ordinary Differential Equations. Wiley, 2016.
+    Page 103
+"""
+
+"""
+Tableau of explicit Runge-Kutta method of order five with six stages
+
+```julia
+TableauRK5(::Type{T}=Float64) where {T}
+```
+The constructor takes one optional argument, that is the element type of the tableau.
+
+$(reference(Val(:RK5)))
+"""
+function TableauRK5(::Type{T}=Float64) where {T}
+    a = @big [[ 0       0       0       0       0       0    ]
+              [ 1//4    0       0       0       0       0    ]
+              [ 1//8    1//8    0       0       0       0    ]
+              [ 0       0       1//2    0       0       0    ]
+              [ 3//16  -3//8    3//8    9//16   0       0    ]
+              [-3//7    8//7    6//7   -12//7   8//7    0    ]]
+    b = @big  [ 7//90,  0,      32//90, 12//90, 32//90, 7//90]
+    c = @big  [ 0,      1//4,   1//4,   1//2,   3//4,   1    ]
+    o = 5
+
+    Tableau{T}(:RK5, o, a, b, c)
 end
 
 
