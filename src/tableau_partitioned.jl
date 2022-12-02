@@ -88,3 +88,17 @@ isexplicit(tab::PartitionedTableau) = istril(tab.q.a) && istril(tab.p.a) && all(
 isimplicit(tab::PartitionedTableau) = !isexplicit(tab)
 isdiagnonallyimplicit(tab::PartitionedTableau) = isimplicit(tab) && tab.s != 1 && istril(tab.q.a) && istril(tab.p.a)
 isfullyimplicit(tab::PartitionedTableau) = !isexplicit(tab) && !(isdiagnonallyimplicit(tab))
+
+
+"""
+```julia
+Base.show(io::IO, tab::PartitionedTableau)
+```
+
+Pretty-print Partitioned Runge-Kutta tableau.
+"""
+function Base.show(io::IO, tab::PartitionedTableau)
+    print(io, "\nPartitioned Runge-Kutta Tableau $(description(tab)):\n")
+    show_coefficients(io, tab.q)
+    show_coefficients(io, tab.p)
+end
