@@ -17,25 +17,18 @@ All tableaus can be retrieved in arbitrary precision.
 
 *RungeKutta.jl* and all of its dependencies can be installed via the Julia REPL by typing 
 ```julia
-]add RungeKutta
+julia> ]add RungeKutta
 ```
 
 ## Basic Usage
 
 After loading the Runge-Kutta module by
-```julia
-julia> using RungeKutta
+```@repl 1
+using RungeKutta
 ```
 a `Tableau` can be created by calling any one of the provided constructors, for example
-```julia
-julia> TableauExplicitMidpoint()
-
-Runge-Kutta Tableau explicit_midpoint with 2 stages and order 2:
-
- 0.0 │ 0.0  0.0
- 0.5 │ 0.5  0.0
-─────┼──────────
-     │ 0.0  1.0
+```@repl 1
+TableauExplicitMidpoint()
 ```
 
 The `Tableau` type has the following fields
