@@ -46,13 +46,14 @@ module RungeKutta
 
     include("symplecticity.jl")
     
-    export SymplecticTableau, SymplecticPartitionedTableau
+    export SymplecticTableau,
+           SymplecticConjugateTableau,
+           SymplecticPartitionedTableau
+
     export check_symplecticity,
-           compute_symplecticity_error,
+           symplecticity_error,
            issymplectic,
-           get_symplectic_conjugate_coefficients,
-           get_symplectic_conjugate_coefficients!,
-           symplecticize
+           symplectic_conjugate_coefficients
 
 
     include("Tableaus.jl")

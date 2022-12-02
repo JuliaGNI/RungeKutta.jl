@@ -171,7 +171,7 @@ end
 function get_lobatto_g_coefficients(::Type{T}, s) where {T}
     a = get_lobatto_f_coefficients(T,s)
     b = get_lobatto_weights(T,s)
-    ā = get_symplectic_conjugate_coefficients(a,b)
+    ā = symplectic_conjugate_coefficients(a,b)
     return (a .+ ā) ./ 2
 end
 
@@ -264,7 +264,7 @@ values are slightly different.
 function TableauLobattoIIIĀ(::Type{T}, s) where {T}
     a = get_lobatto_a_coefficients(s)
     b = get_lobatto_weights(s)
-    ā = get_symplectic_conjugate_coefficients(a,b)
+    ā = symplectic_conjugate_coefficients(a,b)
     Tableau{T}(:LobattoIIIĀ, 2s-2, ā, b, get_lobatto_nodes(s); R∞=(-1)^(s+1))
 end
 
@@ -315,7 +315,7 @@ values are slightly different.
 function TableauLobattoIIIB̄(::Type{T}, s) where {T}
     a = get_lobatto_b_coefficients(s)
     b = get_lobatto_weights(s)
-    ā = get_symplectic_conjugate_coefficients(a,b)
+    ā = symplectic_conjugate_coefficients(a,b)
     Tableau{T}(:LobattoIIIB̄, 2s-2, ā, b, get_lobatto_nodes(s); R∞=(-1)^(s+1))
 end
 
@@ -367,7 +367,7 @@ values are slightly different.
 function TableauLobattoIIIC̄(::Type{T}, s) where {T}
     a = get_lobatto_c_coefficients(s)
     b = get_lobatto_weights(s)
-    ā = get_symplectic_conjugate_coefficients(a,b)
+    ā = symplectic_conjugate_coefficients(a,b)
     Tableau{T}(:LobattoIIIC̄, 2s-2, ā, b, get_lobatto_nodes(s); R∞=(-1)^(s+1))
 end
 
@@ -419,7 +419,7 @@ and thus the numerical values are slightly different.
 function TableauLobattoIIID̄(::Type{T}, s) where {T}
     a = get_lobatto_d_coefficients(s)
     b = get_lobatto_weights(s)
-    ā = get_symplectic_conjugate_coefficients(a,b)
+    ā = symplectic_conjugate_coefficients(a,b)
     Tableau{T}(:LobattoIIID̄, 2s-2, ā, b, get_lobatto_nodes(s); R∞=(-1)^s)
 end
 
@@ -472,7 +472,7 @@ and thus the numerical values are slightly different.
 function TableauLobattoIIIĒ(::Type{T}, s) where {T}
     a = get_lobatto_e_coefficients(s)
     b = get_lobatto_weights(s)
-    ā = get_symplectic_conjugate_coefficients(a,b)
+    ā = symplectic_conjugate_coefficients(a,b)
     Tableau{T}(:LobattoIIIĒ, 2s-2, ā, b, get_lobatto_nodes(s); R∞=(-1)^s)
 end
 
@@ -515,7 +515,7 @@ The Lobatto IIIF̄ tableau is the conjugate symplectic to [`TableauLobattoIIIF`]
 function TableauLobattoIIIF̄(::Type{T}, s) where {T}
     a = get_lobatto_f_coefficients(s)
     b = get_lobatto_weights(s)
-    ā = get_symplectic_conjugate_coefficients(a,b)
+    ā = symplectic_conjugate_coefficients(a,b)
     Tableau{T}(:LobattoIIIF̄, 2s, ā, b, get_lobatto_nodes(s); R∞=(-1)^s)
 end
 
@@ -557,7 +557,7 @@ and thus the numerical values are slightly different.
 function TableauLobattoIIIḠ(::Type{T}, s) where {T}
     a = get_lobatto_g_coefficients(s)
     b = get_lobatto_weights(s)
-    ā = get_symplectic_conjugate_coefficients(a,b)
+    ā = symplectic_conjugate_coefficients(a,b)
     Tableau{T}(:LobattoIIIḠ, 2s, ā, b, get_lobatto_nodes(s); R∞=(-1)^s)
 end
 

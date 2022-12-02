@@ -154,7 +154,7 @@ $(reference(Val(:RadauIB)))
 function TableauRadauIB(::Type{T}, s) where {T}
     a = get_radau_1_coefficients(BigFloat,s)
     b = get_radau_1_weights(BigFloat,s)
-    ā = get_symplectic_conjugate_coefficients(a,b)
+    ā = symplectic_conjugate_coefficients(a,b)
 
     Tableau{T}(:RadauIB, 2s-1, (a .+ ā) ./ 2, b, get_radau_1_nodes(s); R∞=0)
 end
@@ -225,7 +225,7 @@ $(reference(Val(:RadauIIB)))
 function TableauRadauIIB(::Type{T}, s) where {T}
     a = get_radau_2_coefficients(BigFloat,s)
     b = get_radau_2_weights(BigFloat,s)
-    ā = get_symplectic_conjugate_coefficients(a,b)
+    ā = symplectic_conjugate_coefficients(a,b)
 
     Tableau{T}(:RadauIIB, 2s-1, (a .+ ā) ./ 2, b, get_radau_2_nodes(s); R∞=0)
 end

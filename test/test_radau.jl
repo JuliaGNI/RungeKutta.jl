@@ -116,4 +116,9 @@ using RungeKutta.Tableaus: get_radau_1_nodes, get_radau_1_weights, get_radau_1_c
     @test reference(TableauRadauIIA(2)) == reference(Val(:RadauIIA))
     @test reference(TableauRadauIIB(2)) == reference(Val(:RadauIIB))
 
+    for s in 2:5
+        @test !issymplectic(TableauRadauIA(s))
+        @test !issymplectic(TableauRadauIIA(s))
+    end
+
 end
