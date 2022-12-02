@@ -79,7 +79,7 @@ Base.eltype(::PartitionedTableau{T}) where {T} = T
 name(tab::PartitionedTableau) = tab.name
 order(tab::PartitionedTableau) = tab.o
 nstages(tab::PartitionedTableau) = tab.s
-eachstage(tab::PartitionedTableau) = 1:tab.s
+eachstage(tab::PartitionedTableau) = 1:nstages(tab)
 
 reference(tab::PartitionedTableau) = reference(Val(tab.name))
 

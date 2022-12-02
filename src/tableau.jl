@@ -215,7 +215,7 @@ end
 name(tab::Tableau) = tab.name
 order(tab::Tableau) = tab.o
 nstages(tab::Tableau) = tab.s
-eachstage(tab::Tableau) = 1:tab.s
+eachstage(tab::Tableau) = 1:nstages(tab)
 coefficients(tab::Tableau) = tab.a
 weights(tab::Tableau) = tab.b
 nodes(tab::Tableau) = tab.c
