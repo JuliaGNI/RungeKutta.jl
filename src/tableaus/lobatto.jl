@@ -186,6 +186,38 @@ get_lobatto_f_coefficients(s) = get_lobatto_f_coefficients(BigFloat, s)
 get_lobatto_g_coefficients(s) = get_lobatto_g_coefficients(BigFloat, s)
 
 
+RungeKutta.reference(::Val{:LobattoIII}) = """
+References:
+
+    John C. Butcher.
+    Integration processes based on Radau quadrature formulas
+    Mathematics of Computation, Volume 18, Pages 233-244, 1964.
+    doi: 10.1090/S0025-5718-1964-0165693-1.
+
+    Laurent O. Jay.
+    Lobatto Methods.
+    In: Engquist B. (eds). Encyclopedia of Applied and Computational Mathematics. Springer, Berlin, Heidelberg. 2015.
+    doi: 10.1007/978-3-540-70529-1_123.
+"""
+
+"""
+Lobatto III tableau with s stages
+
+```julia
+TableauLobattoIII(::Type{T}, s)
+TableauLobattoIII(s) = TableauLobattoIII(Float64, s)
+```
+The constructor takes the number of stages `s` and optionally the element type `T` of the tableau.
+
+Sometimes this tableau is also referred to as Lobatto IIIC*.
+
+$(reference(Val(:LobattoIII)))
+"""
+function TableauLobattoIII(::Type{T}, s) where {T}
+    Tableau{T}(:LobattoIII, 2s-2, get_lobatto_c̄_coefficients(s), get_lobatto_weights(s), get_lobatto_nodes(s); R∞=(-1)^(s+1))
+end
+
+
 RungeKutta.reference(::Val{:LobattoIIIA}) = """
 References:
 
@@ -318,20 +350,6 @@ function TableauLobattoIIIC(::Type{T}, s) where {T}
 end
 
 
-RungeKutta.reference(::Val{:LobattoIIIC̄}) = """
-References:
-
-    John C. Butcher.
-    Integration processes based on Radau quadrature formulas
-    Mathematics of Computation, Volume 18, Pages 233-244, 1964.
-    doi: 10.1090/S0025-5718-1964-0165693-1.
-
-    Laurent O. Jay.
-    Lobatto Methods.
-    In: Engquist B. (eds). Encyclopedia of Applied and Computational Mathematics. Springer, Berlin, Heidelberg. 2015.
-    doi: 10.1007/978-3-540-70529-1_123.
-"""
-
 """
 Lobatto IIIC̄ tableau with s stages
 
@@ -341,10 +359,16 @@ TableauLobattoIIIC̄(s) = TableauLobattoIIIC̄(Float64, s)
 ```
 The constructor takes the number of stages `s` and optionally the element type `T` of the tableau.
 
-$(reference(Val(:LobattoIIIC̄)))
+Lobatto IIIC̄ tableau is the conjugate symplectic to [`TableauLobattoIIIC`](@ref).
+On paper, its coefficients are identical to [`TableauLobattoIII`](@ref), however, they are computed
+by the symplecticity condition and not by the formula for Lobatto III and thus the numerical
+values are slightly different.
 """
 function TableauLobattoIIIC̄(::Type{T}, s) where {T}
-    Tableau{T}(:LobattoIIIC̄, 2s-2, get_lobatto_c̄_coefficients(s), get_lobatto_weights(s), get_lobatto_nodes(s); R∞=(-1)^(s+1))
+    a = get_lobatto_c_coefficients(s)
+    b = get_lobatto_weights(s)
+    ā = get_symplectic_conjugate_coefficients(a,b)
+    Tableau{T}(:LobattoIIIC̄, 2s-2, ā, b, get_lobatto_nodes(s); R∞=(-1)^(s+1))
 end
 
 
@@ -538,6 +562,7 @@ function TableauLobattoIIIḠ(::Type{T}, s) where {T}
 end
 
 
+TableauLobattoIII(s) = TableauLobattoIII(Float64, s)
 TableauLobattoIIIA(s) = TableauLobattoIIIA(Float64, s)
 TableauLobattoIIIĀ(s) = TableauLobattoIIIĀ(Float64, s)
 TableauLobattoIIIB(s) = TableauLobattoIIIB(Float64, s)

@@ -313,6 +313,7 @@ using RungeKutta.Tableaus: get_lobatto_nodes, get_lobatto_weights,
     end
 
 
+    @test_throws ErrorException TableauLobattoIII(1)
     @test_throws ErrorException TableauLobattoIIIA(1)
     @test_throws ErrorException TableauLobattoIIIĀ(1)
     @test_throws ErrorException TableauLobattoIIIB(1)
@@ -328,6 +329,11 @@ using RungeKutta.Tableaus: get_lobatto_nodes, get_lobatto_weights,
     @test_throws ErrorException TableauLobattoIIIG(1)
     @test_throws ErrorException TableauLobattoIIIḠ(1)
 
+
+    @test TableauLobattoIII(2) ≈ _getTableauLobattoIIIC̄2()
+    @test TableauLobattoIII(3) ≈ _getTableauLobattoIIIC̄3()
+    @test TableauLobattoIII(4) ≈ _getTableauLobattoIIIC̄4()
+    @test TableauLobattoIII(5) ≈ _getTableauLobattoIIIC̄5()
 
     @test TableauLobattoIIIA(2) ≈ _getTableauLobattoIIIA2()
     @test TableauLobattoIIIA(3) ≈ _getTableauLobattoIIIA3()
@@ -392,10 +398,11 @@ using RungeKutta.Tableaus: get_lobatto_nodes, get_lobatto_weights,
     @test TableauLobattoIIIG(4) ≈ TableauLobattoIIIḠ(4)
     @test TableauLobattoIIIG(5) ≈ TableauLobattoIIIḠ(5)
 
+    
+    @test reference(TableauLobattoIII(2)) == reference(Val(:LobattoIII))
     @test reference(TableauLobattoIIIA(2)) == reference(Val(:LobattoIIIA))
     @test reference(TableauLobattoIIIB(2)) == reference(Val(:LobattoIIIB))
     @test reference(TableauLobattoIIIC(2)) == reference(Val(:LobattoIIIC))
-    @test reference(TableauLobattoIIIC̄(2)) == reference(Val(:LobattoIIIC̄))
     @test reference(TableauLobattoIIID(2)) == reference(Val(:LobattoIIID))
     @test reference(TableauLobattoIIIE(2)) == reference(Val(:LobattoIIIE))
     @test reference(TableauLobattoIIIF(2)) == reference(Val(:LobattoIIIF))

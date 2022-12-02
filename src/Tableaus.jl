@@ -41,7 +41,8 @@ module Tableaus
 
     include("tableaus/lobatto.jl")
 
-    export TableauLobattoIIIA,
+    export TableauLobattoIII,
+           TableauLobattoIIIA,
            TableauLobattoIIIĀ,
            TableauLobattoIIIB,
            TableauLobattoIIIB̄,
