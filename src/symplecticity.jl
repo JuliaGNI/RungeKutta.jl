@@ -21,24 +21,16 @@ function issymplectic(tab::PartitionedTableau; kwargs...)
 end
 
 
-function symplecticity_error(tab::Tableau)
-    a, b = tab.a, tab.b
+function symplecticity_error(a::AbstractMatrix{T}, b::AbstractVector{T}) where {T}
     [b[i] * a[i,j] + b[j] * a[j,i] - b[i] * b[j] for i in axes(a,1), j in axes(a,2)]
 end
+
+symplecticity_error(tab::Tableau) = symplecticity_error(tab.a, tab.b)
 
 
 function symplectic_conjugate_coefficients(a::AbstractMatrix{T}, b::AbstractVector{T}) where {T}
     @assert length(b) == size(a,1) == size(a,2)
-
-    ā = Array(zero(a))
-
-    for i in axes(ā, 1)
-        for j in axes(ā, 2)
-            ā[i,j] = b[j] / b[i] * ( b[i] - a[j,i] )
-        end
-    end
-
-    return convert(typeof(a), ā)
+    convert(typeof(a), [b[j] / b[i] * ( b[i] - a[j,i] ) for i in axes(a, 2), j in axes(a, 1)])
 end
 
 
