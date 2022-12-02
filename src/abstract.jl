@@ -7,3 +7,7 @@ abstract type AbstractPartitionedTableau{T} <: AbstractTableau{T} end
     o::Int
     s::Int
 end
+
+name(::AbstractTableau) = missing
+order(::AbstractTableau) = missing
+nstages(::AbstractTableau) = missing
