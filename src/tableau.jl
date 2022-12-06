@@ -221,7 +221,7 @@ reference(tab::Tableau) = reference(Val(tab.name))
 
 isexplicit(tab::Tableau) = istrilstrict(tab.a) && tab.c[1] == 0
 isimplicit(tab::Tableau) = !isexplicit(tab)
-isdiagnonallyimplicit(tab::Tableau) = tab.s != 1 && !istrilstrict(tab.a) && istril(tab.a)
+isdiagonallyimplicit(tab::Tableau) = tab.s != 1 && !istrilstrict(tab.a) && istril(tab.a)
 isfullyimplicit(tab::Tableau) = (tab.s == 1 && tab.a[1,1] != 0) || (!istrilstrict(tab.a) && !istril(tab.a))
 
 

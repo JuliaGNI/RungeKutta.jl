@@ -36,8 +36,8 @@ using RungeKutta: name, order, nstages, coefficients, weights, nodes
     @test  isimplicit(PartitionedTableauGauss(1))
     @test  isimplicit(PartitionedTableauGauss(2))
 
-    @test !isdiagnonallyimplicit(PartitionedTableauGauss(1))
-    @test !isdiagnonallyimplicit(PartitionedTableauGauss(2))
+    @test !isdiagonallyimplicit(PartitionedTableauGauss(1))
+    @test !isdiagonallyimplicit(PartitionedTableauGauss(2))
 
     @test  isfullyimplicit(PartitionedTableauGauss(1))
     @test  isfullyimplicit(PartitionedTableauGauss(2))
@@ -141,14 +141,14 @@ using RungeKutta: name, order, nstages, coefficients, weights, nodes
     @test  isimplicit(TableauLobattoIIIC̄IIIC(2))
     @test  isimplicit(TableauLobattoIIIC̄IIIC(3))
 
-    @test !isdiagnonallyimplicit(TableauLobattoIIIAIIIB(2))
-    @test !isdiagnonallyimplicit(TableauLobattoIIIAIIIB(3))
-    @test !isdiagnonallyimplicit(TableauLobattoIIIBIIIA(2))
-    @test !isdiagnonallyimplicit(TableauLobattoIIIBIIIA(3))
-    @test !isdiagnonallyimplicit(TableauLobattoIIICIIIC̄(2))
-    @test !isdiagnonallyimplicit(TableauLobattoIIICIIIC̄(3))
-    @test !isdiagnonallyimplicit(TableauLobattoIIIC̄IIIC(2))
-    @test !isdiagnonallyimplicit(TableauLobattoIIIC̄IIIC(3))
+    @test !isdiagonallyimplicit(TableauLobattoIIIAIIIB(2))
+    @test !isdiagonallyimplicit(TableauLobattoIIIAIIIB(3))
+    @test !isdiagonallyimplicit(TableauLobattoIIIBIIIA(2))
+    @test !isdiagonallyimplicit(TableauLobattoIIIBIIIA(3))
+    @test !isdiagonallyimplicit(TableauLobattoIIICIIIC̄(2))
+    @test !isdiagonallyimplicit(TableauLobattoIIICIIIC̄(3))
+    @test !isdiagonallyimplicit(TableauLobattoIIIC̄IIIC(2))
+    @test !isdiagonallyimplicit(TableauLobattoIIIC̄IIIC(3))
 
     @test !isfullyimplicit(TableauLobattoIIIAIIIB(2))
     @test  isfullyimplicit(TableauLobattoIIIAIIIB(3))

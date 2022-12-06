@@ -10,7 +10,7 @@ using RungeKutta: name, order, nstages, coefficients, weights, nodes
 
     @test  isexplicit(TableauExplicitEuler())
     @test !isimplicit(TableauExplicitEuler())
-    @test !isdiagnonallyimplicit(TableauExplicitEuler())
+    @test !isdiagonallyimplicit(TableauExplicitEuler())
     @test !isfullyimplicit(TableauExplicitEuler())
     
     @test TableauExplicitEuler() == TableauForwardEuler()
@@ -22,7 +22,7 @@ using RungeKutta: name, order, nstages, coefficients, weights, nodes
 
     @test  isexplicit(TableauExplicitMidpoint())
     @test !isimplicit(TableauExplicitMidpoint())
-    @test !isdiagnonallyimplicit(TableauExplicitMidpoint())
+    @test !isdiagonallyimplicit(TableauExplicitMidpoint())
     @test !isfullyimplicit(TableauExplicitMidpoint())
 
     @test typeof(TableauHeun2()) <: Tableau
@@ -78,7 +78,7 @@ using RungeKutta: name, order, nstages, coefficients, weights, nodes
 
     @test  isexplicit(TableauRK416())
     @test !isimplicit(TableauRK416())
-    @test !isdiagnonallyimplicit(TableauRK416())
+    @test !isdiagonallyimplicit(TableauRK416())
     @test !isfullyimplicit(TableauRK416())
     
     @test typeof(TableauRK42()) <: Tableau
@@ -119,7 +119,7 @@ end
     @test issymmetric(TableauCrankNicolson())
     @test !isexplicit(TableauCrankNicolson())
     @test  isimplicit(TableauCrankNicolson())
-    @test  isdiagnonallyimplicit(TableauCrankNicolson())
+    @test  isdiagonallyimplicit(TableauCrankNicolson())
     @test !isfullyimplicit(TableauCrankNicolson())
     
     @test typeof(TableauCrouzeix()) <: Tableau
@@ -129,7 +129,7 @@ end
 
     @test !isexplicit(TableauCrouzeix())
     @test  isimplicit(TableauCrouzeix())
-    @test  isdiagnonallyimplicit(TableauCrouzeix())
+    @test  isdiagonallyimplicit(TableauCrouzeix())
     @test !isfullyimplicit(TableauCrouzeix())
     
     @test typeof(TableauKraaijevangerSpijker()) <: Tableau
@@ -155,7 +155,7 @@ end
 
     @test !isexplicit(TableauImplicitEuler())
     @test  isimplicit(TableauImplicitEuler())
-    @test !isdiagnonallyimplicit(TableauImplicitEuler())
+    @test !isdiagonallyimplicit(TableauImplicitEuler())
     @test  isfullyimplicit(TableauImplicitEuler())
     @test !issymplectic(TableauImplicitEuler())
     @test !issymmetric(TableauImplicitEuler())
@@ -170,7 +170,7 @@ end
 
     @test !isexplicit(TableauImplicitMidpoint())
     @test  isimplicit(TableauImplicitMidpoint())
-    @test !isdiagnonallyimplicit(TableauImplicitMidpoint())
+    @test !isdiagonallyimplicit(TableauImplicitMidpoint())
     @test  isfullyimplicit(TableauImplicitMidpoint())
     @test issymplectic(TableauImplicitMidpoint())
     @test issymmetric(TableauImplicitMidpoint())
@@ -182,7 +182,7 @@ end
 
     @test !isexplicit(TableauSRK3())
     @test  isimplicit(TableauSRK3())
-    @test !isdiagnonallyimplicit(TableauSRK3())
+    @test !isdiagonallyimplicit(TableauSRK3())
     @test  isfullyimplicit(TableauSRK3())
     @test issymplectic(TableauSRK3())
     @test issymmetric(TableauSRK3())

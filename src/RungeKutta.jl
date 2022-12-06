@@ -23,7 +23,7 @@ module RungeKutta
 
     export isexplicit,
            isimplicit,
-           isdiagnonallyimplicit,
+           isdiagonallyimplicit,
            isfullyimplicit
 
     export description, reference
