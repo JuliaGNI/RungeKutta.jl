@@ -1,6 +1,7 @@
 module RungeKutta
 
     using DelimitedFiles
+    using GeometricBase
     using Markdown
     using PrettyTables
     using Reexport

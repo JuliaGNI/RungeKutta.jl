@@ -208,16 +208,16 @@ function to_file(dir::AbstractString, tab::Tableau{T}) where {T}
     # TODO Write data in original format (e.g., Rational).
 end
 
-name(tab::Tableau) = tab.name
-order(tab::Tableau) = tab.o
+GeometricBase.name(tab::Tableau) = tab.name
+GeometricBase.order(tab::Tableau) = tab.o
 nstages(tab::Tableau) = tab.s
 eachstage(tab::Tableau) = 1:nstages(tab)
 coefficients(tab::Tableau) = tab.a
 weights(tab::Tableau) = tab.b
 nodes(tab::Tableau) = tab.c
 
-description(tab::Tableau) = "$(tab.name) with $(tab.s) $(tab.s == 1 ? "stage" : "stages") and order $(tab.o)"
-reference(tab::Tableau) = reference(Val(tab.name))
+GeometricBase.description(tab::Tableau) = "$(tab.name) with $(tab.s) $(tab.s == 1 ? "stage" : "stages") and order $(tab.o)"
+GeometricBase.reference(tab::Tableau) = reference(Val(tab.name))
 
 isexplicit(tab::Tableau) = istrilstrict(tab.a) && tab.c[1] == 0
 isimplicit(tab::Tableau) = !isexplicit(tab)

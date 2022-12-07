@@ -76,13 +76,13 @@ Base.isequal(tab1::PartitionedTableau{T1}, tab2::PartitionedTableau{T2}) where {
 
 Base.eltype(::PartitionedTableau{T}) where {T} = T
 
-name(tab::PartitionedTableau) = tab.name
-order(tab::PartitionedTableau) = tab.o
+GeometricBase.name(tab::PartitionedTableau) = tab.name
+GeometricBase.order(tab::PartitionedTableau) = tab.o
 nstages(tab::PartitionedTableau) = tab.s
 eachstage(tab::PartitionedTableau) = 1:nstages(tab)
 
-description(tab::PartitionedTableau) = "$(tab.name) with $(tab.s) $(tab.s == 1 ? "stage" : "stages") and order $(tab.o)"
-reference(tab::PartitionedTableau) = reference(Val(tab.name))
+GeometricBase.description(tab::PartitionedTableau) = "$(tab.name) with $(tab.s) $(tab.s == 1 ? "stage" : "stages") and order $(tab.o)"
+GeometricBase.reference(tab::PartitionedTableau) = reference(Val(tab.name))
 
 isexplicit(tab::PartitionedTableau) = istril(tab.q.a) && istril(tab.p.a) && all([tab.q.a[i,i] == 0 || tab.p.a[i,i] == 0 for i in 1:tab.s]) && (tab.q.c[1] == 0 || tab.p.c[1] == 0)
 isimplicit(tab::PartitionedTableau) = !isexplicit(tab)

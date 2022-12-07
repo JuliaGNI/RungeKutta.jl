@@ -1,5 +1,7 @@
 module PartitionedTableaus
 
+    using GeometricBase
+        
     using ..RungeKutta
 
     using .Tableaus

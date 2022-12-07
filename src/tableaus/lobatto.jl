@@ -186,7 +186,7 @@ get_lobatto_f_coefficients(s) = get_lobatto_f_coefficients(BigFloat, s)
 get_lobatto_g_coefficients(s) = get_lobatto_g_coefficients(BigFloat, s)
 
 
-RungeKutta.reference(::Val{:LobattoIII}) = """
+GeometricBase.reference(::Val{:LobattoIII}) = """
 References:
 
     John C. Butcher.
@@ -218,7 +218,7 @@ function TableauLobattoIII(::Type{T}, s) where {T}
 end
 
 
-RungeKutta.reference(::Val{:LobattoIIIA}) = """
+GeometricBase.reference(::Val{:LobattoIIIA}) = """
 References:
 
     Byron Leonard Ehle
@@ -269,7 +269,7 @@ function TableauLobattoIIIĀ(::Type{T}, s) where {T}
 end
 
 
-RungeKutta.reference(::Val{:LobattoIIIB}) = """
+GeometricBase.reference(::Val{:LobattoIIIB}) = """
 References:
 
     Byron Leonard Ehle.
@@ -320,7 +320,7 @@ function TableauLobattoIIIB̄(::Type{T}, s) where {T}
 end
 
 
-RungeKutta.reference(::Val{:LobattoIIIC}) = """
+GeometricBase.reference(::Val{:LobattoIIIC}) = """
 References:
 
     F. H. Chipman.
@@ -372,7 +372,7 @@ function TableauLobattoIIIC̄(::Type{T}, s) where {T}
 end
 
 
-RungeKutta.reference(::Val{:LobattoIIID}) = """
+GeometricBase.reference(::Val{:LobattoIIID}) = """
 References:
 
     R.P.K. Chan.
@@ -424,7 +424,7 @@ function TableauLobattoIIID̄(::Type{T}, s) where {T}
 end
 
 
-RungeKutta.reference(::Val{:LobattoIIIE}) = """
+GeometricBase.reference(::Val{:LobattoIIIE}) = """
 References:
 
     R.P.K. Chan.
@@ -477,7 +477,7 @@ function TableauLobattoIIIĒ(::Type{T}, s) where {T}
 end
 
 
-RungeKutta.reference(::Val{:LobattoIIIF}) = """
+GeometricBase.reference(::Val{:LobattoIIIF}) = """
 References:
 
     Wang Fangzong and Liao Xiaobing.

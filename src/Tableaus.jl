@@ -1,5 +1,7 @@
 module Tableaus
 
+    using GeometricBase
+    
     import Polynomials
     import Polynomials: Polynomial
 

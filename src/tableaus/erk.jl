@@ -1,5 +1,5 @@
 
-RungeKutta.reference(::Val{:ExplicitEuler}) = """
+GeometricBase.reference(::Val{:ExplicitEuler}) = """
 Reference:
 
     Leonhard Euler.
@@ -30,10 +30,10 @@ end
 
 "Alias for [`TableauExplicitEuler`](@ref)"
 const TableauForwardEuler = TableauExplicitEuler
-RungeKutta.reference(::Val{:ForwardEuler}) = reference(Val(:ExplicitEuler))
+GeometricBase.reference(::Val{:ForwardEuler}) = reference(Val(:ExplicitEuler))
 
 
-RungeKutta.reference(::Val{:ExplicitMidpoint}) = """
+GeometricBase.reference(::Val{:ExplicitMidpoint}) = """
 Reference:
 
     Carl Runge.
@@ -64,7 +64,7 @@ function TableauExplicitMidpoint(::Type{T}=Float64) where {T}
 end
 
 
-RungeKutta.reference(::Val{:Heun2}) = """
+GeometricBase.reference(::Val{:Heun2}) = """
 Reference:
 
     Karl Heun.
@@ -102,10 +102,10 @@ Alias for [`TableauHeun2`](@ref)
     Page 99
 """
 const TableauRK21 = TableauHeun2
-RungeKutta.reference(::Val{:RK21}) = reference(Val(:Heun2))
+GeometricBase.reference(::Val{:RK21}) = reference(Val(:Heun2))
 
 
-RungeKutta.reference(::Val{:Heun3}) = """
+GeometricBase.reference(::Val{:Heun3}) = """
 Reference:
 
     Karl Heun.
@@ -136,7 +136,7 @@ function TableauHeun3(::Type{T}=Float64) where {T}
 end
 
 
-RungeKutta.reference(::Val{:Ralston2}) = """
+GeometricBase.reference(::Val{:Ralston2}) = """
 Reference:
 
     Anthony Ralston.
@@ -167,7 +167,7 @@ function TableauRalston2(::Type{T}=Float64) where {T}
 end
 
 
-RungeKutta.reference(::Val{:Ralston3}) = """
+GeometricBase.reference(::Val{:Ralston3}) = """
 Reference:
 
     Anthony Ralston.
@@ -199,7 +199,7 @@ function TableauRalston3(::Type{T}=Float64) where {T}
 end
 
 
-RungeKutta.reference(::Val{:Runge}) = """
+GeometricBase.reference(::Val{:Runge}) = """
 Reference:
 
     Carl Runge
@@ -231,7 +231,7 @@ end
 
 "Alias for [`TableauRunge`](@ref)"
 const TableauRunge2 = TableauRunge
-RungeKutta.reference(::Val{:Runge2}) = reference(Val(:Runge))
+GeometricBase.reference(::Val{:Runge2}) = reference(Val(:Runge))
 
 """
 Alias for [`TableauRunge`](@ref)
@@ -242,10 +242,10 @@ Alias for [`TableauRunge`](@ref)
     Page 99
 """
 const TableauRK22 = TableauRunge
-RungeKutta.reference(::Val{:RK22}) = reference(Val(:Runge))
+GeometricBase.reference(::Val{:RK22}) = reference(Val(:Runge))
 
 
-RungeKutta.reference(::Val{:Kutta}) = """
+GeometricBase.reference(::Val{:Kutta}) = """
 Reference:
 
     Wilhelm Kutta
@@ -277,7 +277,7 @@ end
 
 "Alias for [`TableauKutta`](@ref)"
 const TableauKutta3 = TableauKutta
-RungeKutta.reference(::Val{:Kutta3}) = reference(Val(:Kutta))
+GeometricBase.reference(::Val{:Kutta3}) = reference(Val(:Kutta))
 
 """
 Alias for [`TableauKutta`](@ref) according to
@@ -287,10 +287,10 @@ Alias for [`TableauKutta`](@ref) according to
     Page 99
 """
 const TableauRK32 = TableauKutta
-RungeKutta.reference(::Val{:RK32}) = reference(Val(:Kutta))
+GeometricBase.reference(::Val{:RK32}) = reference(Val(:Kutta))
 
 
-RungeKutta.reference(::Val{:RK31}) = """
+GeometricBase.reference(::Val{:RK31}) = """
 Reference:
 
     John C. Butcher
@@ -320,7 +320,7 @@ function TableauRK31(::Type{T}=Float64) where {T}
 end
 
 
-RungeKutta.reference(::Val{:RK416}) = """
+GeometricBase.reference(::Val{:RK416}) = """
 Reference:
 
     Wilhelm Kutta
@@ -359,14 +359,14 @@ Alias for [`TableauRK416`](@ref) according to
     Page 102
 """
 const TableauRK41 = TableauRK416
-RungeKutta.reference(::Val{:RK41}) = reference(Val(:RK416))
+GeometricBase.reference(::Val{:RK41}) = reference(Val(:RK416))
 
 "Alias for [`TableauRK416`](@ref)"
 const TableauRK4 = TableauRK416
-RungeKutta.reference(::Val{:RK4}) = reference(Val(:RK416))
+GeometricBase.reference(::Val{:RK4}) = reference(Val(:RK416))
 
 
-RungeKutta.reference(::Val{:RK42}) = """
+GeometricBase.reference(::Val{:RK42}) = """
 Reference:
 
     John C. Butcher
@@ -397,7 +397,7 @@ function TableauRK42(::Type{T}=Float64) where {T}
 end
 
 
-RungeKutta.reference(::Val{:RK438}) = """
+GeometricBase.reference(::Val{:RK438}) = """
 Reference:
 
     Wilhelm Kutta
@@ -429,7 +429,7 @@ function TableauRK438(::Type{T}=Float64) where {T}
 end
 
 
-RungeKutta.reference(::Val{:RK5}) = """
+GeometricBase.reference(::Val{:RK5}) = """
 Reference:
 
     John C. Butcher
@@ -462,7 +462,7 @@ function TableauRK5(::Type{T}=Float64) where {T}
 end
 
 
-RungeKutta.reference(::Val{:SSPRK2}) = """
+GeometricBase.reference(::Val{:SSPRK2}) = """
 Reference:
 
     Chi-Wang Shu, Stanley Osher.
@@ -490,7 +490,7 @@ function TableauSSPRK2(args...)
 end
 
 
-RungeKutta.reference(::Val{:SSPRK3}) = """
+GeometricBase.reference(::Val{:SSPRK3}) = """
 Reference:
 
     Chi-Wang Shu, Stanley Osher.

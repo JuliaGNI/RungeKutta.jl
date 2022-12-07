@@ -8,9 +8,6 @@ abstract type AbstractPartitionedTableau{T} <: AbstractTableau{T} end
     s::Int
 end
 
-name(::AbstractTableau) = missing
-order(::AbstractTableau) = missing
+GeometricBase.name(::AbstractTableau) = missing
+GeometricBase.order(::AbstractTableau) = missing
 nstages(::AbstractTableau) = missing
-reference(::AbstractTableau) = missing
-
-reference(::Any) = missing

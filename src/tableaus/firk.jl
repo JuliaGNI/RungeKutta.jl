@@ -1,5 +1,5 @@
 
-RungeKutta.reference(::Val{:ImplicitEuler}) = """
+GeometricBase.reference(::Val{:ImplicitEuler}) = """
 Reference:
 
     Augustin-Louis Cauchy.
@@ -29,10 +29,10 @@ end
 
 "Alias for [`TableauImplicitEuler`](@ref)"
 const TableauBackwardEuler = TableauImplicitEuler
-RungeKutta.reference(::Val{:BackwardEuler}) = reference(Val(:ImplicitEuler))
+GeometricBase.reference(::Val{:BackwardEuler}) = reference(Val(:ImplicitEuler))
 
 
-RungeKutta.reference(::Val{:ImplicitMidpoint}) = """
+GeometricBase.reference(::Val{:ImplicitMidpoint}) = """
 Reference:
 
     Augustin-Louis Cauchy.
@@ -61,7 +61,7 @@ function TableauImplicitMidpoint(::Type{T}=Float64) where {T}
 end
 
 
-RungeKutta.reference(::Val{:SRK3}) = """
+GeometricBase.reference(::Val{:SRK3}) = """
 Reference:
 
     Shan Zhao and Guo-Wei Wei.
