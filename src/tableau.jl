@@ -36,14 +36,14 @@ of a Butcher tableau, i.e.,
    | b
 
 """
-struct Tableau{T, S, RT <: Union{Real,Missing}} <: AbstractTableau{T}
+struct Tableau{T, S, RT <: Union{Real,Missing}, L} <: AbstractTableau{T}
     @TableauHeader
 
-    a::SMatrix{S,S,T}
+    a::SMatrix{S,S,T,L}
     b::SVector{S,T}
     c::SVector{S,T}
 
-    â::SMatrix{S,S,T}
+    â::SMatrix{S,S,T,L}
     b̂::SVector{S,T}
     ĉ::SVector{S,T}
 
@@ -61,7 +61,7 @@ struct Tableau{T, S, RT <: Union{Real,Missing}} <: AbstractTableau{T}
         b̂ = SVector{s}(b .- b̃)
         ĉ = SVector{s}(c .- c̃)
 
-        new{T, s, typeof(R∞)}(name,o,s,ã,b̃,c̃,â,b̂,ĉ,R∞)
+        new{T, s, typeof(R∞), s*s}(name,o,s,ã,b̃,c̃,â,b̂,ĉ,R∞)
     end
 
     function Tableau{T}(name, o, a, b, c; kwargs...) where {T}
