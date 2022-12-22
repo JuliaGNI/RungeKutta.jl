@@ -33,17 +33,22 @@ PartitionedTableau(name::Symbol, q::Tableau, p::Tableau)
 PartitionedTableau(name::Symbol, q::Tableau)
 ```
 """
-struct PartitionedTableau{T, S, RT <: Union{Real,Missing}, L} <: AbstractPartitionedTableau{T}
+struct PartitionedTableau{T, S, RT <: Union{Real,Missing}, RTq, RTp, L} <: AbstractPartitionedTableau{T}
     @TableauHeader
 
-    q::Tableau{T, S, RT, L}
-    p::Tableau{T, S, RT, L}
+    q::Tableau{T, S, RTq, L}
+    p::Tableau{T, S, RTp, L}
 
     R∞::RT
 
     function PartitionedTableau{T}(name, o, q, p; R∞=missing) where {T}
         @assert q.s == p.s
-        new{T, q.s, typeof(R∞), q.s * q.s}(name, o, q.s, q, p, R∞)
+        if ismissing(R∞) && !ismissing(q.R∞) && !ismissing(p.R∞)
+            if q.R∞ == p.R∞
+                R∞ = q.R∞
+            end
+        end
+        new{T, q.s, typeof(R∞), typeof(q.R∞), typeof(p.R∞), q.s * q.s}(name, o, q.s, q, p, R∞)
     end
 
     function PartitionedTableau{T}(name, q, p; kwargs...) where {T}
