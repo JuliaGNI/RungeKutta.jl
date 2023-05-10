@@ -47,7 +47,7 @@ end
 get_gauss_coefficients(s) = get_gauss_coefficients(BigFloat, s)
 
 
-GeometricBase.reference(::Val{:Gauss}) = """
+reference(::Val{:Gauss}) = """
 References:
 
     John C. Butcher.
