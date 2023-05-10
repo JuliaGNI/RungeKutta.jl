@@ -1,13 +1,14 @@
 module RungeKutta
 
     using DelimitedFiles
-    using GeometricBase
     using Markdown
     using PrettyTables
     using Reexport
     using StaticArrays
 
     import GenericLinearAlgebra
+    import GeometricBase
+    import GeometricBase: name, order, description, reference
     import GeometricBase.Utils: @big, @define
     import LinearAlgebra: istril
     import Polynomials
@@ -27,7 +28,7 @@ module RungeKutta
            isdiagonallyimplicit,
            isfullyimplicit
 
-    export description, reference
+    export name, order, description, reference
 
     include("order_conditions.jl")
 

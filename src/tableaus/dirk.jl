@@ -1,5 +1,5 @@
 
-GeometricBase.reference(::Val{:CrankNicolson}) = """
+reference(::Val{:CrankNicolson}) = """
 Reference:
 
     J. Crank and P. Nicolson.
@@ -29,7 +29,7 @@ function TableauCrankNicolson(::Type{T}=Float64) where {T}
 end
 
 
-GeometricBase.reference(::Val{:KraaijevangerSpijker}) = """
+reference(::Val{:KraaijevangerSpijker}) = """
 Reference:
 
     J. F. B. M. Kraaijevanger and M. N. Spijker.
@@ -59,7 +59,7 @@ function TableauKraaijevangerSpijker(::Type{T}=Float64) where {T}
 end
 
 
-GeometricBase.reference(::Val{:QinZhang}) = """
+reference(::Val{:QinZhang}) = """
 Reference:
 
     M.-Z. Qin and M.-Q. Zhang.
@@ -88,7 +88,7 @@ function TableauQinZhang(::Type{T}=Float64) where {T}
 end
 
 
-GeometricBase.reference(::Val{:Crouzeix}) = """
+reference(::Val{:Crouzeix}) = """
 Reference:
 
     M.Crouzeix.

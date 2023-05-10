@@ -101,7 +101,7 @@ end
 get_radau_2_coefficients(s) = get_radau_2_coefficients(BigFloat, s)
 
 
-GeometricBase.reference(::Val{:RadauIA}) = """
+reference(::Val{:RadauIA}) = """
 References:
 
     Byron Leonard Ehle
@@ -127,7 +127,7 @@ end
 TableauRadauIA(s) = TableauRadauIA(Float64, s)
 
 
-GeometricBase.reference(::Val{:RadauIB}) = """
+reference(::Val{:RadauIB}) = """
 Reference:
 
     Sun Geng
@@ -162,7 +162,7 @@ end
 TableauRadauIB(s) = TableauRadauIB(Float64, s)
 
 
-GeometricBase.reference(::Val{:RadauIIA}) = """
+reference(::Val{:RadauIIA}) = """
 References:
 
     Byron Leonard Ehle
@@ -198,7 +198,7 @@ end
 TableauRadauIIA(s) = TableauRadauIIA(Float64, s)
 
 
-GeometricBase.reference(::Val{:RadauIIB}) = """
+reference(::Val{:RadauIIB}) = """
 Reference:
 
     Sun Geng

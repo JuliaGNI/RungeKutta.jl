@@ -1,12 +1,16 @@
 module PartitionedTableaus
 
-    using GeometricBase
-        
+    import GeometricBase
+    import GeometricBase: description, reference
+
     using ..RungeKutta
 
     using .Tableaus
 
     
+    export description, reference
+    
+
     include("tableaus/prk.jl")
 
     export TableauLobattoIIIAIIIB,

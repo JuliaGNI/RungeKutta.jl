@@ -1,12 +1,16 @@
 module Tableaus
 
-    using GeometricBase
-    
+    import GeometricBase
+    import GeometricBase: description, reference
+
     import Polynomials
     import Polynomials: Polynomial
 
     using ..RungeKutta
     using ..RungeKutta: big, @big, _legendre, _shifted_legendre
+
+
+    export description, reference
     
 
     include("tableaus/dirk.jl")
