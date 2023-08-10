@@ -97,4 +97,6 @@ makedocs(bib;
 
 deploydocs(;
     repo="github.com/JuliaGNI/RungeKutta.jl",
+    devurl = "latest",
+    devbranch = "main",
 )
