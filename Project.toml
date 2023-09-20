@@ -1,7 +1,7 @@
 name = "RungeKutta"
 uuid = "fb486d5c-30a0-4a8a-8415-a8b4ace5a6f7"
 authors = ["Michael Kraus"]
-version = "0.5.10"
+version = "0.5.11"
 
 [deps]
 CompactBasisFunctions = "a09551c4-f815-4143-809e-dd1986753ba7"
@@ -19,7 +19,7 @@ StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
 CompactBasisFunctions = "0.2"
 DelimitedFiles = "1"
 GenericLinearAlgebra = "0.2, 0.3"
-GeometricBase = "0.4, 0.5, 0.6, 0.7, 0.8"
+GeometricBase = "0.4, 0.5, 0.6, 0.7, 0.8, 0.9"
 Polynomials = "1, 2, 3, 4"
 PrettyTables = "1, 2"
 Reexport = "1"
