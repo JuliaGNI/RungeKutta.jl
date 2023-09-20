@@ -3,7 +3,7 @@ using Documenter
 using DocumenterCitations
 using Weave
 
-bib = CitationBibliography("RungeKutta.bib")
+bib = CitationBibliography(joinpath(@__DIR__, "RungeKutta.bib"))
 
 module RungeKuttaWeaves
     using Markdown
@@ -70,17 +70,15 @@ weave("src/lobatto.jmd",
          mod = RungeKuttaWeaves)
 
 
-makedocs(bib;
-    modules=[RungeKutta],
-    authors="Michael Kraus",
-    repo="https://github.com/JuliaGNI/RungeKutta.jl/blob/{commit}{path}#L{line}",
-    sitename="RungeKutta.jl",
-    format=Documenter.HTML(;
-        prettyurls=get(ENV, "CI", "false") == "true",
-        canonical="https://juliagni.github.io/RungeKutta.jl",
-        assets=String[],
+makedocs(
+    sitename = "RungeKutta.jl",
+    authors = "Michael Kraus",
+    plugins = [bib],
+    format = Documenter.HTML(
+        prettyurls = get(ENV, "CI", nothing) == "true",
     ),
-    pages=[
+    modules = [RungeKutta],
+    pages = [
         "Home" => "index.md",
         "Runge-Kutta Methods" => "rungekutta.md",
         "Tableau" => "tableau.md",
@@ -95,8 +93,8 @@ makedocs(bib;
     ],
 )
 
-deploydocs(;
-    repo="github.com/JuliaGNI/RungeKutta.jl",
+deploydocs(
+    repo = "github.com/JuliaGNI/RungeKutta.jl",
     devurl = "latest",
     devbranch = "main",
 )
