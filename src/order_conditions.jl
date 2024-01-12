@@ -79,3 +79,5 @@ function solve_simplifying_assumption_d(b::AbstractVector{T}, c::AbstractVector{
     
     hcat([row(j) for j in 1:s]...)
 end
+
+solve_simplifying_assumption_d(b::AbstractVector, c::AbstractVector) = solve_simplifying_assumption_d(promote(b,c)...)
