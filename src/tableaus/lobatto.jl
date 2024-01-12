@@ -117,7 +117,8 @@ function get_lobatto_c_coefficients(::Type{T}, s) where {T}
         M \ r
     end
     
-    hcat(b[1] * ones(T,s), vcat([transpose(row(i)) for i in 1:s]...))
+    # hcat(b[1] * ones(T,s), vcat([transpose(row(i)) for i in 1:s]...))
+    hcat(b[1] * ones(T,s), vcat([T.(collect(transpose(row(i)))) for i in 1:s]...)) # temporary workaround for SymPy issue    
 end
 
 @doc raw"""
@@ -141,7 +142,8 @@ function get_lobatto_c̄_coefficients(::Type{T}, s) where {T}
         M \ r
     end
     
-    hcat(vcat([transpose(row(i)) for i in 1:s]...), zeros(T,s))
+    # hcat(vcat([transpose(row(i)) for i in 1:s]...), zeros(T,s))
+    hcat(vcat([T.(collect(transpose(row(i)))) for i in 1:s]...), zeros(T,s)) # temporary workaround for SymPy issue 
 end
 
 get_lobatto_d_coefficients(::Type{T}, s) where {T} = (get_lobatto_c_coefficients(T,s) .+ get_lobatto_c̄_coefficients(T,s)) ./ 2

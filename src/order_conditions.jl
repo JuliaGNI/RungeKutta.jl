@@ -57,7 +57,8 @@ function solve_simplifying_assumption_c(c::AbstractVector{T}) where {T}
         M \ r
     end
     
-    vcat([transpose(row(i)) for i in 1:s]...)
+    # vcat([transpose(row(i)) for i in 1:s]...)
+    vcat([T.(collect(transpose(row(i)))) for i in 1:s]...) # temporary workaround for SymPy issue
 end
 
 @doc raw"""

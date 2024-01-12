@@ -19,11 +19,16 @@ module RungeKuttaWeaves
                                get_lobatto_f_coefficients, get_lobatto_g_coefficients
     using RungeKutta.Tableaus: get_radau_1_nodes, get_radau_1_weights, get_radau_1_coefficients,
                                get_radau_2_nodes, get_radau_2_weights, get_radau_2_coefficients
-    using SymPy
-    using SymPy: latex
 
+    import PyCall
+    import SymPy
+    import SymPy: latex, simplify
+
+    const SymPo = SymPy.Sym{PyCall.PyObject}
+
+    
     "Markdown-print Runge-Kutta tableau with SymPy coefficients."
-    function Base.show(io::IO, ::MIME"text/markdown", tab::Tableau{Sym})
+    function Base.show(io::IO, ::MIME"text/markdown", tab::Tableau{SymPo})
         show(io, "text/markdown", Markdown.parse("Runge-Kutta Tableau $(tab.name) with $(tab.s) stages and order $(tab.o):"))
 
         tab_arr = simplify.(convert(Matrix, tab))
@@ -42,7 +47,6 @@ module RungeKuttaWeaves
         # tab_markdown = replace(tab_markdown, "\\begin{table}" => "```math")
         # tab_markdown = replace(tab_markdown, "\\end{table}" => "```")
         tab_markdown = "```math\n" * tab_markdown * "```\n"
-
 
         print(io, tab_markdown * "\n")
     end
