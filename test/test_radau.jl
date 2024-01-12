@@ -152,4 +152,9 @@ using RungeKutta.Tableaus: get_radau_1_nodes, get_radau_1_weights, get_radau_1_c
     @test get_radau_2_weights(SymP,2) ≈ get_radau_2_weights(Float64,2)
     @test get_radau_2_coefficients(SymP,2) ≈ get_radau_2_coefficients(Float64,2)
 
+    @test TableauRadauIA(Float32,2) ≈ TableauRadauIA(Float64,2)
+    @test TableauRadauIIA(Float32,2) ≈ TableauRadauIIA(Float64,2)
+    @test TableauRadauIA(SymP,2) ≈ TableauRadauIA(Float64,2)
+    @test TableauRadauIIA(SymP,2) ≈ TableauRadauIIA(Float64,2)
+
 end

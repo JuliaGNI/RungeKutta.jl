@@ -444,4 +444,20 @@ using RungeKutta.Tableaus: get_lobatto_nodes, get_lobatto_weights,
     @test get_lobatto_f_coefficients(SymP,2) ≈ get_lobatto_f_coefficients(Float64,2)
     @test get_lobatto_g_coefficients(SymP,2) ≈ get_lobatto_g_coefficients(Float64,2)
 
+    @test TableauLobattoIIIA(Float32,2) ≈ TableauLobattoIIIA(Float64,2)
+    @test TableauLobattoIIIB(Float32,2) ≈ TableauLobattoIIIB(Float64,2)
+    @test TableauLobattoIIIC(Float32,2) ≈ TableauLobattoIIIC(Float64,2)
+    @test TableauLobattoIIID(Float32,2) ≈ TableauLobattoIIID(Float64,2)
+    @test TableauLobattoIIIE(Float32,2) ≈ TableauLobattoIIIE(Float64,2)
+    @test TableauLobattoIIIF(Float32,2) ≈ TableauLobattoIIIF(Float64,2)
+    @test TableauLobattoIIIG(Float32,2) ≈ TableauLobattoIIIG(Float64,2)
+    
+    @test TableauLobattoIIIA(SymP,2) ≈ TableauLobattoIIIA(Float64,2)
+    @test TableauLobattoIIIB(SymP,2) ≈ TableauLobattoIIIB(Float64,2)
+    @test TableauLobattoIIIC(SymP,2) ≈ TableauLobattoIIIC(Float64,2)
+    @test TableauLobattoIIID(SymP,2) ≈ TableauLobattoIIID(Float64,2)
+    @test TableauLobattoIIIE(SymP,2) ≈ TableauLobattoIIIE(Float64,2)
+    @test TableauLobattoIIIF(SymP,2) ≈ TableauLobattoIIIF(Float64,2)
+    @test TableauLobattoIIIG(SymP,2) ≈ TableauLobattoIIIG(Float64,2)
+
 end
