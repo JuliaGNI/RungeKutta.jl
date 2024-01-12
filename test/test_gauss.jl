@@ -1,3 +1,5 @@
+import RungeKutta.Tableaus: get_gauss_nodes, get_gauss_weights, get_gauss_coefficients
+
 @testset "$(rpad("Gauss Tableaus",80))" begin
 
     function _getTableauGLRK1(T=Float64)
@@ -195,5 +197,14 @@
     @test TableauGauss(6) ≈ _getTableauGLRK6()
 
     @test reference(TableauGauss(1)) == reference(Val(:Gauss))
+
+    for T in (Float32, Float64, BigFloat, SymP)
+        for s in 1:3
+            @test_nowarn get_gauss_nodes(T,s)
+            @test_nowarn get_gauss_weights(T,s)
+            @test_nowarn get_gauss_coefficients(T,s)
+            @test_nowarn TableauGauss(T,s)
+        end
+    end
 
 end

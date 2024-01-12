@@ -398,4 +398,28 @@ using RungeKutta.Tableaus: get_lobatto_nodes, get_lobatto_weights,
         @test  issymplectic(TableauLobattoIIIE(s))
     end
 
+    for T in (Float32, Float64, BigFloat, SymP)
+        for s in 2:4
+            @test_nowarn get_lobatto_nodes(T,s)
+            @test_nowarn get_lobatto_weights(T,s)
+
+            @test_nowarn get_lobatto_a_coefficients(T,s)
+            @test_nowarn get_lobatto_b_coefficients(T,s)
+            @test_nowarn get_lobatto_c_coefficients(T,s)
+            @test_nowarn get_lobatto_c̄_coefficients(T,s)
+            @test_nowarn get_lobatto_d_coefficients(T,s)
+            @test_nowarn get_lobatto_e_coefficients(T,s)
+            @test_nowarn get_lobatto_f_coefficients(T,s)
+            @test_nowarn get_lobatto_g_coefficients(T,s)
+
+            @test_nowarn TableauLobattoIIIA(T,s)
+            @test_nowarn TableauLobattoIIIB(T,s)
+            @test_nowarn TableauLobattoIIIC(T,s)
+            @test_nowarn TableauLobattoIIID(T,s)
+            @test_nowarn TableauLobattoIIIE(T,s)
+            @test_nowarn TableauLobattoIIIF(T,s)
+            @test_nowarn TableauLobattoIIIG(T,s)
+        end
+    end
+
 end

@@ -121,4 +121,19 @@ using RungeKutta.Tableaus: get_radau_1_nodes, get_radau_1_weights, get_radau_1_c
         @test !issymplectic(TableauRadauIIA(s))
     end
 
+    for T in (Float32, Float64, BigFloat, SymP)
+        for s in 2:3
+            @test_nowarn get_radau_1_nodes(T,s)
+            @test_nowarn get_radau_1_weights(T,s)
+            @test_nowarn get_radau_1_coefficients(T,s)
+
+            @test_nowarn get_radau_2_nodes(T,s)
+            @test_nowarn get_radau_2_weights(T,s)
+            @test_nowarn get_radau_2_coefficients(T,s)
+
+            @test_nowarn TableauRadauIA(T,s)
+            @test_nowarn TableauRadauIIA(T,s)
+        end
+    end
+
 end
