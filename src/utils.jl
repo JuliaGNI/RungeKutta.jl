@@ -1,11 +1,11 @@
 "Legendre polynomial P_s(x) of degree s defined on the interval [-1..+1]."
-function _legendre(j::Int, x::T) where {T}
-    if j <= 0
-        return one(T)
+function _legendre(j::Integer, p::Polynomial{T}) where {T}
+    if j ≤ 0
+        return Polynomial(one(T))
     elseif j == 1
-        return x
+        return p
     else
-        return ( (2j-1) * _legendre(j-1, x) * x - (j-1) * _legendre(j-2, x) ) / j
+        return ( (2j-1) * p * _legendre(j-1, p) - (j-1) * _legendre(j-2, p) ) / j
     end
 end
 
