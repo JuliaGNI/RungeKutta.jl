@@ -207,4 +207,12 @@ import RungeKutta.Tableaus: get_gauss_nodes, get_gauss_weights, get_gauss_coeffi
         end
     end
 
+    @test get_gauss_nodes(Float32,2) ≈ get_gauss_nodes(Float64,2)
+    @test get_gauss_weights(Float32,2) ≈ get_gauss_weights(Float64,2)
+    @test get_gauss_coefficients(Float32,2) ≈ get_gauss_coefficients(Float64,2)
+
+    @test get_gauss_nodes(SymP,2) ≈ get_gauss_nodes(Float64,2)
+    @test get_gauss_weights(SymP,2) ≈ get_gauss_weights(Float64,2)
+    @test get_gauss_coefficients(SymP,2) ≈ get_gauss_coefficients(Float64,2)
+
 end

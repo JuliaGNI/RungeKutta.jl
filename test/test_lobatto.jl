@@ -422,4 +422,26 @@ using RungeKutta.Tableaus: get_lobatto_nodes, get_lobatto_weights,
         end
     end
 
+    @test get_lobatto_nodes(Float32,2) ≈ get_lobatto_nodes(Float64,2)
+    @test get_lobatto_weights(Float32,2) ≈ get_lobatto_weights(Float64,2)
+    @test get_lobatto_a_coefficients(Float32,2) ≈ get_lobatto_a_coefficients(Float64,2)
+    @test get_lobatto_b_coefficients(Float32,2) ≈ get_lobatto_b_coefficients(Float64,2)
+    @test get_lobatto_c_coefficients(Float32,2) ≈ get_lobatto_c_coefficients(Float64,2)
+    @test get_lobatto_c̄_coefficients(Float32,2) ≈ get_lobatto_c̄_coefficients(Float64,2)
+    @test get_lobatto_d_coefficients(Float32,2) ≈ get_lobatto_d_coefficients(Float64,2)
+    @test get_lobatto_e_coefficients(Float32,2) ≈ get_lobatto_e_coefficients(Float64,2)
+    @test get_lobatto_f_coefficients(Float32,2) ≈ get_lobatto_f_coefficients(Float64,2)
+    @test get_lobatto_g_coefficients(Float32,2) ≈ get_lobatto_g_coefficients(Float64,2)
+
+    @test get_lobatto_nodes(SymP,2) ≈ get_lobatto_nodes(Float64,2)
+    @test get_lobatto_weights(SymP,2) ≈ get_lobatto_weights(Float64,2)
+    @test get_lobatto_a_coefficients(SymP,2) ≈ get_lobatto_a_coefficients(Float64,2)
+    @test get_lobatto_b_coefficients(SymP,2) ≈ get_lobatto_b_coefficients(Float64,2)
+    @test get_lobatto_c_coefficients(SymP,2) ≈ get_lobatto_c_coefficients(Float64,2)
+    @test get_lobatto_c̄_coefficients(SymP,2) ≈ get_lobatto_c̄_coefficients(Float64,2)
+    @test get_lobatto_d_coefficients(SymP,2) ≈ get_lobatto_d_coefficients(Float64,2)
+    @test get_lobatto_e_coefficients(SymP,2) ≈ get_lobatto_e_coefficients(Float64,2)
+    @test get_lobatto_f_coefficients(SymP,2) ≈ get_lobatto_f_coefficients(Float64,2)
+    @test get_lobatto_g_coefficients(SymP,2) ≈ get_lobatto_g_coefficients(Float64,2)
+
 end

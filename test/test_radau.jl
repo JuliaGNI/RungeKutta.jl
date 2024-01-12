@@ -136,4 +136,20 @@ using RungeKutta.Tableaus: get_radau_1_nodes, get_radau_1_weights, get_radau_1_c
         end
     end
 
+    @test get_radau_1_nodes(Float32,2) ≈ get_radau_1_nodes(Float64,2)
+    @test get_radau_1_weights(Float32,2) ≈ get_radau_1_weights(Float64,2)
+    @test get_radau_1_coefficients(Float32,2) ≈ get_radau_1_coefficients(Float64,2)
+
+    @test get_radau_2_nodes(Float32,2) ≈ get_radau_2_nodes(Float64,2)
+    @test get_radau_2_weights(Float32,2) ≈ get_radau_2_weights(Float64,2)
+    @test get_radau_2_coefficients(Float32,2) ≈ get_radau_2_coefficients(Float64,2)
+
+    @test get_radau_1_nodes(SymP,2) ≈ get_radau_1_nodes(Float64,2)
+    @test get_radau_1_weights(SymP,2) ≈ get_radau_1_weights(Float64,2)
+    @test get_radau_1_coefficients(SymP,2) ≈ get_radau_1_coefficients(Float64,2)
+
+    @test get_radau_2_nodes(SymP,2) ≈ get_radau_2_nodes(Float64,2)
+    @test get_radau_2_weights(SymP,2) ≈ get_radau_2_weights(Float64,2)
+    @test get_radau_2_coefficients(SymP,2) ≈ get_radau_2_coefficients(Float64,2)
+
 end
