@@ -248,7 +248,7 @@ function show_coefficients(io::IO, tab::Tableau)
                     body_hlines = [tab.s],
                     body_hlines_format = ('─','┼','─','─'),
                     equal_columns_width = true,
-                    noheader = true)
+                    show_header = false)
 end
 
 function Base.string(tab::Tableau)
@@ -288,7 +288,7 @@ function Base.show(io::IO, ::MIME"text/markdown", tab::Tableau)
                     backend = Val(:latex),
                     vlines = [1],
                     hlines = [tab.s],
-                    noheader = true)
+                    show_header = false)
     tab_latex = String(take!(strio))
 
     tab_markdown = replace(tab_latex, "tabular" => "array")

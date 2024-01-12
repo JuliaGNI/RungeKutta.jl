@@ -35,7 +35,7 @@ module RungeKuttaWeaves
                         backend = Val(:latex),
                         vlines = [1],
                         hlines = [tab.s],
-                        noheader = true)
+                        show_header = false)
         tab_latex = String(take!(strio))
 
         tab_markdown = replace(tab_latex, "tabular" => "array")
