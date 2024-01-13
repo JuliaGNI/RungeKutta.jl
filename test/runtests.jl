@@ -4,7 +4,7 @@ using Test
 import PyCall
 import SymPy
 
-const SymP = SymPy.Sym{PyCall.PyObject}
+const SymPo = SymPy.Sym{PyCall.PyObject}
 
 include("test_utils.jl")
 include("test_tableau.jl")

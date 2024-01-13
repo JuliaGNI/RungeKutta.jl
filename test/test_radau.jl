@@ -121,7 +121,7 @@ using RungeKutta.Tableaus: get_radau_1_nodes, get_radau_1_weights, get_radau_1_c
         @test !issymplectic(TableauRadauIIA(s))
     end
 
-    for T in (Float32, Float64, BigFloat, SymP)
+    for T in (Float32, Float64, BigFloat, SymPo)
         for s in 2:3
             @test_nowarn get_radau_1_nodes(T,s)
             @test_nowarn get_radau_1_weights(T,s)
@@ -144,17 +144,17 @@ using RungeKutta.Tableaus: get_radau_1_nodes, get_radau_1_weights, get_radau_1_c
     @test get_radau_2_weights(Float32,2) ≈ get_radau_2_weights(Float64,2)
     @test get_radau_2_coefficients(Float32,2) ≈ get_radau_2_coefficients(Float64,2)
 
-    @test get_radau_1_nodes(SymP,2) ≈ get_radau_1_nodes(Float64,2)
-    @test get_radau_1_weights(SymP,2) ≈ get_radau_1_weights(Float64,2)
-    @test get_radau_1_coefficients(SymP,2) ≈ get_radau_1_coefficients(Float64,2)
+    @test get_radau_1_nodes(SymPo,2) ≈ get_radau_1_nodes(Float64,2)
+    @test get_radau_1_weights(SymPo,2) ≈ get_radau_1_weights(Float64,2)
+    @test get_radau_1_coefficients(SymPo,2) ≈ get_radau_1_coefficients(Float64,2)
 
-    @test get_radau_2_nodes(SymP,2) ≈ get_radau_2_nodes(Float64,2)
-    @test get_radau_2_weights(SymP,2) ≈ get_radau_2_weights(Float64,2)
-    @test get_radau_2_coefficients(SymP,2) ≈ get_radau_2_coefficients(Float64,2)
+    @test get_radau_2_nodes(SymPo,2) ≈ get_radau_2_nodes(Float64,2)
+    @test get_radau_2_weights(SymPo,2) ≈ get_radau_2_weights(Float64,2)
+    @test get_radau_2_coefficients(SymPo,2) ≈ get_radau_2_coefficients(Float64,2)
 
     @test TableauRadauIA(Float32,2) ≈ TableauRadauIA(Float64,2)
     @test TableauRadauIIA(Float32,2) ≈ TableauRadauIIA(Float64,2)
-    @test TableauRadauIA(SymP,2) ≈ TableauRadauIA(Float64,2)
-    @test TableauRadauIIA(SymP,2) ≈ TableauRadauIIA(Float64,2)
+    @test TableauRadauIA(SymPo,2) ≈ TableauRadauIA(Float64,2)
+    @test TableauRadauIIA(SymPo,2) ≈ TableauRadauIIA(Float64,2)
 
 end

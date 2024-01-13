@@ -27,7 +27,7 @@ import RungeKutta: _legendre, _shifted_legendre
     end
 
 
-    for T in (Float32, Float64, BigFloat, SymP)
+    for T in (Float32, Float64, BigFloat, SymPo)
         for s in 1:3
             @test_nowarn _legendre(s, Polynomial(T[0,1]))
             @test_nowarn _shifted_legendre(s,T)
