@@ -4,7 +4,7 @@
 
 ```julia; echo=false; results="raw"
 for s in 2:3
-    show(stdout, "text/markdown", Tableau(Symbol("RadauIIA($s)"), 2s-1, get_radau_2_coefficients(SymPo, s), get_radau_2_weights(SymPo, s), get_radau_2_nodes(SymPo, s)))
+    show(stdout, "text/markdown", Tableau(Symbol("RadauIIA($s)"), 2s-1, get_radau_2_coefficients(symtype(), s), get_radau_2_weights(symtype(), s), get_radau_2_nodes(symtype(), s)))
 end
 ```
 
@@ -12,9 +12,9 @@ end
 
 ```julia; echo=false; results="raw"
 for s in 2:3
-    a = get_radau_2_coefficients(SymPo,s)
-    b = get_radau_2_weights(SymPo,s)
-    c = get_radau_2_nodes(SymPo, s)
+    a = get_radau_2_coefficients(symtype(),s)
+    b = get_radau_2_weights(symtype(),s)
+    c = get_radau_2_nodes(symtype(), s)
     ā = symplectic_conjugate_coefficients(a,b)
     show(stdout, "text/markdown", Tableau(Symbol("RadauIIB($s)"), 2s-1, ā, b, c))
 end
