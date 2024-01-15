@@ -4,7 +4,13 @@ using Test
 import PyCall
 import SymPy
 
-const SymPo = SymPy.Sym{PyCall.PyObject}
+"""
+symtype()
+
+Return `Sym{T}` for `T` being the underlying type of `Sym(1)`.
+"""
+symtype() = typeof(SymPy.Sym(1))
+
 
 include("test_utils.jl")
 include("test_tableau.jl")

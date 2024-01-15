@@ -24,11 +24,16 @@ module RungeKuttaWeaves
     import SymPy
     import SymPy: latex, simplify
 
-    const SymPo = SymPy.Sym{PyCall.PyObject}
+    """
+        symtype()
+
+    Return `Sym{T}` for `T` being the underlying type of `Sym(1)`.
+    """
+    symtype() = typeof(SymPy.Sym(1))
 
     
     "Markdown-print Runge-Kutta tableau with SymPy coefficients."
-    function Base.show(io::IO, ::MIME"text/markdown", tab::Tableau{SymPo})
+    function Base.show(io::IO, ::MIME"text/markdown", tab::Tableau{symtype()})
         show(io, "text/markdown", Markdown.parse("Runge-Kutta Tableau $(tab.name) with $(tab.s) stages and order $(tab.o):"))
 
         tab_arr = simplify.(convert(Matrix, tab))

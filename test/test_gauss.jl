@@ -198,7 +198,7 @@ import RungeKutta.Tableaus: get_gauss_nodes, get_gauss_weights, get_gauss_coeffi
 
     @test reference(TableauGauss(1)) == reference(Val(:Gauss))
 
-    for T in (Float32, Float64, BigFloat, SymPo)
+    for T in (Float32, Float64, BigFloat, symtype())
         for s in 1:3
             @test_nowarn get_gauss_nodes(T,s)
             @test_nowarn get_gauss_weights(T,s)
@@ -211,11 +211,11 @@ import RungeKutta.Tableaus: get_gauss_nodes, get_gauss_weights, get_gauss_coeffi
     @test get_gauss_weights(Float32,2) ≈ get_gauss_weights(Float64,2)
     @test get_gauss_coefficients(Float32,2) ≈ get_gauss_coefficients(Float64,2)
 
-    @test get_gauss_nodes(SymPo,2) ≈ get_gauss_nodes(Float64,2)
-    @test get_gauss_weights(SymPo,2) ≈ get_gauss_weights(Float64,2)
-    @test get_gauss_coefficients(SymPo,2) ≈ get_gauss_coefficients(Float64,2)
+    @test get_gauss_nodes(symtype(),2) ≈ get_gauss_nodes(Float64,2)
+    @test get_gauss_weights(symtype(),2) ≈ get_gauss_weights(Float64,2)
+    @test get_gauss_coefficients(symtype(),2) ≈ get_gauss_coefficients(Float64,2)
 
     @test TableauGauss(Float32,2) ≈ TableauGauss(Float64,2)
-    @test TableauGauss(SymPo,2) ≈ TableauGauss(Float64,2)
+    @test TableauGauss(symtype(),2) ≈ TableauGauss(Float64,2)
 
 end
