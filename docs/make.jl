@@ -20,7 +20,6 @@ module RungeKuttaWeaves
     using RungeKutta.Tableaus: get_radau_1_nodes, get_radau_1_weights, get_radau_1_coefficients,
                                get_radau_2_nodes, get_radau_2_weights, get_radau_2_coefficients
 
-    import PyCall
     import SymPy
     import SymPy: latex, simplify
 

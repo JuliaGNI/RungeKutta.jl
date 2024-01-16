@@ -1,7 +1,6 @@
 using RungeKutta
 using Test
 
-import PyCall
 import SymPy
 
 """
