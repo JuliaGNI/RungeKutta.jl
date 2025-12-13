@@ -36,7 +36,7 @@ of a Butcher tableau, i.e.,
    | b
 
 """
-struct Tableau{T, S, RT <: Union{Real,Missing}, L} <: AbstractTableau{T}
+struct Tableau{T,S,RT<:Union{Real,Missing},L} <: AbstractTableau{T}
     @TableauHeader
 
     a::SMatrix{S,S,T,L}
@@ -51,7 +51,7 @@ struct Tableau{T, S, RT <: Union{Real,Missing}, L} <: AbstractTableau{T}
 
     function Tableau{T}(name, o, s, a, b, c; R∞=missing) where {T}
         @assert s > 0 "Number of stages must be > 0"
-        @assert s == size(a,1) == size(a,2) == length(b) == length(c)
+        @assert s == size(a, 1) == size(a, 2) == length(b) == length(c)
 
         ã = SMatrix{s,s}(convert(Matrix{T}, a))
         b̃ = SVector{s}(convert(Vector{T}, b))
@@ -61,7 +61,7 @@ struct Tableau{T, S, RT <: Union{Real,Missing}, L} <: AbstractTableau{T}
         b̂ = SVector{s}(b .- b̃)
         ĉ = SVector{s}(c .- c̃)
 
-        new{T, s, typeof(R∞), s*s}(name,o,s,ã,b̃,c̃,â,b̂,ĉ,R∞)
+        new{T,s,typeof(R∞),s * s}(name, o, s, ã, b̃, c̃, â, b̂, ĉ, R∞)
     end
 
     function Tableau{T}(name, o, a, b, c; kwargs...) where {T}
@@ -69,16 +69,16 @@ struct Tableau{T, S, RT <: Union{Real,Missing}, L} <: AbstractTableau{T}
     end
 end
 
-Tableau(name::Symbol, o::Int, s::Int, a::AbstractMatrix{AT}, b::AbstractVector{BT}, c::AbstractVector{CT}; kwargs...) where {AT,BT,CT} = Tableau{promote_type(AT,BT,CT)}(name,o,s,a,b,c; kwargs...)
-Tableau(name::Symbol, o::Int, a::AbstractMatrix, b::AbstractVector, c::AbstractVector; kwargs...) = Tableau(name,o,length(c),a,b,c; kwargs...)
+Tableau(name::Symbol, o::Int, s::Int, a::AbstractMatrix{AT}, b::AbstractVector{BT}, c::AbstractVector{CT}; kwargs...) where {AT,BT,CT} = Tableau{promote_type(AT, BT, CT)}(name, o, s, a, b, c; kwargs...)
+Tableau(name::Symbol, o::Int, a::AbstractMatrix, b::AbstractVector, c::AbstractVector; kwargs...) = Tableau(name, o, length(c), a, b, c; kwargs...)
 
 function Tableau(name::Symbol, o::Int, t::AbstractMatrix{T}; kwargs...) where {T}
-    @assert size(t,1) == size(t,2)
+    @assert size(t, 1) == size(t, 2)
 
-    local s = size(t,1)-1
+    local s = size(t, 1) - 1
     local a = copy(t[1:s, 2:s+1])
     local b = copy(t[s+1, 2:s+1])
-    local c = copy(t[1:s, 1    ])
+    local c = copy(t[1:s, 1])
 
     Tableau{T}(name, o, s, a, b, c; kwargs...)
 end
@@ -87,31 +87,31 @@ end
 Base.hash(tab::Tableau, h::UInt) = hash(tab.o, hash(tab.s, hash(tab.a, hash(tab.b, hash(tab.c, hash(tab.â, hash(tab.b̂, hash(tab.ĉ, hash(:Tableau, h)))))))))
 
 Base.:(==)(tab1::Tableau, tab2::Tableau) = (tab1.o == tab2.o
-                                         && tab1.s == tab2.s
-                                         && tab1.a == tab2.a
-                                         && tab1.b == tab2.b
-                                         && tab1.c == tab2.c
-                                         && tab1.â == tab2.â
-                                         && tab1.b̂ == tab2.b̂
-                                         && tab1.ĉ == tab2.ĉ
-                                         && ((ismissing(tab1.R∞) && ismissing(tab2.R∞)) || (tab1.R∞ == tab2.R∞)))
+                                            && tab1.s == tab2.s
+                                            && tab1.a == tab2.a
+                                            && tab1.b == tab2.b
+                                            && tab1.c == tab2.c
+                                            && tab1.â == tab2.â
+                                            && tab1.b̂ == tab2.b̂
+                                            && tab1.ĉ == tab2.ĉ
+                                            && ((ismissing(tab1.R∞) && ismissing(tab2.R∞)) || (tab1.R∞ == tab2.R∞)))
 
 Base.isapprox(tab1::Tableau, tab2::Tableau; kwargs...) = (
-                                            tab1.o == tab2.o
-                                         && tab1.s == tab2.s
-                                         && ((ismissing(tab1.R∞) && ismissing(tab2.R∞)) || (tab1.R∞ == tab2.R∞))
-                                         && isapprox(tab1.a, tab2.a; kwargs...)
-                                         && isapprox(tab1.b, tab2.b; kwargs...)
-                                         && isapprox(tab1.c, tab2.c; kwargs...))
- 
+    tab1.o == tab2.o
+    && tab1.s == tab2.s
+    && ((ismissing(tab1.R∞) && ismissing(tab2.R∞)) || (tab1.R∞ == tab2.R∞))
+    && isapprox(tab1.a, tab2.a; kwargs...)
+    && isapprox(tab1.b, tab2.b; kwargs...)
+    && isapprox(tab1.c, tab2.c; kwargs...))
+
 Base.isequal(tab1::Tableau{T1}, tab2::Tableau{T2}) where {T1,T2} = (tab1 == tab2 && T1 == T2 && tab1.name == tab2.name)
 
 Base.eltype(::Tableau{T}) where {T} = T
 
 function to_array(tab::Tableau{T}) where {T}
     local s = tab.s
-    local arr = zeros(T, s+1, s+1)
-    arr[1:s, 1    ] .= tab.c
+    local arr = zeros(T, s + 1, s + 1)
+    arr[1:s, 1] .= tab.c
     arr[s+1, 2:s+1] .= tab.b
     arr[1:s, 2:s+1] .= tab.a
     return arr
@@ -196,7 +196,7 @@ function to_file(dir::AbstractString, tab::Tableau{T}) where {T}
 
     tab_array = convert(Matrix, tab)
     header = string("# ", tab.o, " ", tab.s, " ", T, "\n")
-    file   = string(dir, "/", tab.name, ".tsv")
+    file = string(dir, "/", tab.name, ".tsv")
 
     @info("Writing Runge-Kutta tableau $(tab.name) with $(tab.s) stages and order $(tab.o) to file\n$(file)")
 
@@ -222,33 +222,39 @@ GeometricBase.reference(tab::Tableau) = reference(Val(tab.name))
 isexplicit(tab::Tableau) = istrilstrict(tab.a) && tab.c[1] == 0
 isimplicit(tab::Tableau) = !isexplicit(tab)
 isdiagonallyimplicit(tab::Tableau) = tab.s != 1 && !istrilstrict(tab.a) && istril(tab.a)
-isfullyimplicit(tab::Tableau) = (tab.s == 1 && tab.a[1,1] != 0) || (!istrilstrict(tab.a) && !istril(tab.a))
+isfullyimplicit(tab::Tableau) = (tab.s == 1 && tab.a[1, 1] != 0) || (!istrilstrict(tab.a) && !istril(tab.a))
 
+function butcher_text_tableau_format(tab::Tableau)
+    TextTableFormat(
+        borders=TextTableBorders(' ', ' ', ' ', ' ', ' ', ' ', ' ', '┼', ' ', '│', '─'),
+        horizontal_line_at_beginning=false,
+        horizontal_line_after_data_rows=false,
+        horizontal_lines_at_data_rows=[tab.s],
+        vertical_line_at_beginning=false,
+        vertical_line_after_data_columns=false,
+        vertical_lines_at_data_columns=[1],
+    )
+end
 
-const tf_butcher_tableau = TextFormat(
-    up_right_corner     = ' ',
-    up_left_corner      = ' ',
-    bottom_left_corner  = ' ',
-    bottom_right_corner = ' ',
-    up_intersection     = ' ',
-    left_intersection   = ' ',
-    right_intersection  = ' ',
-    middle_intersection = ' ',
-    bottom_intersection = ' ',
-    column              = '│',
-    row                 = ' '
-)
+function butcher_latex_tableau_format(tab::Tableau)
+    LatexTableFormat(
+        horizontal_line_at_beginning=false,
+        horizontal_line_after_data_rows=false,
+        horizontal_lines_at_data_rows=[tab.s],
+        vertical_line_at_beginning=false,
+        vertical_line_after_data_columns=false,
+        vertical_lines_at_data_columns=[1],
+    )
+end
 
 function show_coefficients(io::IO, tab::Tableau)
     arr = convert(Matrix{Any}, tab)
-    arr[tab.s+1,1] = ""
+    arr[tab.s+1, 1] = ""
     pretty_table(io, arr,
-                    tf = tf_butcher_tableau,
-                    vlines = [1],
-                    body_hlines = [tab.s],
-                    body_hlines_format = ('─','┼','─','─'),
-                    equal_columns_width = true,
-                    show_header = false)
+        table_format=butcher_text_tableau_format(tab),
+        show_column_labels=false,
+        show_row_number_column=false,
+    )
 end
 
 function Base.string(tab::Tableau)
@@ -281,14 +287,15 @@ function Base.show(io::IO, ::MIME"text/markdown", tab::Tableau)
     show(io, "text/markdown", Markdown.parse("Runge-Kutta Tableau $(tab.name) with $(tab.s) stages and order $(tab.o):"))
 
     tab_arr = convert(Matrix{Any}, tab)
-    tab_arr[tab.s+1,1] = ""
+    tab_arr[tab.s+1, 1] = ""
 
     strio = IOBuffer()
     pretty_table(strio, LatexCell.(tab_arr),
-                    backend = Val(:latex),
-                    vlines = [1],
-                    hlines = [tab.s],
-                    show_header = false)
+        backend=:latex,
+        table_format=butcher_latex_tableau_format(tab),
+        show_column_labels=false,
+        show_row_number_column=false,
+    )
     tab_latex = String(take!(strio))
 
     tab_markdown = replace(tab_latex, "tabular" => "array")
