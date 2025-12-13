@@ -30,7 +30,7 @@ module RungeKuttaWeaves
     """
     symtype() = typeof(SymPy.Sym(1))
 
-    
+
     "Markdown-print Runge-Kutta tableau with SymPy coefficients."
     function Base.show(io::IO, ::MIME"text/markdown", tab::Tableau{symtype()})
         show(io, "text/markdown", Markdown.parse("Runge-Kutta Tableau $(tab.name) with $(tab.s) stages and order $(tab.o):"))
@@ -41,10 +41,11 @@ module RungeKuttaWeaves
 
         strio = IOBuffer()
         pretty_table(strio, LatexCell.(str_arr),
-                        backend = Val(:latex),
-                        vlines = [1],
-                        hlines = [tab.s],
-                        show_header = false)
+            backend=:latex,
+            table_format=RungeKutta.butcher_latex_tableau_format(tab),
+            show_column_labels=false,
+            show_row_number_column=false,
+        )
         tab_latex = String(take!(strio))
 
         tab_markdown = replace(tab_latex, "tabular" => "array")

@@ -10,3 +10,6 @@ RungeKutta = "fb486d5c-30a0-4a8a-8415-a8b4ace5a6f7"
 SymPy = "24249f21-da20-56a4-8eb1-6a02cf4ae2e6"
 SymPyCore = "458b697b-88f0-4a86-b56b-78b75cfb3531"
 Weave = "44d3d7a6-8a23-5bf8-98c5-b353f8df5ec9"
+
+[sources]
+RungeKutta = {path = ".."}
