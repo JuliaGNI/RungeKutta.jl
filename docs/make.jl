@@ -8,7 +8,6 @@ bib = CitationBibliography(joinpath(@__DIR__, "RungeKutta.bib"))
 module RungeKuttaWeaves
     using Markdown
     using Markdown: MD, Paragraph, LineBreak
-    using Plots
     using PrettyTables
     using RungeKutta
     using RungeKutta.Tableaus: get_gauss_nodes, get_gauss_weights, get_gauss_coefficients
