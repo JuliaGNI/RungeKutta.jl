@@ -39,7 +39,7 @@ Reference:
 """
 
 """
-Tableau of Kraaijevanger and Spijker's two-stage, 2nd order method
+Tableau of Kraaijevanger and Spijker's two-stage, 1st order method
 
 ```julia
 TableauKraaijevangerSpijker(::Type{T}=Float64) where {T}
@@ -53,7 +53,7 @@ function TableauKraaijevangerSpijker(::Type{T}=Float64) where {T}
               [-1/2   2   ]]
     b = @big  [-1/2,  3/2 ]
     c = @big  [ 1/2,  3/2 ]
-    o = 2
+    o = 1
 
     Tableau{T}(:KraaijevangerSpijker, o, a, b, c)
 end

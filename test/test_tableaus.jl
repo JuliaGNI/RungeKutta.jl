@@ -133,7 +133,7 @@ end
     @test !isfullyimplicit(TableauCrouzeix())
     
     @test typeof(TableauKraaijevangerSpijker()) <: Tableau
-    @test order(TableauKraaijevangerSpijker()) == 2
+    @test order(TableauKraaijevangerSpijker()) == 1
     @test nstages(TableauKraaijevangerSpijker()) == 2
     @test reference(TableauKraaijevangerSpijker()) == reference(Val(:KraaijevangerSpijker))
 
