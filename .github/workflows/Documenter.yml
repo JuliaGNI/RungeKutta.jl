@@ -16,15 +16,12 @@ jobs:
       - uses: julia-actions/setup-julia@v3
         with:
           version: '1'
-      - name: Set environment variables
-        run: echo "PYTHON=''" >> $GITHUB_ENV
       - name: Install dependencies
         run: |
           julia --project=docs -e '
             using Pkg
             Pkg.develop(PackageSpec(path=pwd()))
             Pkg.instantiate()
-            Pkg.build()
             Pkg.precompile()'
       - name: Run doctests
         run: |

@@ -24,12 +24,12 @@ Polynomials = "1, 2, 3, 4"
 PrettyTables = "3"
 Reexport = "1"
 StaticArrays = "1"
+SymPyPythonCall = "0.5"
 julia = "1.10"
 
 [extras]
-SymPy = "24249f21-da20-56a4-8eb1-6a02cf4ae2e6"
-SymPyCore = "458b697b-88f0-4a86-b56b-78b75cfb3531"
+SymPyPythonCall = "bc8888f7-b21e-4b7c-a06a-5d9c9496438c"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [targets]
-test = ["SymPy", "Test"]
+test = ["SymPyPythonCall", "Test"]

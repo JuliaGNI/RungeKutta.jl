@@ -19,15 +19,15 @@ module RungeKuttaWeaves
     using RungeKutta.Tableaus: get_radau_1_nodes, get_radau_1_weights, get_radau_1_coefficients,
                                get_radau_2_nodes, get_radau_2_weights, get_radau_2_coefficients
 
-    import SymPy
-    import SymPy: latex, simplify
+    import SymPyPythonCall
+    import SymPyPythonCall: latex, simplify
 
     """
         symtype()
 
     Return `Sym{T}` for `T` being the underlying type of `Sym(1)`.
     """
-    symtype() = typeof(SymPy.Sym(1))
+    symtype() = typeof(SymPyPythonCall.Sym(1))
 
 
     "Markdown-print Runge-Kutta tableau with SymPy coefficients."
