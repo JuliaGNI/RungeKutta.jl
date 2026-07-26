@@ -1,0 +1,21 @@
+# Radau-I Runge-Kutta Methods
+
+## Radau IA
+
+```julia; echo=false; results="raw"
+for s in 2:3
+    show(stdout, "text/markdown", Tableau(Symbol("RadauIA($s)"), 2s-1, get_radau_1_coefficients(symtype(), s), get_radau_1_weights(symtype(), s), get_radau_1_nodes(symtype(), s)))
+end
+```
+
+## Radau IB
+
+```julia; echo=false; results="raw"
+for s in 2:3
+    a = get_radau_1_coefficients(symtype(),s)
+    b = get_radau_1_weights(symtype(),s)
+    c = get_radau_1_nodes(symtype(), s)
+    ā = symplectic_conjugate_coefficients(a,b)
+    show(stdout, "text/markdown", Tableau(Symbol("RadauIB($s)"), 2s-1, ā, b, c))
+end
+```
