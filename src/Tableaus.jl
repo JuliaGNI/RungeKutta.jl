@@ -42,6 +42,7 @@ module Tableaus
 
     export TableauImplicitEuler, TableauBackwardEuler,
            TableauImplicitMidpoint,
+           TableauIRK3,
            TableauSRK3
 
     include("tableaus/gauss.jl")
@@ -107,6 +108,7 @@ module Tableaus
        backward_euler        = TableauBackwardEuler,
        implicit_euler        = TableauImplicitEuler,
        implicit_midpoint     = TableauImplicitMidpoint,
+       irk3                  = TableauIRK3,
        srk3                  = TableauSRK3,
     )
 

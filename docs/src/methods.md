@@ -43,6 +43,7 @@ All constructors take an optional type argument, defaulting to `Float64`.
 |:---------------------------------------------------------------|:-------|:------|
 | [`TableauImplicitEuler`](@ref), [`TableauBackwardEuler`](@ref) | 1      | 1     |
 | [`TableauImplicitMidpoint`](@ref)                              | 2      | 2     |
+| [`TableauIRK3`](@ref)                                          | 2      | 3     |
 | [`TableauSRK3`](@ref)                                          | 3      | 4     |
 
 ## Gauß, Lobatto and Radau Methods

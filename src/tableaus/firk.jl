@@ -61,6 +61,43 @@ function TableauImplicitMidpoint(::Type{T}=Float64) where {T}
 end
 
 
+reference(::Val{:IRK3}) = """
+Reference:
+
+    Ernst Hairer and Gerhard Wanner.
+    Solving Ordinary Differential Equations II: Stiff and Differential-Algebraic Problems.
+    Springer, 1996.
+    Section IV.5, W-transformation.
+    The s=2, γ=1/2 member of the family of algebraically stable methods of order 2s-1,
+    obtained from the Gauss method by X = Xₛ + γ eₛ eₛᵀ.
+"""
+
+"""
+Tableau of two-stage, 3rd order fully implicit Runge-Kutta method
+
+```julia
+TableauIRK3(::Type{T}=Float64) where {T}
+```
+The constructor takes one optional argument, that is the element type of the tableau.
+
+The method uses the two-point Gauss-Legendre nodes and weights, but its coefficient matrix is
+that of [`TableauGauss`](@ref) plus the rank-one perturbation `¼ (e₁-e₂) (e₁-e₂)ᵀ`. It is
+therefore of order three rather than four and neither symmetric nor symplectic, but it is
+A-stable and algebraically stable with `R(∞) = -1/2`.
+
+$(reference(Val(:IRK3)))
+"""
+function TableauIRK3(::Type{T}=Float64) where {T}
+    a = @big [[ 1/2        -√3/6     ]
+              [+√3/6        1/2      ]]
+    b = @big  [ 1/2,        1/2      ]
+    c = @big  [ 1/2-√3/6,   1/2+√3/6 ]
+    o = 3
+
+    Tableau{T}(:IRK3, o, a, b, c; R∞=-1//2)
+end
+
+
 reference(::Val{:SRK3}) = """
 Reference:
 

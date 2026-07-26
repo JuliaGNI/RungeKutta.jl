@@ -175,6 +175,29 @@ end
     @test issymplectic(TableauImplicitMidpoint())
     @test issymmetric(TableauImplicitMidpoint())
 
+    @test typeof(TableauIRK3()) <: Tableau
+    @test order(TableauIRK3()) == 3
+    @test nstages(TableauIRK3()) == 2
+    @test reference(TableauIRK3()) == reference(Val(:IRK3))
+    @test TableauIRK3().R∞ == -1//2
+
+    @test !isexplicit(TableauIRK3())
+    @test  isimplicit(TableauIRK3())
+    @test !isdiagonallyimplicit(TableauIRK3())
+    @test  isfullyimplicit(TableauIRK3())
+    @test !issymplectic(TableauIRK3())
+    @test !issymmetric(TableauIRK3())
+
+    # Gauss coefficients plus a rank-one perturbation, with the Gauss nodes and weights
+    let v = [1, -1]
+        @test coefficients(TableauIRK3()) ≈ coefficients(TableauGauss(2)) .+ v * v' ./ 4
+        @test weights(TableauIRK3()) ≈ weights(TableauGauss(2))
+        @test nodes(TableauIRK3()) ≈ nodes(TableauGauss(2))
+    end
+
+    # the Gauss nodes make the quadrature condition B(4) hold, even though the order is only three
+    @test RungeKutta.satisfies_simplifying_assumption_b(TableauIRK3(), 4)
+
     @test typeof(TableauSRK3()) <: Tableau
     @test order(TableauSRK3()) == 4
     @test nstages(TableauSRK3()) == 3
