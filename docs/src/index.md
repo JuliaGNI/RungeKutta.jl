@@ -45,7 +45,7 @@ The following tableaus are implemented (prepend `Tableau` to the name to call th
 
 - *diagonally implicit*: CrankNicolson, Crouzeix, KraaijevangerSpijker, QinZhang
 
-- *fully implicit*: ImplicitEuler/BackwardEuler, ImplicitMidpoint, SRK3
+- *fully implicit*: ImplicitEuler/BackwardEuler, ImplicitMidpoint, IRK3, SRK3
 
 In addition there exist functions to compute Gauss, Lobatto and Radau tableaus with an arbitrary number of stages s:
 
