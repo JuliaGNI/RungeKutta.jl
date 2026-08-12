@@ -3,7 +3,6 @@ module Tableaus
     import GeometricBase
     import GeometricBase: description, reference
 
-    import QuadratureRules
     using QuadratureRules: gauss_legendre_nodes, gauss_legendre_weights,
                            lobatto_legendre_nodes, lobatto_legendre_weights,
                            radau_legendre_nodes, radau_legendre_weights
