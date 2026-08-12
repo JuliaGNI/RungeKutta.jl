@@ -1,6 +1,27 @@
 using RungeKutta: name, order, eachstage, nstages, coefficients, weights, nodes, to_array, to_file, from_file
 
+import GeometricBase
+import QuadratureRules
+
 @testset "$(rpad("Tableau",80))" begin
+
+    # The accessors are methods on the generic functions GeometricBase declares, not
+    # RungeKutta-local functions of the same name. Otherwise they would resolve to
+    # nothing as soon as another package of the ecosystem is in scope alongside this
+    # one, which is what QuadratureRules stands in for here.
+    @test coefficients === GeometricBase.coefficients
+    @test nodes === GeometricBase.nodes
+    @test weights === GeometricBase.weights
+
+    @test QuadratureRules.nodes === GeometricBase.nodes
+    @test QuadratureRules.weights === GeometricBase.weights
+
+    let tab = TableauGauss(3)
+        @test nodes(tab) == tab.c
+        @test weights(tab) == tab.b
+        @test coefficients(tab) == tab.a
+    end
+
 
     for s in 1:5
         for T ∈ (Float64, BigFloat)

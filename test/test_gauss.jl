@@ -1,4 +1,5 @@
-import RungeKutta.Tableaus: get_gauss_nodes, get_gauss_weights, get_gauss_coefficients
+import QuadratureRules: gauss_legendre_nodes, gauss_legendre_weights
+import RungeKutta.Tableaus: gauss_coefficients
 
 @testset "$(rpad("Gauss Tableaus",80))" begin
 
@@ -200,22 +201,38 @@ import RungeKutta.Tableaus: get_gauss_nodes, get_gauss_weights, get_gauss_coeffi
 
     for T in (Float32, Float64, BigFloat, symtype())
         for s in 1:3
-            @test_nowarn get_gauss_nodes(T,s)
-            @test_nowarn get_gauss_weights(T,s)
-            @test_nowarn get_gauss_coefficients(T,s)
+            @test_nowarn gauss_legendre_nodes(T, s)
+            @test_nowarn gauss_legendre_weights(T, s)
+            @test_nowarn gauss_coefficients(T,s)
             @test_nowarn TableauGauss(T,s)
         end
     end
 
-    @test get_gauss_nodes(Float32,2) ≈ get_gauss_nodes(Float64,2)
-    @test get_gauss_weights(Float32,2) ≈ get_gauss_weights(Float64,2)
-    @test get_gauss_coefficients(Float32,2) ≈ get_gauss_coefficients(Float64,2)
+    @test gauss_legendre_nodes(Float32, 2) ≈ gauss_legendre_nodes(Float64, 2)
+    @test gauss_legendre_weights(Float32, 2) ≈ gauss_legendre_weights(Float64, 2)
+    @test gauss_coefficients(Float32,2) ≈ gauss_coefficients(Float64,2)
 
-    @test get_gauss_nodes(symtype(),2) ≈ get_gauss_nodes(Float64,2)
-    @test get_gauss_weights(symtype(),2) ≈ get_gauss_weights(Float64,2)
-    @test get_gauss_coefficients(symtype(),2) ≈ get_gauss_coefficients(Float64,2)
+    @test gauss_legendre_nodes(symtype(), 2) ≈ gauss_legendre_nodes(Float64, 2)
+    @test gauss_legendre_weights(symtype(), 2) ≈ gauss_legendre_weights(Float64, 2)
+    @test gauss_coefficients(symtype(),2) ≈ gauss_coefficients(Float64,2)
 
     @test TableauGauss(Float32,2) ≈ TableauGauss(Float64,2)
     @test TableauGauss(symtype(),2) ≈ TableauGauss(Float64,2)
+
+    # The s-stage Gauss quadrature integrates polynomials up to degree 2s-1
+    # exactly. This checks the arbitrary precision nodes and weights directly,
+    # rather than only via their double precision counterparts.
+    for s in 1:10
+        b = gauss_legendre_weights(BigFloat, s)
+        c = gauss_legendre_nodes(BigFloat, s)
+
+        @test eltype(b) == eltype(c) == BigFloat
+        @test issorted(c)
+        @test all(0 .< c .< 1)
+
+        for k in 0:2s-1
+            @test sum(b .* c.^k) ≈ 1 / BigFloat(k+1) atol=1E-60
+        end
+    end
 
 end

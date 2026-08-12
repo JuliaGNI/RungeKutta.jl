@@ -1,15 +1,18 @@
-using RungeKutta.Tableaus: get_radau_1_nodes, get_radau_1_weights, get_radau_1_coefficients,
-                           get_radau_2_nodes, get_radau_2_weights, get_radau_2_coefficients
+using QuadratureRules: radau_legendre_nodes, radau_legendre_weights
+using RungeKutta.Tableaus: radau_1_coefficients, radau_2_coefficients
 
 @testset "$(rpad("Radau Tableaus",80))" begin
 
-    @test_throws ErrorException get_radau_1_nodes(1)
-    @test_throws ErrorException get_radau_1_weights(1)
-    @test_throws ErrorException get_radau_1_coefficients(1)
+    # The one-node Radau quadrature rule is perfectly well defined — it is a Riemann sum —
+    # so the nodes and weights do not throw. What is undefined is the one-stage Radau
+    # *tableau*, and that restriction lives in the coefficients and hence in the constructors.
+    @test_throws ErrorException radau_1_coefficients(1)
+    @test_throws ErrorException radau_2_coefficients(1)
 
-    @test_throws ErrorException get_radau_2_nodes(1)
-    @test_throws ErrorException get_radau_2_weights(1)
-    @test_throws ErrorException get_radau_2_coefficients(1)
+    @test_throws ErrorException TableauRadauIA(1)
+    @test_throws ErrorException TableauRadauIB(1)
+    @test_throws ErrorException TableauRadauIIA(1)
+    @test_throws ErrorException TableauRadauIIB(1)
 
     
     function _TableauRadauIA2(T=Float64)
@@ -123,38 +126,60 @@ using RungeKutta.Tableaus: get_radau_1_nodes, get_radau_1_weights, get_radau_1_c
 
     for T in (Float32, Float64, BigFloat, symtype())
         for s in 2:3
-            @test_nowarn get_radau_1_nodes(T,s)
-            @test_nowarn get_radau_1_weights(T,s)
-            @test_nowarn get_radau_1_coefficients(T,s)
+            @test_nowarn radau_legendre_nodes(T, s, Val(:left))
+            @test_nowarn radau_legendre_weights(T, s, Val(:left))
+            @test_nowarn radau_1_coefficients(T,s)
 
-            @test_nowarn get_radau_2_nodes(T,s)
-            @test_nowarn get_radau_2_weights(T,s)
-            @test_nowarn get_radau_2_coefficients(T,s)
+            @test_nowarn radau_legendre_nodes(T, s, Val(:right))
+            @test_nowarn radau_legendre_weights(T, s, Val(:right))
+            @test_nowarn radau_2_coefficients(T,s)
 
             @test_nowarn TableauRadauIA(T,s)
             @test_nowarn TableauRadauIIA(T,s)
         end
     end
 
-    @test get_radau_1_nodes(Float32,2) ≈ get_radau_1_nodes(Float64,2)
-    @test get_radau_1_weights(Float32,2) ≈ get_radau_1_weights(Float64,2)
-    @test get_radau_1_coefficients(Float32,2) ≈ get_radau_1_coefficients(Float64,2)
+    @test radau_legendre_nodes(Float32, 2, Val(:left)) ≈ radau_legendre_nodes(Float64, 2, Val(:left))
+    @test radau_legendre_weights(Float32, 2, Val(:left)) ≈ radau_legendre_weights(Float64, 2, Val(:left))
+    @test radau_1_coefficients(Float32,2) ≈ radau_1_coefficients(Float64,2)
 
-    @test get_radau_2_nodes(Float32,2) ≈ get_radau_2_nodes(Float64,2)
-    @test get_radau_2_weights(Float32,2) ≈ get_radau_2_weights(Float64,2)
-    @test get_radau_2_coefficients(Float32,2) ≈ get_radau_2_coefficients(Float64,2)
+    @test radau_legendre_nodes(Float32, 2, Val(:right)) ≈ radau_legendre_nodes(Float64, 2, Val(:right))
+    @test radau_legendre_weights(Float32, 2, Val(:right)) ≈ radau_legendre_weights(Float64, 2, Val(:right))
+    @test radau_2_coefficients(Float32,2) ≈ radau_2_coefficients(Float64,2)
 
-    @test get_radau_1_nodes(symtype(),2) ≈ get_radau_1_nodes(Float64,2)
-    @test get_radau_1_weights(symtype(),2) ≈ get_radau_1_weights(Float64,2)
-    @test get_radau_1_coefficients(symtype(),2) ≈ get_radau_1_coefficients(Float64,2)
+    @test radau_legendre_nodes(symtype(), 2, Val(:left)) ≈ radau_legendre_nodes(Float64, 2, Val(:left))
+    @test radau_legendre_weights(symtype(), 2, Val(:left)) ≈ radau_legendre_weights(Float64, 2, Val(:left))
+    @test radau_1_coefficients(symtype(),2) ≈ radau_1_coefficients(Float64,2)
 
-    @test get_radau_2_nodes(symtype(),2) ≈ get_radau_2_nodes(Float64,2)
-    @test get_radau_2_weights(symtype(),2) ≈ get_radau_2_weights(Float64,2)
-    @test get_radau_2_coefficients(symtype(),2) ≈ get_radau_2_coefficients(Float64,2)
+    @test radau_legendre_nodes(symtype(), 2, Val(:right)) ≈ radau_legendre_nodes(Float64, 2, Val(:right))
+    @test radau_legendre_weights(symtype(), 2, Val(:right)) ≈ radau_legendre_weights(Float64, 2, Val(:right))
+    @test radau_2_coefficients(symtype(),2) ≈ radau_2_coefficients(Float64,2)
 
     @test TableauRadauIA(Float32,2) ≈ TableauRadauIA(Float64,2)
     @test TableauRadauIIA(Float32,2) ≈ TableauRadauIIA(Float64,2)
     @test TableauRadauIA(symtype(),2) ≈ TableauRadauIA(Float64,2)
     @test TableauRadauIIA(symtype(),2) ≈ TableauRadauIIA(Float64,2)
+
+    # The s-stage Radau quadrature integrates polynomials up to degree 2s-2
+    # exactly. This checks the arbitrary precision nodes and weights directly,
+    # rather than only via their double precision counterparts. The Radau IA
+    # nodes include the left endpoint, the Radau IIA nodes the right one.
+    for s in 2:10
+        b₁ = radau_legendre_weights(BigFloat, s, Val(:left))
+        c₁ = radau_legendre_nodes(BigFloat, s, Val(:left))
+        b₂ = radau_legendre_weights(BigFloat, s, Val(:right))
+        c₂ = radau_legendre_nodes(BigFloat, s, Val(:right))
+
+        @test eltype(b₁) == eltype(c₁) == eltype(b₂) == eltype(c₂) == BigFloat
+        @test issorted(c₁) && issorted(c₂)
+        @test c₁[begin] == 0 && c₁[end] < 1
+        @test c₂[begin] > 0 && c₂[end] == 1
+        @test c₁ ≈ 1 .- reverse(c₂)
+
+        for k in 0:2s-2
+            @test sum(b₁ .* c₁.^k) ≈ 1 / BigFloat(k+1) atol=1E-60
+            @test sum(b₂ .* c₂.^k) ≈ 1 / BigFloat(k+1) atol=1E-60
+        end
+    end
 
 end

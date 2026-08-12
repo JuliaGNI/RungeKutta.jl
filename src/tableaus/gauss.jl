@@ -1,50 +1,15 @@
 
 @doc raw"""
-The Gauss nodes are given by the roots of the shifted Legendre polynomial
-$P_s (2x-1)$ with $s$ the number of stages.
-"""
-function get_gauss_nodes(::Type{T}, s) where {T}
-    sort(T.(Polynomials.roots(_shifted_legendre(s,T))))
-end
-
-get_gauss_nodes(s) = get_gauss_nodes(BigFloat, s)
-
-
-@doc raw"""
-The Gauss weights are given by the following integrals
-```math
-b_i = \bigg( \frac{dP}{dx} (c_i) \bigg)^{-2} \int \limits_0^1 \bigg( \frac{P(x)}{x - c_i} \bigg)^2 dx ,
-```
-where $P(x)$ denotes the shifted Legendre polynomial
-$P(x) = P_s (2x-1)$ with $s$ the number of stages.
-"""
-function get_gauss_weights(::Type{T}, s) where {T}
-    c = get_gauss_nodes(T,s)
-    P = _shifted_legendre(s,T)
-    D = Polynomials.derivative(P)
-    
-    inti(i) = begin
-        I = Polynomials.integrate( ( P ÷ Polynomial(T[-c[i], 1]) )^2 )
-        I(1) - I(0)
-    end
-    
-    b = [ inti(i) / D(c[i])^2  for i in 1:s ]
-end
-
-get_gauss_weights(s) = get_gauss_weights(BigFloat, s)
-
-
-@doc raw"""
 The Gauss coefficients are implicitly given by the so-called simplifying assumption $C(s)$:
 ```math
 \sum \limits_{j=1}^{s} a_{ij} c_{j}^{k-1} = \frac{c_i^k}{k}  \qquad i = 1 , \, ... , \, s , \; k = 1 , \, ... , \, s .
 ```
 """
-function get_gauss_coefficients(::Type{T}, s) where {T}
-    solve_simplifying_assumption_c(get_gauss_nodes(T,s))
+function gauss_coefficients(::Type{T}, s) where {T}
+    solve_simplifying_assumption_c(gauss_legendre_nodes(T,s))
 end
 
-get_gauss_coefficients(s) = get_gauss_coefficients(BigFloat, s)
+gauss_coefficients(s) = gauss_coefficients(BigFloat, s)
 
 
 reference(::Val{:Gauss}) = """
@@ -61,7 +26,7 @@ References:
     doi: 10.1007/978-3-540-70529-1_115.
 """
 
-"""
+@doc raw"""
 Gauss tableau with s stages
 
 ```julia
@@ -70,10 +35,16 @@ TableauGauss(s) = TableauGauss(Float64, s)
 ```
 The constructor takes the number of stages `s` and optionally the element type `T` of the tableau.
 
-$(reference(Val(:Gauss)))
-"""
-function TableauGauss(::Type{T}, s) where {T}
-    Tableau{T}(:Gauss, 2s, get_gauss_coefficients(s), get_gauss_weights(s), get_gauss_nodes(s); R∞=(-1)^s)
+The nodes and weights are those of the Gauss-Legendre quadrature rule, i.e. the roots of the
+shifted Legendre polynomial $P_s (2x-1)$ and the corresponding interpolatory weights, taken
+from `QuadratureRules.gauss_legendre_nodes` and `QuadratureRules.gauss_legendre_weights`. The
+coefficients follow from the simplifying assumption $C(s)$, cf. [`gauss_coefficients`](@ref).
+Prescribing no node leaves all $2s$ parameters free, which is what gives the method its
+order $2s$.
+
+""" * reference(Val(:Gauss)) function TableauGauss(::Type{T}, s) where {T}
+    Tableau{T}(:Gauss, 2s, gauss_coefficients(s), gauss_legendre_weights(BigFloat, s),
+               gauss_legendre_nodes(BigFloat, s); R∞=(-1)^s)
 end
 
 TableauGauss(s) = TableauGauss(Float64, s)

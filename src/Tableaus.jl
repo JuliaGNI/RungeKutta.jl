@@ -3,11 +3,13 @@ module Tableaus
     import GeometricBase
     import GeometricBase: description, reference
 
-    import Polynomials
-    import Polynomials: Polynomial
+    using QuadratureRules: gauss_legendre_nodes, gauss_legendre_weights,
+                           lobatto_legendre_nodes, lobatto_legendre_weights,
+                           radau_legendre_nodes, radau_legendre_weights
 
     using ..RungeKutta
-    using ..RungeKutta: big, @big, _legendre, _shifted_legendre
+    using ..RungeKutta: big, @big
+    using ..RungeKutta: _nullvector
 
 
     export description, reference
@@ -66,7 +68,6 @@ module Tableaus
            TableauLobattoIIIF̄,
            TableauLobattoIIIG,
            TableauLobattoIIIḠ
-    export get_lobatto_nullvector
 
     include("tableaus/radau.jl")
 

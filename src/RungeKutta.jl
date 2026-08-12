@@ -6,13 +6,12 @@ module RungeKutta
     using Reexport
     using StaticArrays
 
-    import GenericLinearAlgebra
     import GeometricBase
     import GeometricBase: name, order, description, reference
+    import GeometricBase: coefficients, nodes, weights
     import GeometricBase.Utils: @big, @define
+    import LinearAlgebra
     import LinearAlgebra: istril
-    import Polynomials
-    import Polynomials: Polynomial
 
 
     include("utils.jl")
@@ -29,6 +28,7 @@ module RungeKutta
            isfullyimplicit
 
     export name, order, description, reference
+    export coefficients, nodes, weights
 
     include("order_conditions.jl")
 
