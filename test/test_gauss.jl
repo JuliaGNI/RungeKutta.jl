@@ -218,4 +218,20 @@ import RungeKutta.Tableaus: get_gauss_nodes, get_gauss_weights, get_gauss_coeffi
     @test TableauGauss(Float32,2) ≈ TableauGauss(Float64,2)
     @test TableauGauss(symtype(),2) ≈ TableauGauss(Float64,2)
 
+    # The s-stage Gauss quadrature integrates polynomials up to degree 2s-1
+    # exactly. This checks the arbitrary precision nodes and weights directly,
+    # rather than only via their double precision counterparts.
+    for s in 1:10
+        b = get_gauss_weights(BigFloat, s)
+        c = get_gauss_nodes(BigFloat, s)
+
+        @test eltype(b) == eltype(c) == BigFloat
+        @test issorted(c)
+        @test all(0 .< c .< 1)
+
+        for k in 0:2s-1
+            @test sum(b .* c.^k) ≈ 1 / BigFloat(k+1) atol=1E-60
+        end
+    end
+
 end

@@ -6,10 +6,10 @@ module RungeKutta
     using Reexport
     using StaticArrays
 
-    import GenericLinearAlgebra
     import GeometricBase
     import GeometricBase: name, order, description, reference
     import GeometricBase.Utils: @big, @define
+    import LinearAlgebra
     import LinearAlgebra: istril
     import Polynomials
     import Polynomials: Polynomial

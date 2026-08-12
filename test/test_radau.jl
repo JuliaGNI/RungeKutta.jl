@@ -157,4 +157,26 @@ using RungeKutta.Tableaus: get_radau_1_nodes, get_radau_1_weights, get_radau_1_c
     @test TableauRadauIA(symtype(),2) ≈ TableauRadauIA(Float64,2)
     @test TableauRadauIIA(symtype(),2) ≈ TableauRadauIIA(Float64,2)
 
+    # The s-stage Radau quadrature integrates polynomials up to degree 2s-2
+    # exactly. This checks the arbitrary precision nodes and weights directly,
+    # rather than only via their double precision counterparts. The Radau IA
+    # nodes include the left endpoint, the Radau IIA nodes the right one.
+    for s in 2:10
+        b₁ = get_radau_1_weights(BigFloat, s)
+        c₁ = get_radau_1_nodes(BigFloat, s)
+        b₂ = get_radau_2_weights(BigFloat, s)
+        c₂ = get_radau_2_nodes(BigFloat, s)
+
+        @test eltype(b₁) == eltype(c₁) == eltype(b₂) == eltype(c₂) == BigFloat
+        @test issorted(c₁) && issorted(c₂)
+        @test c₁[begin] == 0 && c₁[end] < 1
+        @test c₂[begin] > 0 && c₂[end] == 1
+        @test c₁ ≈ 1 .- reverse(c₂)
+
+        for k in 0:2s-2
+            @test sum(b₁ .* c₁.^k) ≈ 1 / BigFloat(k+1) atol=1E-60
+            @test sum(b₂ .* c₂.^k) ≈ 1 / BigFloat(k+1) atol=1E-60
+        end
+    end
+
 end

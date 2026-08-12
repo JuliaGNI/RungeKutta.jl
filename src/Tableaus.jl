@@ -5,9 +5,11 @@ module Tableaus
 
     import Polynomials
     import Polynomials: Polynomial
+    import QuadratureRules
 
     using ..RungeKutta
     using ..RungeKutta: big, @big, _legendre, _shifted_legendre
+    using ..RungeKutta: _nullvector
 
 
     export description, reference

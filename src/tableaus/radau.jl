@@ -1,69 +1,119 @@
 
+"Radau IA nodes for element types without a floating point representation, e.g. symbolic ones."
+function _radau_1_nodes(::Type{T}, s) where {T}
+    D(k) = Polynomials.derivative(Polynomial(T[0, 1])^k * Polynomial(T[-1, 1])^(k-1), k-1)
+    c = sort(T.(Polynomials.roots(D(s))))
+    c[begin] = 0; c
+end
+
+"Radau IA nodes for floating point element types, refined to full precision by QuadratureRules."
+_radau_1_nodes(::Type{T}, s) where {T<:AbstractFloat} = QuadratureRules.radau_legendre_nodes(T, s, Val(:left))
+
 @doc raw"""
 The s-stage Radau IA nodes are defined as the roots of the following polynomial of degree $s$:
 ```math
 \frac{d^{s-1}}{dx^{s-1}} \big( x^s (x - 1)^{s-1} \big) .
 ```
+
+For floating point element types the nodes are obtained from
+`QuadratureRules.radau_legendre_nodes`, which computes the Radau nodes including
+the left endpoint. For all other element types, in particular symbolic ones, the
+roots of the above polynomial are computed exactly by `Polynomials.roots`.
 """
 function get_radau_1_nodes(::Type{T}, s) where {T}
     if s == 1
         throw(ErrorException("Radau nodes for one stage are not defined."))
     end
 
-    D(k) = Polynomials.derivative(Polynomial(T[0, 1])^k * Polynomial(T[-1, 1])^(k-1), k-1)
-    c = sort(T.(Polynomials.roots(D(s))))
-    c[begin] = 0; c
+    _radau_1_nodes(T, s)
 end
 
 get_radau_1_nodes(s) = get_radau_1_nodes(BigFloat, s)
 
+
+"Radau IIA nodes for element types without a floating point representation, e.g. symbolic ones."
+function _radau_2_nodes(::Type{T}, s) where {T}
+    D(k) = Polynomials.derivative(Polynomial(T[0, 1])^(k-1) * Polynomial(T[-1, 1])^k, k-1)
+    c = sort(T.(Polynomials.roots(D(s))))
+    c[end] = 1; c
+end
+
+"Radau IIA nodes for floating point element types, refined to full precision by QuadratureRules."
+_radau_2_nodes(::Type{T}, s) where {T<:AbstractFloat} = QuadratureRules.radau_legendre_nodes(T, s, Val(:right))
 
 @doc raw"""
 The s-stage Radau IIA nodes are defined as the roots of the following polynomial of degree $s$:
 ```math
 \frac{d^{s-1}}{dx^{s-1}} \big( x^{s-1} (x - 1)^s \big) .
 ```
+
+For floating point element types the nodes are obtained from
+`QuadratureRules.radau_legendre_nodes`, which computes the Radau nodes including
+the right endpoint. For all other element types, in particular symbolic ones, the
+roots of the above polynomial are computed exactly by `Polynomials.roots`.
 """
 function get_radau_2_nodes(::Type{T}, s) where {T}
     if s == 1
         throw(ErrorException("Radau nodes for one stage are not defined."))
     end
 
-    D(k) = Polynomials.derivative(Polynomial(T[0, 1])^(k-1) * Polynomial(T[-1, 1])^k, k-1)
-    c = sort(T.(Polynomials.roots(D(s))))
-    c[end] = 1; c
+    _radau_2_nodes(T, s)
 end
 
 get_radau_2_nodes(s) = get_radau_2_nodes(BigFloat, s)
 
+
+"Radau IA weights for element types without a floating point representation, e.g. symbolic ones."
+_radau_1_weights(::Type{T}, s) where {T} = solve_simplifying_assumption_b(get_radau_1_nodes(T,s))
+
+"Radau IA weights for floating point element types, computed in full precision by QuadratureRules."
+_radau_1_weights(::Type{T}, s) where {T<:AbstractFloat} = QuadratureRules.radau_legendre_weights(T, s, Val(:left))
 
 @doc raw"""
 The Radau IA weights are implicitly given by the so-called simplifying assumption $B(s)$:
 ```math
 \sum \limits_{j=1}^{s} b_{j} c_{j}^{k-1} = \frac{1}{k}  \qquad k = 1 , \, ... , \, s .
 ```
+
+For floating point element types the weights are obtained from
+`QuadratureRules.radau_legendre_weights`, which evaluates the Radau closed form
+rather than solving the Vandermonde system above, and is therefore better
+conditioned for many stages.
 """
 function get_radau_1_weights(::Type{T}, s) where {T}
     if s == 1
         throw(ErrorException("Radau weights for one stage are not defined."))
     end
-    solve_simplifying_assumption_b(get_radau_1_nodes(T,s))
+
+    _radau_1_weights(T, s)
 end
 
 get_radau_1_weights(s) = get_radau_1_weights(BigFloat, s)
 
+
+"Radau IIA weights for element types without a floating point representation, e.g. symbolic ones."
+_radau_2_weights(::Type{T}, s) where {T} = solve_simplifying_assumption_b(get_radau_2_nodes(T,s))
+
+"Radau IIA weights for floating point element types, computed in full precision by QuadratureRules."
+_radau_2_weights(::Type{T}, s) where {T<:AbstractFloat} = QuadratureRules.radau_legendre_weights(T, s, Val(:right))
 
 @doc raw"""
 The Radau IIA weights are implicitly given by the so-called simplifying assumption $B(s)$:
 ```math
 \sum \limits_{j=1}^{s} b_{j} c_{j}^{k-1} = \frac{1}{k}  \qquad k = 1 , \, ... , \, s .
 ```
+
+For floating point element types the weights are obtained from
+`QuadratureRules.radau_legendre_weights`, which evaluates the Radau closed form
+rather than solving the Vandermonde system above, and is therefore better
+conditioned for many stages.
 """
 function get_radau_2_weights(::Type{T}, s) where {T}
     if s == 1
         throw(ErrorException("Radau weights for one stage are not defined."))
     end
-    solve_simplifying_assumption_b(get_radau_2_nodes(T,s))
+
+    _radau_2_weights(T, s)
 end
 
 get_radau_2_weights(s) = get_radau_2_weights(BigFloat, s)

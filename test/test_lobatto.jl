@@ -460,4 +460,20 @@ using RungeKutta.Tableaus: get_lobatto_nodes, get_lobatto_weights,
     @test TableauLobattoIIIF(symtype(),2) ≈ TableauLobattoIIIF(Float64,2)
     @test TableauLobattoIIIG(symtype(),2) ≈ TableauLobattoIIIG(Float64,2)
 
+    # The s-stage Lobatto quadrature integrates polynomials up to degree 2s-3
+    # exactly. This checks the arbitrary precision nodes and weights directly,
+    # rather than only via their double precision counterparts.
+    for s in 2:10
+        b = get_lobatto_weights(BigFloat, s)
+        c = get_lobatto_nodes(BigFloat, s)
+
+        @test eltype(b) == eltype(c) == BigFloat
+        @test issorted(c)
+        @test c[begin] == 0 && c[end] == 1
+
+        for k in 0:2s-3
+            @test sum(b .* c.^k) ≈ 1 / BigFloat(k+1) atol=1E-60
+        end
+    end
+
 end

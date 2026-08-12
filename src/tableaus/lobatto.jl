@@ -3,20 +3,33 @@ import CompactBasisFunctions: Lagrange
 import LinearAlgebra
 
 
+"Lobatto nodes for element types without a floating point representation, e.g. symbolic ones."
+function _lobatto_nodes(::Type{T}, s) where {T}
+    D(k) = Polynomials.derivative(Polynomial(T[0, 1, -1])^(k-1), k-2)
+    c = sort(T.(Polynomials.roots(D(s))))
+    c[begin] = 0; c[end] = 1; c
+end
+
+"Lobatto nodes for floating point element types, refined to full precision by QuadratureRules."
+_lobatto_nodes(::Type{T}, s) where {T<:AbstractFloat} = QuadratureRules.lobatto_legendre_nodes(T, s)
+
 @doc raw"""
 The s-stage Lobatto nodes are defined as the roots of the following polynomial of degree $s$:
 ```math
 \frac{d^{s-2}}{dx^{s-2}} \big( (x - x^2)^{s-1} \big) .
 ```
+
+For floating point element types the nodes are obtained from
+`QuadratureRules.lobatto_legendre_nodes`, which refines them to full precision.
+For all other element types, in particular symbolic ones, the roots of the
+above polynomial are computed exactly by `Polynomials.roots`.
 """
 function get_lobatto_nodes(::Type{T}, s) where {T}
     if s == 1
         throw(ErrorException("Lobatto nodes for one stage are not defined."))
     end
 
-    D(k) = Polynomials.derivative(Polynomial(T[0, 1, -1])^(k-1), k-2)
-    c = sort(T.(Polynomials.roots(D(s))))
-    c[begin] = 0; c[end] = 1; c
+    _lobatto_nodes(T, s)
 end
 
 get_lobatto_nodes(s) = get_lobatto_nodes(BigFloat, s)
@@ -31,16 +44,29 @@ where $P_k$ is the $k$th Legendre polynomial, given by
 ```math
 P_k (x) = \frac{1}{k! 2^k} \big( \frac{d^k}{dx^k} (x^2 - 1)^k \big) .
 ```
+
+For floating point element types the weights are obtained from
+`QuadratureRules.lobatto_legendre_weights`, which evaluates the same closed form
+in full precision. For all other element types, in particular symbolic ones, it
+is evaluated here.
 """
 function get_lobatto_weights(::Type{T}, s) where {T}
     if s == 1
         throw(ErrorException("Lobatto weights for one stage are not defined."))
     end
 
-    P(k,x) = Polynomials.derivative(Polynomial(T[-1, 0, 1])^k, k)(x) / LinearAlgebra.factorial(k) / 2^k
+    _lobatto_weights(T, s)
+end
+
+"Lobatto weights for element types without a floating point representation, e.g. symbolic ones."
+function _lobatto_weights(::Type{T}, s) where {T}
+    P(k,x) = Polynomials.derivative(Polynomial(T[-1, 0, 1])^k, k)(x) / factorial(k) / 2^k
     c = get_lobatto_nodes(T,s)
     b = [ 1 / ( s*(s-1) * P(s-1, 2c[i] - 1)^2 ) for i in 1:s ]
 end
+
+"Lobatto weights for floating point element types, computed in full precision by QuadratureRules."
+_lobatto_weights(::Type{T}, s) where {T<:AbstractFloat} = QuadratureRules.lobatto_legendre_weights(T, s)
 
 get_lobatto_weights(s) = get_lobatto_weights(BigFloat, s)
 
@@ -61,7 +87,7 @@ function get_lobatto_nullvector(::Type{T}, s; normalize=false) where {T}
     q = get_lobatto_nodes(s)
     l = Lagrange(q)
     v = [l'[x, j] for x in q, j in eachindex(l)]
-    w = LinearAlgebra.nullspace(v')[:,begin]
+    w = _nullvector(v')
     normalize ? T.(LinearAlgebra.normalize(w) .* sign(w[begin])) : T.(w)
 end
 

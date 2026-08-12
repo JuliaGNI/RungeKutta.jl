@@ -2,10 +2,17 @@
 @doc raw"""
 The Gauss nodes are given by the roots of the shifted Legendre polynomial
 $P_s (2x-1)$ with $s$ the number of stages.
+
+For floating point element types the nodes are obtained from
+`QuadratureRules.gauss_legendre_nodes`, which refines them to full precision.
+For all other element types, in particular symbolic ones, the roots of the
+shifted Legendre polynomial are computed exactly by `Polynomials.roots`.
 """
 function get_gauss_nodes(::Type{T}, s) where {T}
     sort(T.(Polynomials.roots(_shifted_legendre(s,T))))
 end
+
+get_gauss_nodes(::Type{T}, s) where {T<:AbstractFloat} = QuadratureRules.gauss_legendre_nodes(T, s)
 
 get_gauss_nodes(s) = get_gauss_nodes(BigFloat, s)
 
@@ -17,19 +24,26 @@ b_i = \bigg( \frac{dP}{dx} (c_i) \bigg)^{-2} \int \limits_0^1 \bigg( \frac{P(x)}
 ```
 where $P(x)$ denotes the shifted Legendre polynomial
 $P(x) = P_s (2x-1)$ with $s$ the number of stages.
+
+For floating point element types the weights are obtained from
+`QuadratureRules.gauss_legendre_weights`, which evaluates the same integrals in
+full precision. For all other element types, in particular symbolic ones, they
+are evaluated here by exact polynomial division and integration.
 """
 function get_gauss_weights(::Type{T}, s) where {T}
     c = get_gauss_nodes(T,s)
     P = _shifted_legendre(s,T)
     D = Polynomials.derivative(P)
-    
+
     inti(i) = begin
         I = Polynomials.integrate( ( P ÷ Polynomial(T[-c[i], 1]) )^2 )
         I(1) - I(0)
     end
-    
+
     b = [ inti(i) / D(c[i])^2  for i in 1:s ]
 end
+
+get_gauss_weights(::Type{T}, s) where {T<:AbstractFloat} = QuadratureRules.gauss_legendre_weights(T, s)
 
 get_gauss_weights(s) = get_gauss_weights(BigFloat, s)
 
