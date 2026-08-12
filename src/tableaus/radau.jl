@@ -7,7 +7,7 @@ The Radau IA coefficients are implicitly given by the so-called simplifying assu
 """
 function radau_1_coefficients(::Type{T}, s) where {T}
     if s == 1
-        throw(ErrorException("Radau IIA coefficients for one stage are not defined."))
+        throw(ErrorException("Radau IA coefficients for one stage are not defined."))
     end
     solve_simplifying_assumption_d(radau_legendre_weights(T, s, Val(:left)), radau_legendre_nodes(T, s, Val(:left)))
 end
@@ -57,9 +57,7 @@ from the simplifying assumption $D(s)$, cf. [`radau_1_coefficients`](@ref).
 Prescribing one endpoint costs one degree of exactness relative to Gauss, giving order $2s-1$.
 Contrast [`TableauRadauIIA`](@ref), which prescribes the right endpoint instead.
 
-$(reference(Val(:RadauIA)))
-"""
-function TableauRadauIA(::Type{T}, s) where {T}
+""" * reference(Val(:RadauIA)) function TableauRadauIA(::Type{T}, s) where {T}
     Tableau{T}(:RadauIA, 2s-1, radau_1_coefficients(s), radau_legendre_weights(BigFloat, s, Val(:left)), radau_legendre_nodes(BigFloat, s, Val(:left)); R∞=0)
 end
 
@@ -138,9 +136,7 @@ Having the right endpoint among the nodes is what makes the method *stiffly accu
 why Radau IIA rather than [`TableauRadauIA`](@ref) is the workhorse for stiff and
 differential-algebraic problems. Both have order $2s-1$.
 
-$(reference(Val(:RadauIIA)))
-"""
-function TableauRadauIIA(::Type{T}, s) where {T}
+""" * reference(Val(:RadauIIA)) function TableauRadauIIA(::Type{T}, s) where {T}
     Tableau{T}(:RadauIIA, 2s-1, radau_2_coefficients(s), radau_legendre_weights(BigFloat, s, Val(:right)), radau_legendre_nodes(BigFloat, s, Val(:right)); R∞=0)
 end
 

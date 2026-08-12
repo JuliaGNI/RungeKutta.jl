@@ -42,9 +42,7 @@ coefficients follow from the simplifying assumption $C(s)$, cf. [`gauss_coeffici
 Prescribing no node leaves all $2s$ parameters free, which is what gives the method its
 order $2s$.
 
-$(reference(Val(:Gauss)))
-"""
-function TableauGauss(::Type{T}, s) where {T}
+""" * reference(Val(:Gauss)) function TableauGauss(::Type{T}, s) where {T}
     Tableau{T}(:Gauss, 2s, gauss_coefficients(s), gauss_legendre_weights(BigFloat, s),
                gauss_legendre_nodes(BigFloat, s); R∞=(-1)^s)
 end
