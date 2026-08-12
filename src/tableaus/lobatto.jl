@@ -1,18 +1,21 @@
 
 import CompactBasisFunctions: Lagrange
-import LinearAlgebra
 
 
 """
 ```julia
-lobatto_nullvector(::Type, s; normalize=false)
-lobatto_nullvector(s; kwargs...)
+lobatto_nullvector(::Type, s)
+lobatto_nullvector(s)
 ```
 
 Computes the nullvector of the matrix containing the derivatives of the
 Lagrange basis on the `s` Lobatto nodes evaluated on these nodes.
+
+The result is of unit length with a positive first entry, cf. [`_nullvector`](@ref),
+so it is determined by the Lobatto nodes alone and not by the factorisation used to
+obtain it.
 """
-function lobatto_nullvector(::Type{T}, s; normalize=false) where {T}
+function lobatto_nullvector(::Type{T}, s) where {T}
     if s == 1
         throw(ErrorException("Lobatto nullvector for one stage is not defined."))
     end
@@ -20,11 +23,10 @@ function lobatto_nullvector(::Type{T}, s; normalize=false) where {T}
     q = lobatto_legendre_nodes(BigFloat, s)
     l = Lagrange(q)
     v = [l'[x, j] for x in q, j in eachindex(l)]
-    w = _nullvector(v')
-    normalize ? T.(LinearAlgebra.normalize(w) .* sign(w[begin])) : T.(w)
+    T.(_nullvector(v'))
 end
 
-lobatto_nullvector(s; kwargs...) = lobatto_nullvector(Float64, s; kwargs...)
+lobatto_nullvector(s) = lobatto_nullvector(Float64, s)
 
 
 @doc raw"""

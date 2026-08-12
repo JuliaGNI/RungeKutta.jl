@@ -38,10 +38,14 @@ using RungeKutta.Tableaus: lobatto_nullvector,
     end
 
 
-    @test lobatto_nullvector(2; normalize=true) ≈ _lobatto_nullvector(2)
-    @test lobatto_nullvector(3; normalize=true) ≈ _lobatto_nullvector(3)
-    @test lobatto_nullvector(4; normalize=true) ≈ _lobatto_nullvector(4)
-    @test lobatto_nullvector(5; normalize=true) ≈ _lobatto_nullvector(5)
+    # The vector comes out of unit length with a positive first entry, so it is fixed
+    # by the nodes alone and does not flip with the factorisation used to obtain it.
+    for s in 2:5
+        @test lobatto_nullvector(s) ≈ _lobatto_nullvector(s)
+        @test lobatto_nullvector(BigFloat, s) ≈ _lobatto_nullvector(s)
+        @test LinearAlgebra.norm(lobatto_nullvector(s)) ≈ 1
+        @test lobatto_nullvector(s)[begin] > 0
+    end
 
 
     function _getTableauLobattoIIIA2(T=Float64)

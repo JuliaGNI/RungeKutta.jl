@@ -35,6 +35,16 @@ import RungeKutta: istriustrict, istrilstrict, _nullvector
         @test norm(w) ≈ one(T)
         @test norm(A * w) < 16eps(T)
         @test abs.(w) ≈ abs.(nullspace(Float64.(A))[:,begin])
+
+        # The sign is canonical, so the vector does not depend on the pivot order:
+        # permuting the columns of A permutes w and leaves the sign alone.
+        @test w[begin] > 0
+        @test _nullvector(A[:, [3,2,1]]) ≈ reverse(w)
     end
+
+    # A matrix whose nullspace is not one-dimensional is rejected rather than
+    # answered with a vector that does not span anything.
+    @test_throws ArgumentError _nullvector(Float64[1 2 3; 4 5 6; 7 8 10])   # rank 3
+    @test_throws ArgumentError _nullvector(zeros(3,3))                      # rank 0
 
 end
