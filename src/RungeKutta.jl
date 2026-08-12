@@ -8,6 +8,7 @@ module RungeKutta
 
     import GeometricBase
     import GeometricBase: name, order, description, reference
+    import GeometricBase: nodes
     import GeometricBase.Utils: @big, @define
     import LinearAlgebra
     import LinearAlgebra: istril
@@ -29,6 +30,7 @@ module RungeKutta
            isfullyimplicit
 
     export name, order, description, reference
+    export nodes
 
     include("order_conditions.jl")
 
