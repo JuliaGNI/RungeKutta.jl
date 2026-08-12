@@ -10,14 +10,14 @@ module RungeKuttaWeaves
     using Markdown: MD, Paragraph, LineBreak
     using PrettyTables
     using RungeKutta
-    using RungeKutta.Tableaus: get_gauss_nodes, get_gauss_weights, get_gauss_coefficients
-    using RungeKutta.Tableaus: get_lobatto_nodes, get_lobatto_weights,
-                               get_lobatto_a_coefficients, get_lobatto_b_coefficients,
-                               get_lobatto_c_coefficients, get_lobatto_c̄_coefficients,
-                               get_lobatto_d_coefficients, get_lobatto_e_coefficients,
-                               get_lobatto_f_coefficients, get_lobatto_g_coefficients
-    using RungeKutta.Tableaus: get_radau_1_nodes, get_radau_1_weights, get_radau_1_coefficients,
-                               get_radau_2_nodes, get_radau_2_weights, get_radau_2_coefficients
+    using RungeKutta.Tableaus: gauss_nodes, gauss_weights, gauss_coefficients
+    using RungeKutta.Tableaus: lobatto_nodes, lobatto_weights,
+                               lobatto_a_coefficients, lobatto_b_coefficients,
+                               lobatto_c_coefficients, lobatto_c̄_coefficients,
+                               lobatto_d_coefficients, lobatto_e_coefficients,
+                               lobatto_f_coefficients, lobatto_g_coefficients
+    using RungeKutta.Tableaus: radau_1_nodes, radau_1_weights, radau_1_coefficients,
+                               radau_2_nodes, radau_2_weights, radau_2_coefficients
 
     import SymPyPythonCall
     import SymPyPythonCall: latex, simplify

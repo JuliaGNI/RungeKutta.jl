@@ -20,7 +20,7 @@ For floating point element types the nodes are obtained from
 the left endpoint. For all other element types, in particular symbolic ones, the
 roots of the above polynomial are computed exactly by `Polynomials.roots`.
 """
-function get_radau_1_nodes(::Type{T}, s) where {T}
+function radau_1_nodes(::Type{T}, s) where {T}
     if s == 1
         throw(ErrorException("Radau nodes for one stage are not defined."))
     end
@@ -28,7 +28,7 @@ function get_radau_1_nodes(::Type{T}, s) where {T}
     _radau_1_nodes(T, s)
 end
 
-get_radau_1_nodes(s) = get_radau_1_nodes(BigFloat, s)
+radau_1_nodes(s) = radau_1_nodes(BigFloat, s)
 
 
 "Radau IIA nodes for element types without a floating point representation, e.g. symbolic ones."
@@ -52,7 +52,7 @@ For floating point element types the nodes are obtained from
 the right endpoint. For all other element types, in particular symbolic ones, the
 roots of the above polynomial are computed exactly by `Polynomials.roots`.
 """
-function get_radau_2_nodes(::Type{T}, s) where {T}
+function radau_2_nodes(::Type{T}, s) where {T}
     if s == 1
         throw(ErrorException("Radau nodes for one stage are not defined."))
     end
@@ -60,11 +60,11 @@ function get_radau_2_nodes(::Type{T}, s) where {T}
     _radau_2_nodes(T, s)
 end
 
-get_radau_2_nodes(s) = get_radau_2_nodes(BigFloat, s)
+radau_2_nodes(s) = radau_2_nodes(BigFloat, s)
 
 
 "Radau IA weights for element types without a floating point representation, e.g. symbolic ones."
-_radau_1_weights(::Type{T}, s) where {T} = solve_simplifying_assumption_b(get_radau_1_nodes(T,s))
+_radau_1_weights(::Type{T}, s) where {T} = solve_simplifying_assumption_b(radau_1_nodes(T,s))
 
 "Radau IA weights for floating point element types, computed in full precision by QuadratureRules."
 _radau_1_weights(::Type{T}, s) where {T<:AbstractFloat} = QuadratureRules.radau_legendre_weights(T, s, Val(:left))
@@ -80,7 +80,7 @@ For floating point element types the weights are obtained from
 rather than solving the Vandermonde system above, and is therefore better
 conditioned for many stages.
 """
-function get_radau_1_weights(::Type{T}, s) where {T}
+function radau_1_weights(::Type{T}, s) where {T}
     if s == 1
         throw(ErrorException("Radau weights for one stage are not defined."))
     end
@@ -88,11 +88,11 @@ function get_radau_1_weights(::Type{T}, s) where {T}
     _radau_1_weights(T, s)
 end
 
-get_radau_1_weights(s) = get_radau_1_weights(BigFloat, s)
+radau_1_weights(s) = radau_1_weights(BigFloat, s)
 
 
 "Radau IIA weights for element types without a floating point representation, e.g. symbolic ones."
-_radau_2_weights(::Type{T}, s) where {T} = solve_simplifying_assumption_b(get_radau_2_nodes(T,s))
+_radau_2_weights(::Type{T}, s) where {T} = solve_simplifying_assumption_b(radau_2_nodes(T,s))
 
 "Radau IIA weights for floating point element types, computed in full precision by QuadratureRules."
 _radau_2_weights(::Type{T}, s) where {T<:AbstractFloat} = QuadratureRules.radau_legendre_weights(T, s, Val(:right))
@@ -108,7 +108,7 @@ For floating point element types the weights are obtained from
 rather than solving the Vandermonde system above, and is therefore better
 conditioned for many stages.
 """
-function get_radau_2_weights(::Type{T}, s) where {T}
+function radau_2_weights(::Type{T}, s) where {T}
     if s == 1
         throw(ErrorException("Radau weights for one stage are not defined."))
     end
@@ -116,7 +116,7 @@ function get_radau_2_weights(::Type{T}, s) where {T}
     _radau_2_weights(T, s)
 end
 
-get_radau_2_weights(s) = get_radau_2_weights(BigFloat, s)
+radau_2_weights(s) = radau_2_weights(BigFloat, s)
 
 
 @doc raw"""
@@ -125,14 +125,14 @@ The Radau IA coefficients are implicitly given by the so-called simplifying assu
 \sum \limits_{i=1}^{s} b_i c_{i}^{k-1} a_{ij} = \frac{b_j}{k} ( 1 - c_j^k)  \qquad j = 1 , \, ... , \, s , \; k = 1 , \, ... , \, s .
 ```
 """
-function get_radau_1_coefficients(::Type{T}, s) where {T}
+function radau_1_coefficients(::Type{T}, s) where {T}
     if s == 1
         throw(ErrorException("Radau IIA coefficients for one stage are not defined."))
     end
-    solve_simplifying_assumption_d(get_radau_1_weights(T,s), get_radau_1_nodes(T,s))
+    solve_simplifying_assumption_d(radau_1_weights(T,s), radau_1_nodes(T,s))
 end
 
-get_radau_1_coefficients(s) = get_radau_1_coefficients(BigFloat, s)
+radau_1_coefficients(s) = radau_1_coefficients(BigFloat, s)
 
 
 @doc raw"""
@@ -141,14 +141,14 @@ The Radau IIA coefficients are implicitly given by the so-called simplifying ass
 \sum \limits_{j=1}^{s} a_{ij} c_{j}^{k-1} = \frac{c_i^k}{k}  \qquad i = 1 , \, ... , \, s , \; k = 1 , \, ... , \, s .
 ```
 """
-function get_radau_2_coefficients(::Type{T}, s) where {T}
+function radau_2_coefficients(::Type{T}, s) where {T}
     if s == 1
         throw(ErrorException("Radau IIA coefficients for one stage are not defined."))
     end
-    solve_simplifying_assumption_c(get_radau_2_nodes(T,s))
+    solve_simplifying_assumption_c(radau_2_nodes(T,s))
 end
 
-get_radau_2_coefficients(s) = get_radau_2_coefficients(BigFloat, s)
+radau_2_coefficients(s) = radau_2_coefficients(BigFloat, s)
 
 
 reference(::Val{:RadauIA}) = """
@@ -171,7 +171,7 @@ The constructor takes the number of stages `s` and optionally the element type `
 $(reference(Val(:RadauIA)))
 """
 function TableauRadauIA(::Type{T}, s) where {T}
-    Tableau{T}(:RadauIA, 2s-1, get_radau_1_coefficients(s), get_radau_1_weights(s), get_radau_1_nodes(s); R∞=0)
+    Tableau{T}(:RadauIA, 2s-1, radau_1_coefficients(s), radau_1_weights(s), radau_1_nodes(s); R∞=0)
 end
 
 TableauRadauIA(s) = TableauRadauIA(Float64, s)
@@ -202,11 +202,11 @@ all ``1 \\le i,j \\le s``.
 $(reference(Val(:RadauIB)))
 """
 function TableauRadauIB(::Type{T}, s) where {T}
-    a = get_radau_1_coefficients(BigFloat,s)
-    b = get_radau_1_weights(BigFloat,s)
+    a = radau_1_coefficients(BigFloat,s)
+    b = radau_1_weights(BigFloat,s)
     ā = symplectic_conjugate_coefficients(a,b)
 
-    Tableau{T}(:RadauIB, 2s-1, (a .+ ā) ./ 2, b, get_radau_1_nodes(s); R∞=0)
+    Tableau{T}(:RadauIB, 2s-1, (a .+ ā) ./ 2, b, radau_1_nodes(s); R∞=0)
 end
 
 TableauRadauIB(s) = TableauRadauIB(Float64, s)
@@ -242,7 +242,7 @@ The constructor takes the number of stages `s` and optionally the element type `
 $(reference(Val(:RadauIIA)))
 """
 function TableauRadauIIA(::Type{T}, s) where {T}
-    Tableau{T}(:RadauIIA, 2s-1, get_radau_2_coefficients(s), get_radau_2_weights(s), get_radau_2_nodes(s); R∞=0)
+    Tableau{T}(:RadauIIA, 2s-1, radau_2_coefficients(s), radau_2_weights(s), radau_2_nodes(s); R∞=0)
 end
 
 TableauRadauIIA(s) = TableauRadauIIA(Float64, s)
@@ -273,11 +273,11 @@ all ``1 \\le i,j \\le s``.
 $(reference(Val(:RadauIIB)))
 """
 function TableauRadauIIB(::Type{T}, s) where {T}
-    a = get_radau_2_coefficients(BigFloat,s)
-    b = get_radau_2_weights(BigFloat,s)
+    a = radau_2_coefficients(BigFloat,s)
+    b = radau_2_weights(BigFloat,s)
     ā = symplectic_conjugate_coefficients(a,b)
 
-    Tableau{T}(:RadauIIB, 2s-1, (a .+ ā) ./ 2, b, get_radau_2_nodes(s); R∞=0)
+    Tableau{T}(:RadauIIB, 2s-1, (a .+ ā) ./ 2, b, radau_2_nodes(s); R∞=0)
 end
 
 TableauRadauIIB(s) = TableauRadauIIB(Float64, s)

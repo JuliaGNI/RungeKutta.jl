@@ -8,13 +8,13 @@ For floating point element types the nodes are obtained from
 For all other element types, in particular symbolic ones, the roots of the
 shifted Legendre polynomial are computed exactly by `Polynomials.roots`.
 """
-function get_gauss_nodes(::Type{T}, s) where {T}
+function gauss_nodes(::Type{T}, s) where {T}
     sort(T.(Polynomials.roots(_shifted_legendre(s,T))))
 end
 
-get_gauss_nodes(::Type{T}, s) where {T<:AbstractFloat} = QuadratureRules.gauss_legendre_nodes(T, s)
+gauss_nodes(::Type{T}, s) where {T<:AbstractFloat} = QuadratureRules.gauss_legendre_nodes(T, s)
 
-get_gauss_nodes(s) = get_gauss_nodes(BigFloat, s)
+gauss_nodes(s) = gauss_nodes(BigFloat, s)
 
 
 @doc raw"""
@@ -30,8 +30,8 @@ For floating point element types the weights are obtained from
 full precision. For all other element types, in particular symbolic ones, they
 are evaluated here by exact polynomial division and integration.
 """
-function get_gauss_weights(::Type{T}, s) where {T}
-    c = get_gauss_nodes(T,s)
+function gauss_weights(::Type{T}, s) where {T}
+    c = gauss_nodes(T,s)
     P = _shifted_legendre(s,T)
     D = Polynomials.derivative(P)
 
@@ -43,9 +43,9 @@ function get_gauss_weights(::Type{T}, s) where {T}
     b = [ inti(i) / D(c[i])^2  for i in 1:s ]
 end
 
-get_gauss_weights(::Type{T}, s) where {T<:AbstractFloat} = QuadratureRules.gauss_legendre_weights(T, s)
+gauss_weights(::Type{T}, s) where {T<:AbstractFloat} = QuadratureRules.gauss_legendre_weights(T, s)
 
-get_gauss_weights(s) = get_gauss_weights(BigFloat, s)
+gauss_weights(s) = gauss_weights(BigFloat, s)
 
 
 @doc raw"""
@@ -54,11 +54,11 @@ The Gauss coefficients are implicitly given by the so-called simplifying assumpt
 \sum \limits_{j=1}^{s} a_{ij} c_{j}^{k-1} = \frac{c_i^k}{k}  \qquad i = 1 , \, ... , \, s , \; k = 1 , \, ... , \, s .
 ```
 """
-function get_gauss_coefficients(::Type{T}, s) where {T}
-    solve_simplifying_assumption_c(get_gauss_nodes(T,s))
+function gauss_coefficients(::Type{T}, s) where {T}
+    solve_simplifying_assumption_c(gauss_nodes(T,s))
 end
 
-get_gauss_coefficients(s) = get_gauss_coefficients(BigFloat, s)
+gauss_coefficients(s) = gauss_coefficients(BigFloat, s)
 
 
 reference(::Val{:Gauss}) = """
@@ -87,7 +87,7 @@ The constructor takes the number of stages `s` and optionally the element type `
 $(reference(Val(:Gauss)))
 """
 function TableauGauss(::Type{T}, s) where {T}
-    Tableau{T}(:Gauss, 2s, get_gauss_coefficients(s), get_gauss_weights(s), get_gauss_nodes(s); R∞=(-1)^s)
+    Tableau{T}(:Gauss, 2s, gauss_coefficients(s), gauss_weights(s), gauss_nodes(s); R∞=(-1)^s)
 end
 
 TableauGauss(s) = TableauGauss(Float64, s)

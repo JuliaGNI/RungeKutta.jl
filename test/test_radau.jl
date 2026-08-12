@@ -1,15 +1,15 @@
-using RungeKutta.Tableaus: get_radau_1_nodes, get_radau_1_weights, get_radau_1_coefficients,
-                           get_radau_2_nodes, get_radau_2_weights, get_radau_2_coefficients
+using RungeKutta.Tableaus: radau_1_nodes, radau_1_weights, radau_1_coefficients,
+                           radau_2_nodes, radau_2_weights, radau_2_coefficients
 
 @testset "$(rpad("Radau Tableaus",80))" begin
 
-    @test_throws ErrorException get_radau_1_nodes(1)
-    @test_throws ErrorException get_radau_1_weights(1)
-    @test_throws ErrorException get_radau_1_coefficients(1)
+    @test_throws ErrorException radau_1_nodes(1)
+    @test_throws ErrorException radau_1_weights(1)
+    @test_throws ErrorException radau_1_coefficients(1)
 
-    @test_throws ErrorException get_radau_2_nodes(1)
-    @test_throws ErrorException get_radau_2_weights(1)
-    @test_throws ErrorException get_radau_2_coefficients(1)
+    @test_throws ErrorException radau_2_nodes(1)
+    @test_throws ErrorException radau_2_weights(1)
+    @test_throws ErrorException radau_2_coefficients(1)
 
     
     function _TableauRadauIA2(T=Float64)
@@ -123,34 +123,34 @@ using RungeKutta.Tableaus: get_radau_1_nodes, get_radau_1_weights, get_radau_1_c
 
     for T in (Float32, Float64, BigFloat, symtype())
         for s in 2:3
-            @test_nowarn get_radau_1_nodes(T,s)
-            @test_nowarn get_radau_1_weights(T,s)
-            @test_nowarn get_radau_1_coefficients(T,s)
+            @test_nowarn radau_1_nodes(T,s)
+            @test_nowarn radau_1_weights(T,s)
+            @test_nowarn radau_1_coefficients(T,s)
 
-            @test_nowarn get_radau_2_nodes(T,s)
-            @test_nowarn get_radau_2_weights(T,s)
-            @test_nowarn get_radau_2_coefficients(T,s)
+            @test_nowarn radau_2_nodes(T,s)
+            @test_nowarn radau_2_weights(T,s)
+            @test_nowarn radau_2_coefficients(T,s)
 
             @test_nowarn TableauRadauIA(T,s)
             @test_nowarn TableauRadauIIA(T,s)
         end
     end
 
-    @test get_radau_1_nodes(Float32,2) ≈ get_radau_1_nodes(Float64,2)
-    @test get_radau_1_weights(Float32,2) ≈ get_radau_1_weights(Float64,2)
-    @test get_radau_1_coefficients(Float32,2) ≈ get_radau_1_coefficients(Float64,2)
+    @test radau_1_nodes(Float32,2) ≈ radau_1_nodes(Float64,2)
+    @test radau_1_weights(Float32,2) ≈ radau_1_weights(Float64,2)
+    @test radau_1_coefficients(Float32,2) ≈ radau_1_coefficients(Float64,2)
 
-    @test get_radau_2_nodes(Float32,2) ≈ get_radau_2_nodes(Float64,2)
-    @test get_radau_2_weights(Float32,2) ≈ get_radau_2_weights(Float64,2)
-    @test get_radau_2_coefficients(Float32,2) ≈ get_radau_2_coefficients(Float64,2)
+    @test radau_2_nodes(Float32,2) ≈ radau_2_nodes(Float64,2)
+    @test radau_2_weights(Float32,2) ≈ radau_2_weights(Float64,2)
+    @test radau_2_coefficients(Float32,2) ≈ radau_2_coefficients(Float64,2)
 
-    @test get_radau_1_nodes(symtype(),2) ≈ get_radau_1_nodes(Float64,2)
-    @test get_radau_1_weights(symtype(),2) ≈ get_radau_1_weights(Float64,2)
-    @test get_radau_1_coefficients(symtype(),2) ≈ get_radau_1_coefficients(Float64,2)
+    @test radau_1_nodes(symtype(),2) ≈ radau_1_nodes(Float64,2)
+    @test radau_1_weights(symtype(),2) ≈ radau_1_weights(Float64,2)
+    @test radau_1_coefficients(symtype(),2) ≈ radau_1_coefficients(Float64,2)
 
-    @test get_radau_2_nodes(symtype(),2) ≈ get_radau_2_nodes(Float64,2)
-    @test get_radau_2_weights(symtype(),2) ≈ get_radau_2_weights(Float64,2)
-    @test get_radau_2_coefficients(symtype(),2) ≈ get_radau_2_coefficients(Float64,2)
+    @test radau_2_nodes(symtype(),2) ≈ radau_2_nodes(Float64,2)
+    @test radau_2_weights(symtype(),2) ≈ radau_2_weights(Float64,2)
+    @test radau_2_coefficients(symtype(),2) ≈ radau_2_coefficients(Float64,2)
 
     @test TableauRadauIA(Float32,2) ≈ TableauRadauIA(Float64,2)
     @test TableauRadauIIA(Float32,2) ≈ TableauRadauIIA(Float64,2)
@@ -162,10 +162,10 @@ using RungeKutta.Tableaus: get_radau_1_nodes, get_radau_1_weights, get_radau_1_c
     # rather than only via their double precision counterparts. The Radau IA
     # nodes include the left endpoint, the Radau IIA nodes the right one.
     for s in 2:10
-        b₁ = get_radau_1_weights(BigFloat, s)
-        c₁ = get_radau_1_nodes(BigFloat, s)
-        b₂ = get_radau_2_weights(BigFloat, s)
-        c₂ = get_radau_2_nodes(BigFloat, s)
+        b₁ = radau_1_weights(BigFloat, s)
+        c₁ = radau_1_nodes(BigFloat, s)
+        b₂ = radau_2_weights(BigFloat, s)
+        c₂ = radau_2_nodes(BigFloat, s)
 
         @test eltype(b₁) == eltype(c₁) == eltype(b₂) == eltype(c₂) == BigFloat
         @test issorted(c₁) && issorted(c₂)

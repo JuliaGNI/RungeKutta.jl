@@ -68,7 +68,6 @@ module Tableaus
            TableauLobattoIIIF̄,
            TableauLobattoIIIG,
            TableauLobattoIIIḠ
-    export get_lobatto_nullvector
 
     include("tableaus/radau.jl")
 
