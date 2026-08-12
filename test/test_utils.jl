@@ -1,7 +1,5 @@
 import LinearAlgebra: I, norm, nullspace
-import Polynomials: Polynomial
-import RungeKutta: istriustrict, istrilstrict
-import RungeKutta: _legendre, _shifted_legendre, _nullvector
+import RungeKutta: istriustrict, istrilstrict, _nullvector
 
 @testset "$(rpad("Utility Functions",80))" begin
 
@@ -24,14 +22,6 @@ import RungeKutta: _legendre, _shifted_legendre, _nullvector
 
         @test !istriustrict(rand(n,n))
         @test !istrilstrict(rand(n,n))
-    end
-
-
-    for T in (Float32, Float64, BigFloat, symtype())
-        for s in 1:3
-            @test_nowarn _legendre(s, Polynomial(T[0,1]))
-            @test_nowarn _shifted_legendre(s,T)
-        end
     end
 
 

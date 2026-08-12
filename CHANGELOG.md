@@ -27,6 +27,23 @@ package affected.
   dropping the previously allowed `0.2` and `0.10`–`0.13` respectively.
 - **`QuadratureRules` `0.2` is now a dependency.** It is where the quadrature nodes and
   weights come from, so it is required, not optional.
+- **The eight node and weight accessors are removed entirely**, not renamed:
+  `gauss_nodes`, `gauss_weights`, `lobatto_nodes`, `lobatto_weights`, `radau_1_nodes`,
+  `radau_1_weights`, `radau_2_nodes`, `radau_2_weights`. Once QuadratureRules learned to
+  evaluate its nodes and weights on symbolic element types too, these had become one-line
+  forwardings, and two public names for one function only invite drift. Call
+  `QuadratureRules.gauss_legendre_nodes(T, s)`, `lobatto_legendre_weights(T, s)`,
+  `radau_legendre_nodes(T, s, Val(:left))` for Radau IA and `Val(:right)` for Radau IIA.
+  The QuadratureRules names are also the more precise ones, `gauss_nodes` being ambiguous
+  now that Gauss-Chebyshev nodes exist alongside Gauss-Legendre. Note that the one-argument
+  forms defaulted to `BigFloat` whereas QuadratureRules defaults to `Float64`, so pass the
+  element type explicitly. `nodes(tab)`, `weights(tab)` and `coefficients(tab)` remain the
+  way to read a tableau that has already been constructed.
+- **A one-stage Radau rule no longer throws.** The nodes and weights of the one-node Radau
+  quadrature are perfectly well defined — it is a Riemann sum — and QuadratureRules returns
+  them. What remains undefined is the one-stage Radau *tableau*, so
+  `radau_1_coefficients(1)`, `radau_2_coefficients(1)` and the four `TableauRadau*(1)`
+  constructors still throw an `ErrorException`.
 
 ### Added
 

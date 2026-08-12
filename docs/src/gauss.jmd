@@ -2,6 +2,6 @@
 
 ```julia; echo=false; results="raw"
 for s in 1:3
-    show(stdout, "text/markdown", Tableau(Symbol("Gauss($s)"), 2s, gauss_coefficients(symtype(), s), gauss_weights(symtype(), s), gauss_nodes(symtype(), s)))
+    show(stdout, "text/markdown", Tableau(Symbol("Gauss($s)"), 2s, gauss_coefficients(symtype(), s), gauss_legendre_weights(symtype(), s), gauss_legendre_nodes(symtype(), s)))
 end
 ```

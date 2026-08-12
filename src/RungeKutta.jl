@@ -12,8 +12,6 @@ module RungeKutta
     import GeometricBase.Utils: @big, @define
     import LinearAlgebra
     import LinearAlgebra: istril
-    import Polynomials
-    import Polynomials: Polynomial
 
 
     include("utils.jl")

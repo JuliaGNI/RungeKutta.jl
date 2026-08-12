@@ -1,4 +1,5 @@
-import RungeKutta.Tableaus: gauss_nodes, gauss_weights, gauss_coefficients
+import QuadratureRules: gauss_legendre_nodes, gauss_legendre_weights
+import RungeKutta.Tableaus: gauss_coefficients
 
 @testset "$(rpad("Gauss Tableaus",80))" begin
 
@@ -200,19 +201,19 @@ import RungeKutta.Tableaus: gauss_nodes, gauss_weights, gauss_coefficients
 
     for T in (Float32, Float64, BigFloat, symtype())
         for s in 1:3
-            @test_nowarn gauss_nodes(T,s)
-            @test_nowarn gauss_weights(T,s)
+            @test_nowarn gauss_legendre_nodes(T, s)
+            @test_nowarn gauss_legendre_weights(T, s)
             @test_nowarn gauss_coefficients(T,s)
             @test_nowarn TableauGauss(T,s)
         end
     end
 
-    @test gauss_nodes(Float32,2) ≈ gauss_nodes(Float64,2)
-    @test gauss_weights(Float32,2) ≈ gauss_weights(Float64,2)
+    @test gauss_legendre_nodes(Float32, 2) ≈ gauss_legendre_nodes(Float64, 2)
+    @test gauss_legendre_weights(Float32, 2) ≈ gauss_legendre_weights(Float64, 2)
     @test gauss_coefficients(Float32,2) ≈ gauss_coefficients(Float64,2)
 
-    @test gauss_nodes(symtype(),2) ≈ gauss_nodes(Float64,2)
-    @test gauss_weights(symtype(),2) ≈ gauss_weights(Float64,2)
+    @test gauss_legendre_nodes(symtype(), 2) ≈ gauss_legendre_nodes(Float64, 2)
+    @test gauss_legendre_weights(symtype(), 2) ≈ gauss_legendre_weights(Float64, 2)
     @test gauss_coefficients(symtype(),2) ≈ gauss_coefficients(Float64,2)
 
     @test TableauGauss(Float32,2) ≈ TableauGauss(Float64,2)
@@ -222,8 +223,8 @@ import RungeKutta.Tableaus: gauss_nodes, gauss_weights, gauss_coefficients
     # exactly. This checks the arbitrary precision nodes and weights directly,
     # rather than only via their double precision counterparts.
     for s in 1:10
-        b = gauss_weights(BigFloat, s)
-        c = gauss_nodes(BigFloat, s)
+        b = gauss_legendre_weights(BigFloat, s)
+        c = gauss_legendre_nodes(BigFloat, s)
 
         @test eltype(b) == eltype(c) == BigFloat
         @test issorted(c)

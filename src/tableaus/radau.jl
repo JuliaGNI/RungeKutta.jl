@@ -1,124 +1,4 @@
 
-"Radau IA nodes for element types without a floating point representation, e.g. symbolic ones."
-function _radau_1_nodes(::Type{T}, s) where {T}
-    D(k) = Polynomials.derivative(Polynomial(T[0, 1])^k * Polynomial(T[-1, 1])^(k-1), k-1)
-    c = sort(T.(Polynomials.roots(D(s))))
-    c[begin] = 0; c
-end
-
-"Radau IA nodes for floating point element types, refined to full precision by QuadratureRules."
-_radau_1_nodes(::Type{T}, s) where {T<:AbstractFloat} = QuadratureRules.radau_legendre_nodes(T, s, Val(:left))
-
-@doc raw"""
-The s-stage Radau IA nodes are defined as the roots of the following polynomial of degree $s$:
-```math
-\frac{d^{s-1}}{dx^{s-1}} \big( x^s (x - 1)^{s-1} \big) .
-```
-
-For floating point element types the nodes are obtained from
-`QuadratureRules.radau_legendre_nodes`, which computes the Radau nodes including
-the left endpoint. For all other element types, in particular symbolic ones, the
-roots of the above polynomial are computed exactly by `Polynomials.roots`.
-"""
-function radau_1_nodes(::Type{T}, s) where {T}
-    if s == 1
-        throw(ErrorException("Radau nodes for one stage are not defined."))
-    end
-
-    _radau_1_nodes(T, s)
-end
-
-radau_1_nodes(s) = radau_1_nodes(BigFloat, s)
-
-
-"Radau IIA nodes for element types without a floating point representation, e.g. symbolic ones."
-function _radau_2_nodes(::Type{T}, s) where {T}
-    D(k) = Polynomials.derivative(Polynomial(T[0, 1])^(k-1) * Polynomial(T[-1, 1])^k, k-1)
-    c = sort(T.(Polynomials.roots(D(s))))
-    c[end] = 1; c
-end
-
-"Radau IIA nodes for floating point element types, refined to full precision by QuadratureRules."
-_radau_2_nodes(::Type{T}, s) where {T<:AbstractFloat} = QuadratureRules.radau_legendre_nodes(T, s, Val(:right))
-
-@doc raw"""
-The s-stage Radau IIA nodes are defined as the roots of the following polynomial of degree $s$:
-```math
-\frac{d^{s-1}}{dx^{s-1}} \big( x^{s-1} (x - 1)^s \big) .
-```
-
-For floating point element types the nodes are obtained from
-`QuadratureRules.radau_legendre_nodes`, which computes the Radau nodes including
-the right endpoint. For all other element types, in particular symbolic ones, the
-roots of the above polynomial are computed exactly by `Polynomials.roots`.
-"""
-function radau_2_nodes(::Type{T}, s) where {T}
-    if s == 1
-        throw(ErrorException("Radau nodes for one stage are not defined."))
-    end
-
-    _radau_2_nodes(T, s)
-end
-
-radau_2_nodes(s) = radau_2_nodes(BigFloat, s)
-
-
-"Radau IA weights for element types without a floating point representation, e.g. symbolic ones."
-_radau_1_weights(::Type{T}, s) where {T} = solve_simplifying_assumption_b(radau_1_nodes(T,s))
-
-"Radau IA weights for floating point element types, computed in full precision by QuadratureRules."
-_radau_1_weights(::Type{T}, s) where {T<:AbstractFloat} = QuadratureRules.radau_legendre_weights(T, s, Val(:left))
-
-@doc raw"""
-The Radau IA weights are implicitly given by the so-called simplifying assumption $B(s)$:
-```math
-\sum \limits_{j=1}^{s} b_{j} c_{j}^{k-1} = \frac{1}{k}  \qquad k = 1 , \, ... , \, s .
-```
-
-For floating point element types the weights are obtained from
-`QuadratureRules.radau_legendre_weights`, which evaluates the Radau closed form
-rather than solving the Vandermonde system above, and is therefore better
-conditioned for many stages.
-"""
-function radau_1_weights(::Type{T}, s) where {T}
-    if s == 1
-        throw(ErrorException("Radau weights for one stage are not defined."))
-    end
-
-    _radau_1_weights(T, s)
-end
-
-radau_1_weights(s) = radau_1_weights(BigFloat, s)
-
-
-"Radau IIA weights for element types without a floating point representation, e.g. symbolic ones."
-_radau_2_weights(::Type{T}, s) where {T} = solve_simplifying_assumption_b(radau_2_nodes(T,s))
-
-"Radau IIA weights for floating point element types, computed in full precision by QuadratureRules."
-_radau_2_weights(::Type{T}, s) where {T<:AbstractFloat} = QuadratureRules.radau_legendre_weights(T, s, Val(:right))
-
-@doc raw"""
-The Radau IIA weights are implicitly given by the so-called simplifying assumption $B(s)$:
-```math
-\sum \limits_{j=1}^{s} b_{j} c_{j}^{k-1} = \frac{1}{k}  \qquad k = 1 , \, ... , \, s .
-```
-
-For floating point element types the weights are obtained from
-`QuadratureRules.radau_legendre_weights`, which evaluates the Radau closed form
-rather than solving the Vandermonde system above, and is therefore better
-conditioned for many stages.
-"""
-function radau_2_weights(::Type{T}, s) where {T}
-    if s == 1
-        throw(ErrorException("Radau weights for one stage are not defined."))
-    end
-
-    _radau_2_weights(T, s)
-end
-
-radau_2_weights(s) = radau_2_weights(BigFloat, s)
-
-
 @doc raw"""
 The Radau IA coefficients are implicitly given by the so-called simplifying assumption $D(s)$:
 ```math
@@ -129,7 +9,7 @@ function radau_1_coefficients(::Type{T}, s) where {T}
     if s == 1
         throw(ErrorException("Radau IIA coefficients for one stage are not defined."))
     end
-    solve_simplifying_assumption_d(radau_1_weights(T,s), radau_1_nodes(T,s))
+    solve_simplifying_assumption_d(radau_legendre_weights(T, s, Val(:left)), radau_legendre_nodes(T, s, Val(:left)))
 end
 
 radau_1_coefficients(s) = radau_1_coefficients(BigFloat, s)
@@ -145,7 +25,7 @@ function radau_2_coefficients(::Type{T}, s) where {T}
     if s == 1
         throw(ErrorException("Radau IIA coefficients for one stage are not defined."))
     end
-    solve_simplifying_assumption_c(radau_2_nodes(T,s))
+    solve_simplifying_assumption_c(radau_legendre_nodes(T, s, Val(:right)))
 end
 
 radau_2_coefficients(s) = radau_2_coefficients(BigFloat, s)
@@ -159,7 +39,7 @@ References:
     Research Report CSRR 2010, Dept. AACS, University of Waterloo, 1969.
 """
 
-"""
+@doc raw"""
 Radau IA tableau with s stages
 
 ```julia
@@ -168,10 +48,19 @@ TableauRadauIA(s) = TableauRadauIA(Float64, s)
 ```
 The constructor takes the number of stages `s` and optionally the element type `T` of the tableau.
 
+The nodes and weights are those of the **left** Radau-Legendre quadrature rule, i.e.
+`QuadratureRules.radau_legendre_nodes(T, s, Val(:left))` and the corresponding weights: Radau
+IA is the family that prescribes the *left* endpoint, so $c_1 = 0$. Equivalently the nodes are
+the roots of $\frac{d^{s-1}}{dx^{s-1}} \big( x^s (x-1)^{s-1} \big)$. The coefficients follow
+from the simplifying assumption $D(s)$, cf. [`radau_1_coefficients`](@ref).
+
+Prescribing one endpoint costs one degree of exactness relative to Gauss, giving order $2s-1$.
+Contrast [`TableauRadauIIA`](@ref), which prescribes the right endpoint instead.
+
 $(reference(Val(:RadauIA)))
 """
 function TableauRadauIA(::Type{T}, s) where {T}
-    Tableau{T}(:RadauIA, 2s-1, radau_1_coefficients(s), radau_1_weights(s), radau_1_nodes(s); R∞=0)
+    Tableau{T}(:RadauIA, 2s-1, radau_1_coefficients(s), radau_legendre_weights(BigFloat, s, Val(:left)), radau_legendre_nodes(BigFloat, s, Val(:left)); R∞=0)
 end
 
 TableauRadauIA(s) = TableauRadauIA(Float64, s)
@@ -203,10 +92,10 @@ $(reference(Val(:RadauIB)))
 """
 function TableauRadauIB(::Type{T}, s) where {T}
     a = radau_1_coefficients(BigFloat,s)
-    b = radau_1_weights(BigFloat,s)
+    b = radau_legendre_weights(BigFloat, s, Val(:left))
     ā = symplectic_conjugate_coefficients(a,b)
 
-    Tableau{T}(:RadauIB, 2s-1, (a .+ ā) ./ 2, b, radau_1_nodes(s); R∞=0)
+    Tableau{T}(:RadauIB, 2s-1, (a .+ ā) ./ 2, b, radau_legendre_nodes(BigFloat, s, Val(:left)); R∞=0)
 end
 
 TableauRadauIB(s) = TableauRadauIB(Float64, s)
@@ -230,7 +119,7 @@ References:
     doi: 10.1007/978-3-540-70529-1_139.
 """
 
-"""
+@doc raw"""
 Radau IIA tableau with s stages
 
 ```julia
@@ -239,10 +128,20 @@ TableauRadauIIA(s) = TableauRadauIIA(Float64, s)
 ```
 The constructor takes the number of stages `s` and optionally the element type `T` of the tableau.
 
+The nodes and weights are those of the **right** Radau-Legendre quadrature rule, i.e.
+`QuadratureRules.radau_legendre_nodes(T, s, Val(:right))` and the corresponding weights: Radau
+IIA is the family that prescribes the *right* endpoint, so $c_s = 1$. Equivalently the nodes
+are the roots of $\frac{d^{s-1}}{dx^{s-1}} \big( x^{s-1} (x-1)^s \big)$. The coefficients
+follow from the simplifying assumption $C(s)$, cf. [`radau_2_coefficients`](@ref).
+
+Having the right endpoint among the nodes is what makes the method *stiffly accurate*, which is
+why Radau IIA rather than [`TableauRadauIA`](@ref) is the workhorse for stiff and
+differential-algebraic problems. Both have order $2s-1$.
+
 $(reference(Val(:RadauIIA)))
 """
 function TableauRadauIIA(::Type{T}, s) where {T}
-    Tableau{T}(:RadauIIA, 2s-1, radau_2_coefficients(s), radau_2_weights(s), radau_2_nodes(s); R∞=0)
+    Tableau{T}(:RadauIIA, 2s-1, radau_2_coefficients(s), radau_legendre_weights(BigFloat, s, Val(:right)), radau_legendre_nodes(BigFloat, s, Val(:right)); R∞=0)
 end
 
 TableauRadauIIA(s) = TableauRadauIIA(Float64, s)
@@ -274,10 +173,10 @@ $(reference(Val(:RadauIIB)))
 """
 function TableauRadauIIB(::Type{T}, s) where {T}
     a = radau_2_coefficients(BigFloat,s)
-    b = radau_2_weights(BigFloat,s)
+    b = radau_legendre_weights(BigFloat, s, Val(:right))
     ā = symplectic_conjugate_coefficients(a,b)
 
-    Tableau{T}(:RadauIIB, 2s-1, (a .+ ā) ./ 2, b, radau_2_nodes(s); R∞=0)
+    Tableau{T}(:RadauIIB, 2s-1, (a .+ ā) ./ 2, b, radau_legendre_nodes(BigFloat, s, Val(:right)); R∞=0)
 end
 
 TableauRadauIIB(s) = TableauRadauIIB(Float64, s)

@@ -3,73 +3,6 @@ import CompactBasisFunctions: Lagrange
 import LinearAlgebra
 
 
-"Lobatto nodes for element types without a floating point representation, e.g. symbolic ones."
-function _lobatto_nodes(::Type{T}, s) where {T}
-    D(k) = Polynomials.derivative(Polynomial(T[0, 1, -1])^(k-1), k-2)
-    c = sort(T.(Polynomials.roots(D(s))))
-    c[begin] = 0; c[end] = 1; c
-end
-
-"Lobatto nodes for floating point element types, refined to full precision by QuadratureRules."
-_lobatto_nodes(::Type{T}, s) where {T<:AbstractFloat} = QuadratureRules.lobatto_legendre_nodes(T, s)
-
-@doc raw"""
-The s-stage Lobatto nodes are defined as the roots of the following polynomial of degree $s$:
-```math
-\frac{d^{s-2}}{dx^{s-2}} \big( (x - x^2)^{s-1} \big) .
-```
-
-For floating point element types the nodes are obtained from
-`QuadratureRules.lobatto_legendre_nodes`, which refines them to full precision.
-For all other element types, in particular symbolic ones, the roots of the
-above polynomial are computed exactly by `Polynomials.roots`.
-"""
-function lobatto_nodes(::Type{T}, s) where {T}
-    if s == 1
-        throw(ErrorException("Lobatto nodes for one stage are not defined."))
-    end
-
-    _lobatto_nodes(T, s)
-end
-
-lobatto_nodes(s) = lobatto_nodes(BigFloat, s)
-
-
-@doc raw"""
-The Lobatto weights can be explicitly computed by the formula
-```math
-b_j = \frac{1}{s (s-1) P_{s-1}(2 c_j - 1)^2} \qquad j = 1 , \, ... , \, s ,
-```
-where $P_k$ is the $k$th Legendre polynomial, given by
-```math
-P_k (x) = \frac{1}{k! 2^k} \big( \frac{d^k}{dx^k} (x^2 - 1)^k \big) .
-```
-
-For floating point element types the weights are obtained from
-`QuadratureRules.lobatto_legendre_weights`, which evaluates the same closed form
-in full precision. For all other element types, in particular symbolic ones, it
-is evaluated here.
-"""
-function lobatto_weights(::Type{T}, s) where {T}
-    if s == 1
-        throw(ErrorException("Lobatto weights for one stage are not defined."))
-    end
-
-    _lobatto_weights(T, s)
-end
-
-"Lobatto weights for element types without a floating point representation, e.g. symbolic ones."
-function _lobatto_weights(::Type{T}, s) where {T}
-    P(k,x) = Polynomials.derivative(Polynomial(T[-1, 0, 1])^k, k)(x) / factorial(k) / 2^k
-    c = lobatto_nodes(T,s)
-    b = [ 1 / ( s*(s-1) * P(s-1, 2c[i] - 1)^2 ) for i in 1:s ]
-end
-
-"Lobatto weights for floating point element types, computed in full precision by QuadratureRules."
-_lobatto_weights(::Type{T}, s) where {T<:AbstractFloat} = QuadratureRules.lobatto_legendre_weights(T, s)
-
-lobatto_weights(s) = lobatto_weights(BigFloat, s)
-
 """
 ```julia
 lobatto_nullvector(::Type, s; normalize=false)
@@ -84,7 +17,7 @@ function lobatto_nullvector(::Type{T}, s; normalize=false) where {T}
         throw(ErrorException("Lobatto nullvector for one stage is not defined."))
     end
 
-    q = lobatto_nodes(s)
+    q = lobatto_legendre_nodes(BigFloat, s)
     l = Lagrange(q)
     v = [l'[x, j] for x in q, j in eachindex(l)]
     w = _nullvector(v')
@@ -104,7 +37,7 @@ function lobatto_a_coefficients(::Type{T}, s) where {T}
     if s == 1
         throw(ErrorException("Lobatto IIIA coefficients for one stage are not defined."))
     end
-    solve_simplifying_assumption_c(lobatto_nodes(T,s))
+    solve_simplifying_assumption_c(lobatto_legendre_nodes(T, s))
 end
 
 @doc raw"""
@@ -118,7 +51,7 @@ function lobatto_b_coefficients(::Type{T}, s) where {T}
         throw(ErrorException("Lobatto IIIB coefficients for one stage are not defined."))
     end
 
-    solve_simplifying_assumption_d(lobatto_weights(T,s), lobatto_nodes(T,s))
+    solve_simplifying_assumption_d(lobatto_legendre_weights(T, s), lobatto_legendre_nodes(T, s))
 end
 
 @doc raw"""
@@ -134,8 +67,8 @@ function lobatto_c_coefficients(::Type{T}, s) where {T}
         throw(ErrorException("Lobatto IIIC coefficients for one stage are not defined."))
     end
 
-    b = lobatto_weights(T,s)
-    c = lobatto_nodes(T,s)
+    b = lobatto_legendre_weights(T, s)
+    c = lobatto_legendre_nodes(T, s)
     M = [ c[j]^(k-1) for k in 1:s-1, j in 2:s ]
     
     row(i) = begin
@@ -159,7 +92,7 @@ function lobatto_c̄_coefficients(::Type{T}, s) where {T}
         throw(ErrorException("Lobatto IIIC̄ coefficients for one stage are not defined."))
     end
 
-    c = lobatto_nodes(T,s)
+    c = lobatto_legendre_nodes(T, s)
     M = [ c[j]^(k-1) for k in 1:s-1, j in 1:s-1 ]
     
     row(i) = begin
@@ -179,7 +112,7 @@ function lobatto_f_coefficients(::Type{T}, s) where {T}
         throw(ErrorException("Lobatto IIIF coefficients for one stage are not defined."))
     end
 
-    c = lobatto_nodes(T,s)
+    c = lobatto_legendre_nodes(T, s)
     M = [ 1 / T(k + j - 1) for k in 1:s, j in 1:s ]
     r = [ 1 / T(s) / T(s + k) for k in 1:s ]
     α = M \ r
@@ -196,7 +129,7 @@ end
 
 function lobatto_g_coefficients(::Type{T}, s) where {T}
     a = lobatto_f_coefficients(T,s)
-    b = lobatto_weights(T,s)
+    b = lobatto_legendre_weights(T, s)
     ā = symplectic_conjugate_coefficients(a,b)
     return (a .+ ā) ./ 2
 end
@@ -240,7 +173,7 @@ Sometimes this tableau is also referred to as Lobatto IIIC*.
 $(reference(Val(:LobattoIII)))
 """
 function TableauLobattoIII(::Type{T}, s) where {T}
-    Tableau{T}(:LobattoIII, 2s-2, lobatto_c̄_coefficients(s), lobatto_weights(s), lobatto_nodes(s); R∞=(-1)^(s+1))
+    Tableau{T}(:LobattoIII, 2s-2, lobatto_c̄_coefficients(s), lobatto_legendre_weights(BigFloat, s), lobatto_legendre_nodes(BigFloat, s); R∞=(-1)^(s+1))
 end
 
 
@@ -269,7 +202,7 @@ The constructor takes the number of stages `s` and optionally the element type `
 $(reference(Val(:LobattoIIIA)))
 """
 function TableauLobattoIIIA(::Type{T}, s) where {T}
-    Tableau{T}(:LobattoIIIA, 2s-2, lobatto_a_coefficients(s), lobatto_weights(s), lobatto_nodes(s); R∞=(-1)^(s+1))
+    Tableau{T}(:LobattoIIIA, 2s-2, lobatto_a_coefficients(s), lobatto_legendre_weights(BigFloat, s), lobatto_legendre_nodes(BigFloat, s); R∞=(-1)^(s+1))
 end
 
 
@@ -289,9 +222,9 @@ values are slightly different.
 """
 function TableauLobattoIIIĀ(::Type{T}, s) where {T}
     a = lobatto_a_coefficients(s)
-    b = lobatto_weights(s)
+    b = lobatto_legendre_weights(BigFloat, s)
     ā = symplectic_conjugate_coefficients(a,b)
-    Tableau{T}(:LobattoIIIĀ, 2s-2, ā, b, lobatto_nodes(s); R∞=(-1)^(s+1))
+    Tableau{T}(:LobattoIIIĀ, 2s-2, ā, b, lobatto_legendre_nodes(BigFloat, s); R∞=(-1)^(s+1))
 end
 
 
@@ -320,7 +253,7 @@ The constructor takes the number of stages `s` and optionally the element type `
 $(reference(Val(:LobattoIIIB)))
 """
 function TableauLobattoIIIB(::Type{T}, s) where {T}
-    Tableau{T}(:LobattoIIIB, 2s-2, lobatto_b_coefficients(s), lobatto_weights(s), lobatto_nodes(s); R∞=(-1)^(s+1))
+    Tableau{T}(:LobattoIIIB, 2s-2, lobatto_b_coefficients(s), lobatto_legendre_weights(BigFloat, s), lobatto_legendre_nodes(BigFloat, s); R∞=(-1)^(s+1))
 end
 
 
@@ -340,9 +273,9 @@ values are slightly different.
 """
 function TableauLobattoIIIB̄(::Type{T}, s) where {T}
     a = lobatto_b_coefficients(s)
-    b = lobatto_weights(s)
+    b = lobatto_legendre_weights(BigFloat, s)
     ā = symplectic_conjugate_coefficients(a,b)
-    Tableau{T}(:LobattoIIIB̄, 2s-2, ā, b, lobatto_nodes(s); R∞=(-1)^(s+1))
+    Tableau{T}(:LobattoIIIB̄, 2s-2, ā, b, lobatto_legendre_nodes(BigFloat, s); R∞=(-1)^(s+1))
 end
 
 
@@ -372,7 +305,7 @@ The constructor takes the number of stages `s` and optionally the element type `
 $(reference(Val(:LobattoIIIC)))
 """
 function TableauLobattoIIIC(::Type{T}, s) where {T}
-    Tableau{T}(:LobattoIIIC, 2s-2, lobatto_c_coefficients(s), lobatto_weights(s), lobatto_nodes(s); R∞=(-1)^(s+1))
+    Tableau{T}(:LobattoIIIC, 2s-2, lobatto_c_coefficients(s), lobatto_legendre_weights(BigFloat, s), lobatto_legendre_nodes(BigFloat, s); R∞=(-1)^(s+1))
 end
 
 
@@ -392,9 +325,9 @@ values are slightly different.
 """
 function TableauLobattoIIIC̄(::Type{T}, s) where {T}
     a = lobatto_c_coefficients(s)
-    b = lobatto_weights(s)
+    b = lobatto_legendre_weights(BigFloat, s)
     ā = symplectic_conjugate_coefficients(a,b)
-    Tableau{T}(:LobattoIIIC̄, 2s-2, ā, b, lobatto_nodes(s); R∞=(-1)^(s+1))
+    Tableau{T}(:LobattoIIIC̄, 2s-2, ā, b, lobatto_legendre_nodes(BigFloat, s); R∞=(-1)^(s+1))
 end
 
 
@@ -424,7 +357,7 @@ The constructor takes the number of stages `s` and optionally the element type `
 $(reference(Val(:LobattoIIID)))
 """
 function TableauLobattoIIID(::Type{T}, s) where {T}
-    Tableau{T}(:LobattoIIID, 2s-2, lobatto_d_coefficients(s), lobatto_weights(s), lobatto_nodes(s); R∞=(-1)^s)
+    Tableau{T}(:LobattoIIID, 2s-2, lobatto_d_coefficients(s), lobatto_legendre_weights(BigFloat, s), lobatto_legendre_nodes(BigFloat, s); R∞=(-1)^s)
 end
 
 
@@ -444,9 +377,9 @@ and thus the numerical values are slightly different.
 """
 function TableauLobattoIIID̄(::Type{T}, s) where {T}
     a = lobatto_d_coefficients(s)
-    b = lobatto_weights(s)
+    b = lobatto_legendre_weights(BigFloat, s)
     ā = symplectic_conjugate_coefficients(a,b)
-    Tableau{T}(:LobattoIIID̄, 2s-2, ā, b, lobatto_nodes(s); R∞=(-1)^s)
+    Tableau{T}(:LobattoIIID̄, 2s-2, ā, b, lobatto_legendre_nodes(BigFloat, s); R∞=(-1)^s)
 end
 
 
@@ -477,7 +410,7 @@ The constructor takes the number of stages `s` and optionally the element type `
 $(reference(Val(:LobattoIIIE)))
 """
 function TableauLobattoIIIE(::Type{T}, s) where {T}
-    Tableau{T}(:LobattoIIIE, 2s-2, lobatto_e_coefficients(s), lobatto_weights(s), lobatto_nodes(s); R∞=(-1)^s)
+    Tableau{T}(:LobattoIIIE, 2s-2, lobatto_e_coefficients(s), lobatto_legendre_weights(BigFloat, s), lobatto_legendre_nodes(BigFloat, s); R∞=(-1)^s)
 end
 
 
@@ -497,9 +430,9 @@ and thus the numerical values are slightly different.
 """
 function TableauLobattoIIIĒ(::Type{T}, s) where {T}
     a = lobatto_e_coefficients(s)
-    b = lobatto_weights(s)
+    b = lobatto_legendre_weights(BigFloat, s)
     ā = symplectic_conjugate_coefficients(a,b)
-    Tableau{T}(:LobattoIIIĒ, 2s-2, ā, b, lobatto_nodes(s); R∞=(-1)^s)
+    Tableau{T}(:LobattoIIIĒ, 2s-2, ā, b, lobatto_legendre_nodes(BigFloat, s); R∞=(-1)^s)
 end
 
 
@@ -523,7 +456,7 @@ The constructor takes the number of stages `s` and optionally the element type `
 $(reference(Val(:LobattoIIIF)))
 """
 function TableauLobattoIIIF(::Type{T}, s) where {T}
-    Tableau{T}(:LobattoIIIF, 2s,   lobatto_f_coefficients(s), lobatto_weights(s), lobatto_nodes(s); R∞=(-1)^s)
+    Tableau{T}(:LobattoIIIF, 2s,   lobatto_f_coefficients(s), lobatto_legendre_weights(BigFloat, s), lobatto_legendre_nodes(BigFloat, s); R∞=(-1)^s)
 end
 
 
@@ -540,9 +473,9 @@ The Lobatto IIIF̄ tableau is the conjugate symplectic to [`TableauLobattoIIIF`]
 """
 function TableauLobattoIIIF̄(::Type{T}, s) where {T}
     a = lobatto_f_coefficients(s)
-    b = lobatto_weights(s)
+    b = lobatto_legendre_weights(BigFloat, s)
     ā = symplectic_conjugate_coefficients(a,b)
-    Tableau{T}(:LobattoIIIF̄, 2s, ā, b, lobatto_nodes(s); R∞=(-1)^s)
+    Tableau{T}(:LobattoIIIF̄, 2s, ā, b, lobatto_legendre_nodes(BigFloat, s); R∞=(-1)^s)
 end
 
 
@@ -562,7 +495,7 @@ the symplecticity conditions $b_{i} \bar{a}_{i,j} + \bar{b}_{j} a_{j,i} = b_{i} 
 for all $1 \le i,j \le s$.
 """
 function TableauLobattoIIIG(::Type{T}, s) where {T}
-    Tableau{T}(:LobattoIIIG, 2s,   lobatto_g_coefficients(s), lobatto_weights(s), lobatto_nodes(s); R∞=(-1)^s)
+    Tableau{T}(:LobattoIIIG, 2s,   lobatto_g_coefficients(s), lobatto_legendre_weights(BigFloat, s), lobatto_legendre_nodes(BigFloat, s); R∞=(-1)^s)
 end
 
 
@@ -582,9 +515,9 @@ and thus the numerical values are slightly different.
 """
 function TableauLobattoIIIḠ(::Type{T}, s) where {T}
     a = lobatto_g_coefficients(s)
-    b = lobatto_weights(s)
+    b = lobatto_legendre_weights(BigFloat, s)
     ā = symplectic_conjugate_coefficients(a,b)
-    Tableau{T}(:LobattoIIIḠ, 2s, ā, b, lobatto_nodes(s); R∞=(-1)^s)
+    Tableau{T}(:LobattoIIIḠ, 2s, ā, b, lobatto_legendre_nodes(BigFloat, s); R∞=(-1)^s)
 end
 
 

@@ -10,14 +10,15 @@ module RungeKuttaWeaves
     using Markdown: MD, Paragraph, LineBreak
     using PrettyTables
     using RungeKutta
-    using RungeKutta.Tableaus: gauss_nodes, gauss_weights, gauss_coefficients
-    using RungeKutta.Tableaus: lobatto_nodes, lobatto_weights,
-                               lobatto_a_coefficients, lobatto_b_coefficients,
+    using QuadratureRules: gauss_legendre_nodes, gauss_legendre_weights,
+                           lobatto_legendre_nodes, lobatto_legendre_weights,
+                           radau_legendre_nodes, radau_legendre_weights
+    using RungeKutta.Tableaus: gauss_coefficients
+    using RungeKutta.Tableaus: lobatto_a_coefficients, lobatto_b_coefficients,
                                lobatto_c_coefficients, lobatto_c̄_coefficients,
                                lobatto_d_coefficients, lobatto_e_coefficients,
                                lobatto_f_coefficients, lobatto_g_coefficients
-    using RungeKutta.Tableaus: radau_1_nodes, radau_1_weights, radau_1_coefficients,
-                               radau_2_nodes, radau_2_weights, radau_2_coefficients
+    using RungeKutta.Tableaus: radau_1_coefficients, radau_2_coefficients
 
     import SymPyPythonCall
     import SymPyPythonCall: latex, simplify

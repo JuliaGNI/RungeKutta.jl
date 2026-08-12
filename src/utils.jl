@@ -1,20 +1,3 @@
-"Legendre polynomial P_s(x) of degree s defined on the interval [-1..+1]."
-function _legendre(j::Integer, p::Polynomial{T}) where {T}
-    if j ≤ 0
-        return Polynomial(one(T))
-    elseif j == 1
-        return p
-    else
-        return ( (2j-1) * p * _legendre(j-1, p) - (j-1) * _legendre(j-2, p) ) / j
-    end
-end
-
-"Legendre polynomial of degree s shifted to the interval [0..1], i.e., P_s(2x-1)."
-function _shifted_legendre(s, T=BigFloat)
-    _legendre(s, Polynomial(T[-1, 2]))
-end
-
-
 """
 Compute a vector spanning the one-dimensional nullspace of the square matrix `A`.
 
