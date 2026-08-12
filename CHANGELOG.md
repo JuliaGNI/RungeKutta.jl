@@ -25,7 +25,7 @@ package affected.
   either qualified or by explicit import.
 - **`CompactBasisFunctions` is restricted to `0.3`** and **`GeometricBase` to `0.14.8`**,
   dropping the previously allowed `0.2` and `0.10`–`0.13` respectively.
-- **`QuadratureRules` `0.1.11` is now a dependency.** It is where the quadrature nodes and
+- **`QuadratureRules` `0.2` is now a dependency.** It is where the quadrature nodes and
   weights come from, so it is required, not optional.
 
 ### Added
