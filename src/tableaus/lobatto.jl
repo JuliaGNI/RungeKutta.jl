@@ -11,8 +11,8 @@ lobatto_nullvector(s)
 Computes the nullvector of the matrix containing the derivatives of the
 Lagrange basis on the `s` Lobatto nodes evaluated on these nodes.
 
-The result is of unit length with a positive first entry, cf. [`_nullvector`](@ref),
-so it is determined by the Lobatto nodes alone and not by the factorisation used to
+The result is of unit length with a positive first entry, cf. `_nullvector`, so it
+is determined by the Lobatto nodes alone and not by the factorisation used to
 obtain it.
 """
 function lobatto_nullvector(::Type{T}, s) where {T}

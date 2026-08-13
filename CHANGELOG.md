@@ -4,6 +4,20 @@ All notable changes to RungeKutta.jl are documented here. Versions follow
 [semantic versioning](https://semver.org) as it applies to Julia's `0.x` series, where a
 change to the minor version may break compatibility.
 
+## v0.6.1
+
+### Fixed
+
+- **The `lobatto_nullvector` docstring no longer breaks downstream documentation builds.**
+  It referred to the internal helper as ``[`_nullvector`](@ref)``. `_nullvector` lives in
+  `RungeKutta`, not in `RungeKutta.Tableaus`, so the link resolves only in a build that
+  documents the parent module too, as this package's own `docs/src/library.md` does. A
+  downstream package that pulls the accessors in with `@autodocs Modules =
+  [RungeKutta.Tableaus]` inherits the docstring but not the target, and Documenter then
+  fails the build with a `:cross_references` error. Reported from GeometricIntegrators.jl,
+  whose documentation job this broke on the upgrade to v0.6.0. The reference is now plain
+  code formatting; nothing about the function itself changed.
+
 ## v0.6.0
 
 This release is **breaking**: the tableau accessors are renamed, one of them is no longer
