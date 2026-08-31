@@ -1,4 +1,5 @@
-using RungeKutta: name, order, eachstage, nstages, coefficients, weights, nodes, to_array, to_file, from_file
+using RungeKutta: name, order, eachstage, nstages, coefficients, weights, nodes, to_array,
+                  to_file, from_file
 
 import GeometricBase
 import QuadratureRules
@@ -22,21 +23,19 @@ import QuadratureRules
         @test coefficients(tab) == tab.a
     end
 
-
     for s in 1:5
-        for T ∈ (Float64, BigFloat)
-
-            a = rand(T,s,s)
-            b = rand(T,s)
-            c = rand(T,s)
+        for T in (Float64, BigFloat)
+            a = rand(T, s, s)
+            b = rand(T, s)
+            c = rand(T, s)
 
             tab1 = Tableau(:Test, 2s, a, b, c)
             tab2 = Tableau(:Test, 2s, s, a, b, c)
             tab3 = Tableau{T}(:Test, 2s, a, b, c)
             tab4 = Tableau{T}(:Test, 2s, s, a, b, c)
-            tabϵ = Tableau(:Test, 2s, a .+ 4eps(T) .* rand(T,s,s),
-                                      b .+ 4eps(T) .* rand(T,s),
-                                      c .+ 4eps(T) .* rand(T,s))
+            tabϵ = Tableau(:Test, 2s, a .+ 4eps(T) .* rand(T, s, s),
+                b .+ 4eps(T) .* rand(T, s),
+                c .+ 4eps(T) .* rand(T, s))
 
             @test tab1 ≈ tab2 ≈ tab3 ≈ tab4
             @test tab1 == tab2 == tab3 == tab4
@@ -73,27 +72,27 @@ import QuadratureRules
             @test tab1.â == tab2.â == tab3.â == tab4.â == zero(a)
             @test tab1.b̂ == tab2.b̂ == tab3.b̂ == tab4.b̂ == zero(b)
             @test tab1.ĉ == tab2.ĉ == tab3.ĉ == tab4.ĉ == zero(c)
-            
+
             @test tab1 == Tableau(tab1.name, tab1.o, to_array(tab1))
             @test tab1 == Tableau(tab1.name, tab1.o, convert(Matrix, tab1))
             @test tab1 == Tableau(tab1.name, tab1.o, convert(Array, tab1))
-            @test tab1 == convert(Tableau, convert(Matrix, tab1); name=tab1.name, o=tab1.o)
-            @test tab1 == convert(Tableau, convert(Array,  tab1); name=tab1.name, o=tab1.o)
+            @test tab1 ==
+                  convert(Tableau, convert(Matrix, tab1); name = tab1.name, o = tab1.o)
+            @test tab1 ==
+                  convert(Tableau, convert(Array, tab1); name = tab1.name, o = tab1.o)
             @test convert(Matrix, tab1) == convert(Matrix{T}, tab1)
-            @test convert(Array,  tab1) == convert(Array{T},  tab1)
+            @test convert(Array, tab1) == convert(Array{T}, tab1)
 
             @test startswith(repr(tab1), "\nRunge-Kutta Tableau")
             @test startswith(repr(MIME("text/markdown"), tab1), "Runge-Kutta Tableau")
-
         end
-
 
         T1 = BigFloat
         T2 = Float64
 
-        a = rand(T1,s,s)
-        b = rand(T1,s)
-        c = rand(T1,s)
+        a = rand(T1, s, s)
+        b = rand(T1, s)
+        c = rand(T1, s)
 
         tab1 = Tableau{T1}(:Test, 2s, s, a, b, c)
         tab2 = Tableau{T2}(:Test, 2s, s, a, b, c)
@@ -105,14 +104,12 @@ import QuadratureRules
         tmp = mktempdir()
         to_file(tmp, tab2)
         tabf = from_file(tmp, "Test")
-        rm(tmp, recursive=true)
+        rm(tmp, recursive = true)
 
         @test tabf.o == tab2.o
         @test tabf.s == tab2.s
         @test tabf.a == tab2.a
         @test tabf.b == tab2.b
         @test tabf.c == tab2.c
-
     end
-
 end

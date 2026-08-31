@@ -6,13 +6,13 @@ The Gauss coefficients are implicitly given by the so-called simplifying assumpt
 ```
 """
 function gauss_coefficients(::Type{T}, s) where {T}
-    solve_simplifying_assumption_c(gauss_legendre_nodes(T,s))
+    solve_simplifying_assumption_c(gauss_legendre_nodes(T, s))
 end
 
 gauss_coefficients(s) = gauss_coefficients(BigFloat, s)
 
-
-reference(::Val{:Gauss}) = """
+function reference(::Val{:Gauss})
+    """
 References:
 
     John C. Butcher.
@@ -25,6 +25,7 @@ References:
     In: Engquist B. (eds). Encyclopedia of Applied and Computational Mathematics. Springer, Berlin, Heidelberg. 2015.
     doi: 10.1007/978-3-540-70529-1_115.
 """
+end
 
 @doc raw"""
 Gauss tableau with s stages
@@ -44,7 +45,7 @@ order $2s$.
 
 """ * reference(Val(:Gauss)) function TableauGauss(::Type{T}, s) where {T}
     Tableau{T}(:Gauss, 2s, gauss_coefficients(s), gauss_legendre_weights(BigFloat, s),
-               gauss_legendre_nodes(BigFloat, s); R∞=(-1)^s)
+        gauss_legendre_nodes(BigFloat, s); R∞ = (-1)^s)
 end
 
 TableauGauss(s) = TableauGauss(Float64, s)

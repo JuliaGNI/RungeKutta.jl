@@ -9,11 +9,11 @@ function radau_1_coefficients(::Type{T}, s) where {T}
     if s == 1
         throw(ErrorException("Radau IA coefficients for one stage are not defined."))
     end
-    solve_simplifying_assumption_d(radau_legendre_weights(T, s, Val(:left)), radau_legendre_nodes(T, s, Val(:left)))
+    solve_simplifying_assumption_d(
+        radau_legendre_weights(T, s, Val(:left)), radau_legendre_nodes(T, s, Val(:left)))
 end
 
 radau_1_coefficients(s) = radau_1_coefficients(BigFloat, s)
-
 
 @doc raw"""
 The Radau IIA coefficients are implicitly given by the so-called simplifying assumption $C(s)$:
@@ -30,14 +30,15 @@ end
 
 radau_2_coefficients(s) = radau_2_coefficients(BigFloat, s)
 
-
-reference(::Val{:RadauIA}) = """
+function reference(::Val{:RadauIA})
+    """
 References:
 
     Byron Leonard Ehle
     On Padé approximations to the exponential function and a-stable methods for the numerical solution of initial value problems.
     Research Report CSRR 2010, Dept. AACS, University of Waterloo, 1969.
 """
+end
 
 @doc raw"""
 Radau IA tableau with s stages
@@ -58,11 +59,12 @@ Prescribing one endpoint costs one degree of exactness relative to Gauss, giving
 Contrast [`TableauRadauIIA`](@ref), which prescribes the right endpoint instead.
 
 """ * reference(Val(:RadauIA)) function TableauRadauIA(::Type{T}, s) where {T}
-    Tableau{T}(:RadauIA, 2s-1, radau_1_coefficients(s), radau_legendre_weights(BigFloat, s, Val(:left)), radau_legendre_nodes(BigFloat, s, Val(:left)); R∞=0)
+    Tableau{T}(:RadauIA, 2s-1, radau_1_coefficients(s),
+        radau_legendre_weights(BigFloat, s, Val(:left)),
+        radau_legendre_nodes(BigFloat, s, Val(:left)); R∞ = 0)
 end
 
 TableauRadauIA(s) = TableauRadauIA(Float64, s)
-
 
 reference(::Val{:RadauIB}) = """
 Reference:
@@ -89,17 +91,18 @@ all ``1 \\le i,j \\le s``.
 $(reference(Val(:RadauIB)))
 """
 function TableauRadauIB(::Type{T}, s) where {T}
-    a = radau_1_coefficients(BigFloat,s)
+    a = radau_1_coefficients(BigFloat, s)
     b = radau_legendre_weights(BigFloat, s, Val(:left))
-    ā = symplectic_conjugate_coefficients(a,b)
+    ā = symplectic_conjugate_coefficients(a, b)
 
-    Tableau{T}(:RadauIB, 2s-1, (a .+ ā) ./ 2, b, radau_legendre_nodes(BigFloat, s, Val(:left)); R∞=0)
+    Tableau{T}(:RadauIB, 2s-1, (a .+ ā) ./ 2, b,
+        radau_legendre_nodes(BigFloat, s, Val(:left)); R∞ = 0)
 end
 
 TableauRadauIB(s) = TableauRadauIB(Float64, s)
 
-
-reference(::Val{:RadauIIA}) = """
+function reference(::Val{:RadauIIA})
+    """
 References:
 
     Byron Leonard Ehle
@@ -116,6 +119,7 @@ References:
     In: Engquist B. (eds). Encyclopedia of Applied and Computational Mathematics. Springer, Berlin, Heidelberg. 2015.
     doi: 10.1007/978-3-540-70529-1_139.
 """
+end
 
 @doc raw"""
 Radau IIA tableau with s stages
@@ -137,11 +141,12 @@ why Radau IIA rather than [`TableauRadauIA`](@ref) is the workhorse for stiff an
 differential-algebraic problems. Both have order $2s-1$.
 
 """ * reference(Val(:RadauIIA)) function TableauRadauIIA(::Type{T}, s) where {T}
-    Tableau{T}(:RadauIIA, 2s-1, radau_2_coefficients(s), radau_legendre_weights(BigFloat, s, Val(:right)), radau_legendre_nodes(BigFloat, s, Val(:right)); R∞=0)
+    Tableau{T}(:RadauIIA, 2s-1, radau_2_coefficients(s),
+        radau_legendre_weights(BigFloat, s, Val(:right)),
+        radau_legendre_nodes(BigFloat, s, Val(:right)); R∞ = 0)
 end
 
 TableauRadauIIA(s) = TableauRadauIIA(Float64, s)
-
 
 reference(::Val{:RadauIIB}) = """
 Reference:
@@ -168,11 +173,12 @@ all ``1 \\le i,j \\le s``.
 $(reference(Val(:RadauIIB)))
 """
 function TableauRadauIIB(::Type{T}, s) where {T}
-    a = radau_2_coefficients(BigFloat,s)
+    a = radau_2_coefficients(BigFloat, s)
     b = radau_legendre_weights(BigFloat, s, Val(:right))
-    ā = symplectic_conjugate_coefficients(a,b)
+    ā = symplectic_conjugate_coefficients(a, b)
 
-    Tableau{T}(:RadauIIB, 2s-1, (a .+ ā) ./ 2, b, radau_legendre_nodes(BigFloat, s, Val(:right)); R∞=0)
+    Tableau{T}(:RadauIIB, 2s-1, (a .+ ā) ./ 2, b,
+        radau_legendre_nodes(BigFloat, s, Val(:right)); R∞ = 0)
 end
 
 TableauRadauIIB(s) = TableauRadauIIB(Float64, s)

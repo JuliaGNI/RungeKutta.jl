@@ -1,35 +1,32 @@
 module PartitionedTableaus
 
-    import GeometricBase
-    import GeometricBase: description, reference
+import GeometricBase
+import GeometricBase: description, reference
 
-    using ..RungeKutta
+using ..RungeKutta
 
-    using .Tableaus
+using .Tableaus
 
-    
-    export description, reference
-    
+export description, reference
 
-    include("tableaus/prk.jl")
+include("tableaus/prk.jl")
 
-    export TableauLobattoIIIAIIIB,
-           TableauLobattoIIIBIIIA,
-           TableauLobattoIIIAIIIĀ,
-           TableauLobattoIIIBIIIB̄,
-           TableauLobattoIIICIIIC̄,
-           TableauLobattoIIIC̄IIIC,
-           TableauLobattoIIIDIIID̄,
-           TableauLobattoIIIEIIIĒ,
-           TableauLobattoIIIFIIIF̄,
-           TableauLobattoIIIF̄IIIF,
-           TableauLobattoIIIGIIIḠ,
-           PartitionedTableauGauss
+export TableauLobattoIIIAIIIB,
+       TableauLobattoIIIBIIIA,
+       TableauLobattoIIIAIIIĀ,
+       TableauLobattoIIIBIIIB̄,
+       TableauLobattoIIICIIIC̄,
+       TableauLobattoIIIC̄IIIC,
+       TableauLobattoIIIDIIID̄,
+       TableauLobattoIIIEIIIĒ,
+       TableauLobattoIIIFIIIF̄,
+       TableauLobattoIIIF̄IIIF,
+       TableauLobattoIIIGIIIḠ,
+       PartitionedTableauGauss
 
+PartitionedTableauList = (
+)
 
-    PartitionedTableauList = (
-    )
-
-    export PartitionedTableauList
+export PartitionedTableauList
 
 end

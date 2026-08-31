@@ -1,10 +1,10 @@
 using RungeKutta: name, order, nstages, coefficients, weights, nodes
 
 @testset "$(rpad("Partitioned Tableaus",80))" begin
-
-    @test typeof(PartitionedTableau(:PRK4, TableauRK4(), TableauRK4())) <: PartitionedTableau
-    @test PartitionedTableau(:PRK4, TableauRK4(), TableauRK4()) == PartitionedTableau(:PRK4, TableauRK4())
-    
+    @test typeof(PartitionedTableau(:PRK4, TableauRK4(), TableauRK4())) <:
+          PartitionedTableau
+    @test PartitionedTableau(:PRK4, TableauRK4(), TableauRK4()) ==
+          PartitionedTableau(:PRK4, TableauRK4())
 
     @test typeof(PartitionedTableauGauss(1)) <: PartitionedTableau
     @test typeof(PartitionedTableauGauss(2)) <: PartitionedTableau
@@ -33,16 +33,15 @@ using RungeKutta: name, order, nstages, coefficients, weights, nodes
     @test !isexplicit(PartitionedTableauGauss(1))
     @test !isexplicit(PartitionedTableauGauss(2))
 
-    @test  isimplicit(PartitionedTableauGauss(1))
-    @test  isimplicit(PartitionedTableauGauss(2))
+    @test isimplicit(PartitionedTableauGauss(1))
+    @test isimplicit(PartitionedTableauGauss(2))
 
     @test !isdiagonallyimplicit(PartitionedTableauGauss(1))
     @test !isdiagonallyimplicit(PartitionedTableauGauss(2))
 
-    @test  isfullyimplicit(PartitionedTableauGauss(1))
-    @test  isfullyimplicit(PartitionedTableauGauss(2))
-    
-    
+    @test isfullyimplicit(PartitionedTableauGauss(1))
+    @test isfullyimplicit(PartitionedTableauGauss(2))
+
     @test typeof(TableauLobattoIIIAIIIB(2)) <: PartitionedTableau
     @test typeof(TableauLobattoIIIAIIIB(3)) <: PartitionedTableau
     @test typeof(TableauLobattoIIIBIIIA(2)) <: PartitionedTableau
@@ -103,12 +102,12 @@ using RungeKutta: name, order, nstages, coefficients, weights, nodes
     @test issymplectic(TableauLobattoIIICIIIC̄(2))
     @test issymplectic(TableauLobattoIIICIIIC̄(3))
     @test issymplectic(TableauLobattoIIIC̄IIIC(2))
-    @test  issymplectic(TableauLobattoIIIC̄IIIC(3))
+    @test issymplectic(TableauLobattoIIIC̄IIIC(3))
 
-    @test  issymmetric(TableauLobattoIIIAIIIB(2))
-    @test  issymmetric(TableauLobattoIIIAIIIB(3))
-    @test  issymmetric(TableauLobattoIIIBIIIA(2))
-    @test  issymmetric(TableauLobattoIIIBIIIA(3))
+    @test issymmetric(TableauLobattoIIIAIIIB(2))
+    @test issymmetric(TableauLobattoIIIAIIIB(3))
+    @test issymmetric(TableauLobattoIIIBIIIA(2))
+    @test issymmetric(TableauLobattoIIIBIIIA(3))
     @test !issymmetric(TableauLobattoIIICIIIC̄(2))
     @test !issymmetric(TableauLobattoIIICIIIC̄(3))
     @test !issymmetric(TableauLobattoIIIC̄IIIC(2))
@@ -123,9 +122,9 @@ using RungeKutta: name, order, nstages, coefficients, weights, nodes
     @test TableauLobattoIIIC̄IIIC(2).R∞ == -1
     @test TableauLobattoIIIC̄IIIC(3).R∞ == +1
 
-    @test  isexplicit(TableauLobattoIIIAIIIB(2))
+    @test isexplicit(TableauLobattoIIIAIIIB(2))
     @test !isexplicit(TableauLobattoIIIAIIIB(3))
-    @test  isexplicit(TableauLobattoIIIBIIIA(2))
+    @test isexplicit(TableauLobattoIIIBIIIA(2))
     @test !isexplicit(TableauLobattoIIIBIIIA(3))
     @test !isexplicit(TableauLobattoIIICIIIC̄(2))
     @test !isexplicit(TableauLobattoIIICIIIC̄(3))
@@ -133,13 +132,13 @@ using RungeKutta: name, order, nstages, coefficients, weights, nodes
     @test !isexplicit(TableauLobattoIIIC̄IIIC(3))
 
     @test !isimplicit(TableauLobattoIIIAIIIB(2))
-    @test  isimplicit(TableauLobattoIIIAIIIB(3))
+    @test isimplicit(TableauLobattoIIIAIIIB(3))
     @test !isimplicit(TableauLobattoIIIBIIIA(2))
-    @test  isimplicit(TableauLobattoIIIBIIIA(3))
-    @test  isimplicit(TableauLobattoIIICIIIC̄(2))
-    @test  isimplicit(TableauLobattoIIICIIIC̄(3))
-    @test  isimplicit(TableauLobattoIIIC̄IIIC(2))
-    @test  isimplicit(TableauLobattoIIIC̄IIIC(3))
+    @test isimplicit(TableauLobattoIIIBIIIA(3))
+    @test isimplicit(TableauLobattoIIICIIIC̄(2))
+    @test isimplicit(TableauLobattoIIICIIIC̄(3))
+    @test isimplicit(TableauLobattoIIIC̄IIIC(2))
+    @test isimplicit(TableauLobattoIIIC̄IIIC(3))
 
     @test !isdiagonallyimplicit(TableauLobattoIIIAIIIB(2))
     @test !isdiagonallyimplicit(TableauLobattoIIIAIIIB(3))
@@ -151,12 +150,11 @@ using RungeKutta: name, order, nstages, coefficients, weights, nodes
     @test !isdiagonallyimplicit(TableauLobattoIIIC̄IIIC(3))
 
     @test !isfullyimplicit(TableauLobattoIIIAIIIB(2))
-    @test  isfullyimplicit(TableauLobattoIIIAIIIB(3))
+    @test isfullyimplicit(TableauLobattoIIIAIIIB(3))
     @test !isfullyimplicit(TableauLobattoIIIBIIIA(2))
-    @test  isfullyimplicit(TableauLobattoIIIBIIIA(3))
-    @test  isfullyimplicit(TableauLobattoIIICIIIC̄(2))
-    @test  isfullyimplicit(TableauLobattoIIICIIIC̄(3))
-    @test  isfullyimplicit(TableauLobattoIIIC̄IIIC(2))
-    @test  isfullyimplicit(TableauLobattoIIIC̄IIIC(3))
-
+    @test isfullyimplicit(TableauLobattoIIIBIIIA(3))
+    @test isfullyimplicit(TableauLobattoIIICIIIC̄(2))
+    @test isfullyimplicit(TableauLobattoIIICIIIC̄(3))
+    @test isfullyimplicit(TableauLobattoIIIC̄IIIC(2))
+    @test isfullyimplicit(TableauLobattoIIIC̄IIIC(3))
 end

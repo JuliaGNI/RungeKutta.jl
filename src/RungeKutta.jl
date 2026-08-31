@@ -1,68 +1,66 @@
 module RungeKutta
 
-    using DelimitedFiles
-    using Markdown
-    using PrettyTables
-    using Reexport
-    using StaticArrays
+using DelimitedFiles
+using Markdown
+using PrettyTables
+using Reexport
+using StaticArrays
 
-    import GeometricBase
-    import GeometricBase: name, order, description, reference
-    import GeometricBase: coefficients, nodes, weights
-    import GeometricBase.Utils: @big, @define
-    import LinearAlgebra
-    import LinearAlgebra: istril
+import GeometricBase
+import GeometricBase: name, order, description, reference
+import GeometricBase: coefficients, nodes, weights
+import GeometricBase.Utils: @big, @define
+import LinearAlgebra
+import LinearAlgebra: istril
 
+include("utils.jl")
 
-    include("utils.jl")
+include("abstract.jl")
+include("tableau.jl")
+include("tableau_partitioned.jl")
 
-    include("abstract.jl")
-    include("tableau.jl")
-    include("tableau_partitioned.jl")
+export Tableau, PartitionedTableau
 
-    export Tableau, PartitionedTableau
+export isexplicit,
+       isimplicit,
+       isdiagonallyimplicit,
+       isfullyimplicit
 
-    export isexplicit,
-           isimplicit,
-           isdiagonallyimplicit,
-           isfullyimplicit
+export name, order, description, reference
+export coefficients, nodes, weights
 
-    export name, order, description, reference
-    export coefficients, nodes, weights
+include("order_conditions.jl")
 
-    include("order_conditions.jl")
+export check_order_conditions_b,
+       check_order_conditions_c,
+       check_order_conditions_d,
+       satisfies_simplifying_assumption_b,
+       satisfies_simplifying_assumption_c,
+       satisfies_simplifying_assumption_d,
+       solve_simplifying_assumption_b,
+       solve_simplifying_assumption_c,
+       solve_simplifying_assumption_d
 
-    export check_order_conditions_b,
-           check_order_conditions_c,
-           check_order_conditions_d,
-           satisfies_simplifying_assumption_b,
-           satisfies_simplifying_assumption_c,
-           satisfies_simplifying_assumption_d,
-           solve_simplifying_assumption_b,
-           solve_simplifying_assumption_c,
-           solve_simplifying_assumption_d
+include("symmetry.jl")
 
-    include("symmetry.jl")
-    
-    export check_symmetry,
-           issymmetric
+export check_symmetry,
+       issymmetric
 
-    include("symplecticity.jl")
-    
-    export SymplecticTableau,
-           SymplecticConjugateTableau,
-           SymplecticPartitionedTableau
+include("symplecticity.jl")
 
-    export check_symplecticity,
-           symplecticity_error,
-           issymplectic,
-           symplectic_conjugate_coefficients
+export SymplecticTableau,
+       SymplecticConjugateTableau,
+       SymplecticPartitionedTableau
 
+export check_symplecticity,
+       symplecticity_error,
+       issymplectic,
+       symplectic_conjugate_coefficients
 
-    include("Tableaus.jl")
-    @reexport using .Tableaus
+include("Tableaus.jl")
+@reexport using .Tableaus
 
-    include("PartitionedTableaus.jl")
-    @reexport using .PartitionedTableaus
+include("PartitionedTableaus.jl")
+@reexport using .PartitionedTableaus
 
 end

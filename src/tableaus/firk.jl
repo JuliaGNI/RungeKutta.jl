@@ -18,19 +18,18 @@ The constructor takes one optional argument, that is the element type of the tab
 
 $(reference(Val(:ImplicitEuler)))
 """
-function TableauImplicitEuler(::Type{T}=Float64) where {T}
+function TableauImplicitEuler(::Type{T} = Float64) where {T}
     a = ones(BigFloat, 1, 1)
     b = ones(BigFloat, 1)
     c = ones(BigFloat, 1)
     o = 1
 
-    Tableau{T}(:ImplicitEuler, o, a, b, c; R∞=0)
+    Tableau{T}(:ImplicitEuler, o, a, b, c; R∞ = 0)
 end
 
 "Alias for [`TableauImplicitEuler`](@ref)"
 const TableauBackwardEuler = TableauImplicitEuler
 reference(::Val{:BackwardEuler}) = reference(Val(:ImplicitEuler))
-
 
 reference(::Val{:ImplicitMidpoint}) = """
 Reference:
@@ -51,15 +50,14 @@ The constructor takes one optional argument, that is the element type of the tab
 
 $(reference(Val(:ImplicitMidpoint)))
 """
-function TableauImplicitMidpoint(::Type{T}=Float64) where {T}
+function TableauImplicitMidpoint(::Type{T} = Float64) where {T}
     a = ones(BigFloat, 1, 1) ./ 2
     b = ones(BigFloat, 1)
     c = ones(BigFloat, 1) ./ 2
     o = 2
 
-    Tableau{T}(:ImplicitMidpoint, o, a, b, c; R∞=-1)
+    Tableau{T}(:ImplicitMidpoint, o, a, b, c; R∞ = -1)
 end
-
 
 reference(::Val{:IRK3}) = """
 Reference:
@@ -87,16 +85,15 @@ A-stable and algebraically stable with `R(∞) = -1/2`.
 
 $(reference(Val(:IRK3)))
 """
-function TableauIRK3(::Type{T}=Float64) where {T}
-    a = @big [[ 1/2        -√3/6     ]
-              [+√3/6        1/2      ]]
-    b = @big  [ 1/2,        1/2      ]
-    c = @big  [ 1/2-√3/6,   1/2+√3/6 ]
+function TableauIRK3(::Type{T} = Float64) where {T}
+    a = @big [[1/2 -√3/6]
+              [+√3/6 1/2]]
+    b = @big [1/2, 1/2]
+    c = @big [1/2-√3/6, 1/2+√3/6]
     o = 3
 
-    Tableau{T}(:IRK3, o, a, b, c; R∞=-1//2)
+    Tableau{T}(:IRK3, o, a, b, c; R∞ = -1//2)
 end
-
 
 reference(::Val{:SRK3}) = """
 Reference:
@@ -117,13 +114,13 @@ The constructor takes one optional argument, that is the element type of the tab
 
 $(reference(Val(:SRK3)))
 """
-function TableauSRK3(::Type{T}=Float64) where {T}
-    a = @big [[ 5/36         2/9        5/36-√15/10 ]
-              [ 5/36         2/9        5/36        ]
-              [ 5/36+√15/10  2/9        5/36        ]]
-    b = @big  [ 5/18,        4/9,       5/18        ]
-    c = @big  [ 1/2-√15/10,  1/2,       1/2+√15/10  ]
+function TableauSRK3(::Type{T} = Float64) where {T}
+    a = @big [[5/36 2/9 5/36-√15/10]
+              [5/36 2/9 5/36]
+              [5/36+√15/10 2/9 5/36]]
+    b = @big [5/18, 4/9, 5/18]
+    c = @big [1/2-√15/10, 1/2, 1/2+√15/10]
     o = 4
 
-    Tableau{T}(:SRK3, o, a, b, c; R∞=-1)
+    Tableau{T}(:SRK3, o, a, b, c; R∞ = -1)
 end

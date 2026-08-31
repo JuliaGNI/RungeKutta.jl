@@ -1,18 +1,17 @@
 using RungeKutta: name, order, nstages, coefficients, weights, nodes
 
 @testset "$(rpad("Explicit Tableaus",80))" begin
-
     @test typeof(TableauExplicitEuler()) <: Tableau
     @test order(TableauExplicitEuler()) == 1
     @test nstages(TableauExplicitEuler()) == 1
     @test reference(TableauExplicitEuler()) == reference(Val(:ExplicitEuler))
     @test TableauExplicitEuler().R∞ == Inf
 
-    @test  isexplicit(TableauExplicitEuler())
+    @test isexplicit(TableauExplicitEuler())
     @test !isimplicit(TableauExplicitEuler())
     @test !isdiagonallyimplicit(TableauExplicitEuler())
     @test !isfullyimplicit(TableauExplicitEuler())
-    
+
     @test TableauExplicitEuler() == TableauForwardEuler()
 
     @test typeof(TableauExplicitMidpoint()) <: Tableau
@@ -20,7 +19,7 @@ using RungeKutta: name, order, nstages, coefficients, weights, nodes
     @test nstages(TableauExplicitMidpoint()) == 2
     @test reference(TableauExplicitMidpoint()) == reference(Val(:ExplicitMidpoint))
 
-    @test  isexplicit(TableauExplicitMidpoint())
+    @test isexplicit(TableauExplicitMidpoint())
     @test !isimplicit(TableauExplicitMidpoint())
     @test !isdiagonallyimplicit(TableauExplicitMidpoint())
     @test !isfullyimplicit(TableauExplicitMidpoint())
@@ -76,11 +75,11 @@ using RungeKutta: name, order, nstages, coefficients, weights, nodes
     @test TableauRK416() == TableauRK4()
     @test TableauRK416() == TableauRK41()
 
-    @test  isexplicit(TableauRK416())
+    @test isexplicit(TableauRK416())
     @test !isimplicit(TableauRK416())
     @test !isdiagonallyimplicit(TableauRK416())
     @test !isfullyimplicit(TableauRK416())
-    
+
     @test typeof(TableauRK42()) <: Tableau
     @test order(TableauRK42()) == 4
     @test nstages(TableauRK42()) == 4
@@ -105,12 +104,9 @@ using RungeKutta: name, order, nstages, coefficients, weights, nodes
     @test order(TableauSSPRK3()) == 3
     @test nstages(TableauSSPRK3()) == 3
     @test reference(TableauSSPRK3()) == reference(Val(:SSPRK3))
-
 end
 
-
 @testset "$(rpad("Diagonally Implicit Tableaus",80))" begin
-
     @test typeof(TableauCrankNicolson()) <: Tableau
     @test order(TableauCrankNicolson()) == 2
     @test nstages(TableauCrankNicolson()) == 2
@@ -118,20 +114,20 @@ end
 
     @test issymmetric(TableauCrankNicolson())
     @test !isexplicit(TableauCrankNicolson())
-    @test  isimplicit(TableauCrankNicolson())
-    @test  isdiagonallyimplicit(TableauCrankNicolson())
+    @test isimplicit(TableauCrankNicolson())
+    @test isdiagonallyimplicit(TableauCrankNicolson())
     @test !isfullyimplicit(TableauCrankNicolson())
-    
+
     @test typeof(TableauCrouzeix()) <: Tableau
     @test order(TableauCrouzeix()) == 3
     @test nstages(TableauCrouzeix()) == 2
     @test reference(TableauCrouzeix()) == reference(Val(:Crouzeix))
 
     @test !isexplicit(TableauCrouzeix())
-    @test  isimplicit(TableauCrouzeix())
-    @test  isdiagonallyimplicit(TableauCrouzeix())
+    @test isimplicit(TableauCrouzeix())
+    @test isdiagonallyimplicit(TableauCrouzeix())
     @test !isfullyimplicit(TableauCrouzeix())
-    
+
     @test typeof(TableauKraaijevangerSpijker()) <: Tableau
     @test order(TableauKraaijevangerSpijker()) == 1
     @test nstages(TableauKraaijevangerSpijker()) == 2
@@ -141,12 +137,9 @@ end
     @test order(TableauQinZhang()) == 2
     @test nstages(TableauQinZhang()) == 2
     @test issymplectic(TableauQinZhang())
-
 end
 
-
 @testset "$(rpad("Fully Implicit Tableaus",80))" begin
-
     @test typeof(TableauImplicitEuler()) <: Tableau
     @test order(TableauImplicitEuler()) == 1
     @test nstages(TableauImplicitEuler()) == 1
@@ -154,9 +147,9 @@ end
     @test TableauImplicitEuler().R∞ == 0
 
     @test !isexplicit(TableauImplicitEuler())
-    @test  isimplicit(TableauImplicitEuler())
+    @test isimplicit(TableauImplicitEuler())
     @test !isdiagonallyimplicit(TableauImplicitEuler())
-    @test  isfullyimplicit(TableauImplicitEuler())
+    @test isfullyimplicit(TableauImplicitEuler())
     @test !issymplectic(TableauImplicitEuler())
     @test !issymmetric(TableauImplicitEuler())
 
@@ -169,9 +162,9 @@ end
     @test TableauImplicitMidpoint().R∞ == -1
 
     @test !isexplicit(TableauImplicitMidpoint())
-    @test  isimplicit(TableauImplicitMidpoint())
+    @test isimplicit(TableauImplicitMidpoint())
     @test !isdiagonallyimplicit(TableauImplicitMidpoint())
-    @test  isfullyimplicit(TableauImplicitMidpoint())
+    @test isfullyimplicit(TableauImplicitMidpoint())
     @test issymplectic(TableauImplicitMidpoint())
     @test issymmetric(TableauImplicitMidpoint())
 
@@ -182,9 +175,9 @@ end
     @test TableauIRK3().R∞ == -1//2
 
     @test !isexplicit(TableauIRK3())
-    @test  isimplicit(TableauIRK3())
+    @test isimplicit(TableauIRK3())
     @test !isdiagonallyimplicit(TableauIRK3())
-    @test  isfullyimplicit(TableauIRK3())
+    @test isfullyimplicit(TableauIRK3())
     @test !issymplectic(TableauIRK3())
     @test !issymmetric(TableauIRK3())
 
@@ -204,10 +197,9 @@ end
     @test reference(TableauSRK3()) == reference(Val(:SRK3))
 
     @test !isexplicit(TableauSRK3())
-    @test  isimplicit(TableauSRK3())
+    @test isimplicit(TableauSRK3())
     @test !isdiagonallyimplicit(TableauSRK3())
-    @test  isfullyimplicit(TableauSRK3())
+    @test isfullyimplicit(TableauSRK3())
     @test issymplectic(TableauSRK3())
     @test issymmetric(TableauSRK3())
-    
 end

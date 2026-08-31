@@ -1,7 +1,6 @@
 
 import CompactBasisFunctions: Lagrange
 
-
 """
 ```julia
 lobatto_nullvector(::Type, s)
@@ -27,7 +26,6 @@ function lobatto_nullvector(::Type{T}, s) where {T}
 end
 
 lobatto_nullvector(s) = lobatto_nullvector(Float64, s)
-
 
 @doc raw"""
 The Lobatto IIIA coefficients are implicitly given by the so-called simplifying assumption $C(s)$:
@@ -71,14 +69,14 @@ function lobatto_c_coefficients(::Type{T}, s) where {T}
 
     b = lobatto_legendre_weights(T, s)
     c = lobatto_legendre_nodes(T, s)
-    M = [ c[j]^(k-1) for k in 1:s-1, j in 2:s ]
-    
+    M = [c[j]^(k-1) for k in 1:(s - 1), j in 2:s]
+
     row(i) = begin
-        r = [ c[i]^k / T(k) - c[1]^(k-1) * b[1] for k in 1:s-1 ]
+        r = [c[i]^k / T(k) - c[1]^(k-1) * b[1] for k in 1:(s - 1)]
         M \ r
     end
-    
-    hcat(b[1] * ones(T,s), vcat([transpose(row(i)) for i in 1:s]...))
+
+    hcat(b[1] * ones(T, s), vcat([transpose(row(i)) for i in 1:s]...))
 end
 
 @doc raw"""
@@ -95,19 +93,23 @@ function lobatto_c̄_coefficients(::Type{T}, s) where {T}
     end
 
     c = lobatto_legendre_nodes(T, s)
-    M = [ c[j]^(k-1) for k in 1:s-1, j in 1:s-1 ]
-    
+    M = [c[j]^(k-1) for k in 1:(s - 1), j in 1:(s - 1)]
+
     row(i) = begin
-        r = [ c[i]^k / T(k) for k in 1:s-1 ]
+        r = [c[i]^k / T(k) for k in 1:(s - 1)]
         M \ r
     end
-    
-    hcat(vcat([transpose(row(i)) for i in 1:s]...), zeros(T,s))
+
+    hcat(vcat([transpose(row(i)) for i in 1:s]...), zeros(T, s))
 end
 
-lobatto_d_coefficients(::Type{T}, s) where {T} = (lobatto_c_coefficients(T,s) .+ lobatto_c̄_coefficients(T,s)) ./ 2
+function lobatto_d_coefficients(::Type{T}, s) where {T}
+    (lobatto_c_coefficients(T, s) .+ lobatto_c̄_coefficients(T, s)) ./ 2
+end
 
-lobatto_e_coefficients(::Type{T}, s) where {T} = (lobatto_a_coefficients(T,s) .+ lobatto_b_coefficients(T,s)) ./ 2
+function lobatto_e_coefficients(::Type{T}, s) where {T}
+    (lobatto_a_coefficients(T, s) .+ lobatto_b_coefficients(T, s)) ./ 2
+end
 
 function lobatto_f_coefficients(::Type{T}, s) where {T}
     if s == 1
@@ -115,27 +117,26 @@ function lobatto_f_coefficients(::Type{T}, s) where {T}
     end
 
     c = lobatto_legendre_nodes(T, s)
-    M = [ 1 / T(k + j - 1) for k in 1:s, j in 1:s ]
-    r = [ 1 / T(s) / T(s + k) for k in 1:s ]
+    M = [1 / T(k + j - 1) for k in 1:s, j in 1:s]
+    r = [1 / T(s) / T(s + k) for k in 1:s]
     α = M \ r
-    
-    Vₛ = [ c[i]^(j-1) for i in 1:s, j in 1:s ]
+
+    Vₛ = [c[i]^(j-1) for i in 1:s, j in 1:s]
     Aₛ = zeros(T, s, s)
     for i in 2:s
-       Aₛ[i,i-1] = 1 / T(i-1)
+        Aₛ[i, i - 1] = 1 / T(i-1)
     end
-    Aₛ[:,s] = α
-    
+    Aₛ[:, s] = α
+
     Vₛ * Aₛ * inv(Vₛ)
 end
 
 function lobatto_g_coefficients(::Type{T}, s) where {T}
-    a = lobatto_f_coefficients(T,s)
+    a = lobatto_f_coefficients(T, s)
     b = lobatto_legendre_weights(T, s)
-    ā = symplectic_conjugate_coefficients(a,b)
+    ā = symplectic_conjugate_coefficients(a, b)
     return (a .+ ā) ./ 2
 end
-
 
 lobatto_a_coefficients(s) = lobatto_a_coefficients(BigFloat, s)
 lobatto_b_coefficients(s) = lobatto_b_coefficients(BigFloat, s)
@@ -146,8 +147,8 @@ lobatto_e_coefficients(s) = lobatto_e_coefficients(BigFloat, s)
 lobatto_f_coefficients(s) = lobatto_f_coefficients(BigFloat, s)
 lobatto_g_coefficients(s) = lobatto_g_coefficients(BigFloat, s)
 
-
-reference(::Val{:LobattoIII}) = """
+function reference(::Val{:LobattoIII})
+    """
 References:
 
     John C. Butcher.
@@ -160,6 +161,7 @@ References:
     In: Engquist B. (eds). Encyclopedia of Applied and Computational Mathematics. Springer, Berlin, Heidelberg. 2015.
     doi: 10.1007/978-3-540-70529-1_123.
 """
+end
 
 """
 Lobatto III tableau with s stages
@@ -175,11 +177,13 @@ Sometimes this tableau is also referred to as Lobatto IIIC*.
 $(reference(Val(:LobattoIII)))
 """
 function TableauLobattoIII(::Type{T}, s) where {T}
-    Tableau{T}(:LobattoIII, 2s-2, lobatto_c̄_coefficients(s), lobatto_legendre_weights(BigFloat, s), lobatto_legendre_nodes(BigFloat, s); R∞=(-1)^(s+1))
+    Tableau{T}(
+        :LobattoIII, 2s-2, lobatto_c̄_coefficients(s), lobatto_legendre_weights(BigFloat, s),
+        lobatto_legendre_nodes(BigFloat, s); R∞ = (-1)^(s+1))
 end
 
-
-reference(::Val{:LobattoIIIA}) = """
+function reference(::Val{:LobattoIIIA})
+    """
 References:
 
     Byron Leonard Ehle
@@ -191,6 +195,7 @@ References:
     In: Engquist B. (eds). Encyclopedia of Applied and Computational Mathematics. Springer, Berlin, Heidelberg. 2015.
     doi: 10.1007/978-3-540-70529-1_123
 """
+end
 
 """
 Lobatto IIIA tableau with s stages
@@ -204,9 +209,10 @@ The constructor takes the number of stages `s` and optionally the element type `
 $(reference(Val(:LobattoIIIA)))
 """
 function TableauLobattoIIIA(::Type{T}, s) where {T}
-    Tableau{T}(:LobattoIIIA, 2s-2, lobatto_a_coefficients(s), lobatto_legendre_weights(BigFloat, s), lobatto_legendre_nodes(BigFloat, s); R∞=(-1)^(s+1))
+    Tableau{T}(:LobattoIIIA, 2s-2, lobatto_a_coefficients(s),
+        lobatto_legendre_weights(BigFloat, s),
+        lobatto_legendre_nodes(BigFloat, s); R∞ = (-1)^(s+1))
 end
-
 
 """
 Lobatto IIIĀ tableau with s stages
@@ -225,12 +231,13 @@ values are slightly different.
 function TableauLobattoIIIĀ(::Type{T}, s) where {T}
     a = lobatto_a_coefficients(s)
     b = lobatto_legendre_weights(BigFloat, s)
-    ā = symplectic_conjugate_coefficients(a,b)
-    Tableau{T}(:LobattoIIIĀ, 2s-2, ā, b, lobatto_legendre_nodes(BigFloat, s); R∞=(-1)^(s+1))
+    ā = symplectic_conjugate_coefficients(a, b)
+    Tableau{T}(
+        :LobattoIIIĀ, 2s-2, ā, b, lobatto_legendre_nodes(BigFloat, s); R∞ = (-1)^(s+1))
 end
 
-
-reference(::Val{:LobattoIIIB}) = """
+function reference(::Val{:LobattoIIIB})
+    """
 References:
 
     Byron Leonard Ehle.
@@ -242,6 +249,7 @@ References:
     In: Engquist B. (eds). Encyclopedia of Applied and Computational Mathematics. Springer, Berlin, Heidelberg. 2015.
     doi: 10.1007/978-3-540-70529-1_123.
 """
+end
 
 """
 Lobatto IIIB tableau with s stages
@@ -255,9 +263,10 @@ The constructor takes the number of stages `s` and optionally the element type `
 $(reference(Val(:LobattoIIIB)))
 """
 function TableauLobattoIIIB(::Type{T}, s) where {T}
-    Tableau{T}(:LobattoIIIB, 2s-2, lobatto_b_coefficients(s), lobatto_legendre_weights(BigFloat, s), lobatto_legendre_nodes(BigFloat, s); R∞=(-1)^(s+1))
+    Tableau{T}(:LobattoIIIB, 2s-2, lobatto_b_coefficients(s),
+        lobatto_legendre_weights(BigFloat, s),
+        lobatto_legendre_nodes(BigFloat, s); R∞ = (-1)^(s+1))
 end
-
 
 """
 Lobatto IIIB̄ tableau with s stages
@@ -276,12 +285,13 @@ values are slightly different.
 function TableauLobattoIIIB̄(::Type{T}, s) where {T}
     a = lobatto_b_coefficients(s)
     b = lobatto_legendre_weights(BigFloat, s)
-    ā = symplectic_conjugate_coefficients(a,b)
-    Tableau{T}(:LobattoIIIB̄, 2s-2, ā, b, lobatto_legendre_nodes(BigFloat, s); R∞=(-1)^(s+1))
+    ā = symplectic_conjugate_coefficients(a, b)
+    Tableau{T}(
+        :LobattoIIIB̄, 2s-2, ā, b, lobatto_legendre_nodes(BigFloat, s); R∞ = (-1)^(s+1))
 end
 
-
-reference(::Val{:LobattoIIIC}) = """
+function reference(::Val{:LobattoIIIC})
+    """
 References:
 
     F. H. Chipman.
@@ -294,6 +304,7 @@ References:
     In: Engquist B. (eds). Encyclopedia of Applied and Computational Mathematics. Springer, Berlin, Heidelberg. 2015.
     doi: 10.1007/978-3-540-70529-1_123.
 """
+end
 
 """
 Lobatto IIIC tableau with s stages
@@ -307,9 +318,10 @@ The constructor takes the number of stages `s` and optionally the element type `
 $(reference(Val(:LobattoIIIC)))
 """
 function TableauLobattoIIIC(::Type{T}, s) where {T}
-    Tableau{T}(:LobattoIIIC, 2s-2, lobatto_c_coefficients(s), lobatto_legendre_weights(BigFloat, s), lobatto_legendre_nodes(BigFloat, s); R∞=(-1)^(s+1))
+    Tableau{T}(:LobattoIIIC, 2s-2, lobatto_c_coefficients(s),
+        lobatto_legendre_weights(BigFloat, s),
+        lobatto_legendre_nodes(BigFloat, s); R∞ = (-1)^(s+1))
 end
-
 
 """
 Lobatto IIIC̄ tableau with s stages
@@ -328,12 +340,13 @@ values are slightly different.
 function TableauLobattoIIIC̄(::Type{T}, s) where {T}
     a = lobatto_c_coefficients(s)
     b = lobatto_legendre_weights(BigFloat, s)
-    ā = symplectic_conjugate_coefficients(a,b)
-    Tableau{T}(:LobattoIIIC̄, 2s-2, ā, b, lobatto_legendre_nodes(BigFloat, s); R∞=(-1)^(s+1))
+    ā = symplectic_conjugate_coefficients(a, b)
+    Tableau{T}(
+        :LobattoIIIC̄, 2s-2, ā, b, lobatto_legendre_nodes(BigFloat, s); R∞ = (-1)^(s+1))
 end
 
-
-reference(::Val{:LobattoIIID}) = """
+function reference(::Val{:LobattoIIID})
+    """
 References:
 
     R.P.K. Chan.
@@ -346,6 +359,7 @@ References:
     In: Engquist B. (eds). Encyclopedia of Applied and Computational Mathematics. Springer, Berlin, Heidelberg. 2015.
     doi: 10.1007/978-3-540-70529-1_123.
 """
+end
 
 """
 Lobatto IIID tableau with s stages
@@ -359,9 +373,10 @@ The constructor takes the number of stages `s` and optionally the element type `
 $(reference(Val(:LobattoIIID)))
 """
 function TableauLobattoIIID(::Type{T}, s) where {T}
-    Tableau{T}(:LobattoIIID, 2s-2, lobatto_d_coefficients(s), lobatto_legendre_weights(BigFloat, s), lobatto_legendre_nodes(BigFloat, s); R∞=(-1)^s)
+    Tableau{T}(:LobattoIIID, 2s-2, lobatto_d_coefficients(s),
+        lobatto_legendre_weights(BigFloat, s),
+        lobatto_legendre_nodes(BigFloat, s); R∞ = (-1)^s)
 end
-
 
 """
 Lobatto IIID̄ tableau with s stages
@@ -380,12 +395,12 @@ and thus the numerical values are slightly different.
 function TableauLobattoIIID̄(::Type{T}, s) where {T}
     a = lobatto_d_coefficients(s)
     b = lobatto_legendre_weights(BigFloat, s)
-    ā = symplectic_conjugate_coefficients(a,b)
-    Tableau{T}(:LobattoIIID̄, 2s-2, ā, b, lobatto_legendre_nodes(BigFloat, s); R∞=(-1)^s)
+    ā = symplectic_conjugate_coefficients(a, b)
+    Tableau{T}(:LobattoIIID̄, 2s-2, ā, b, lobatto_legendre_nodes(BigFloat, s); R∞ = (-1)^s)
 end
 
-
-reference(::Val{:LobattoIIIE}) = """
+function reference(::Val{:LobattoIIIE})
+    """
 References:
 
     R.P.K. Chan.
@@ -398,6 +413,7 @@ References:
     In: Engquist B. (eds). Encyclopedia of Applied and Computational Mathematics. Springer, Berlin, Heidelberg. 2015.
     doi: 10.1007/978-3-540-70529-1_123.
 """
+end
 
 """
 Lobatto IIIE tableau with s stages
@@ -412,9 +428,10 @@ The constructor takes the number of stages `s` and optionally the element type `
 $(reference(Val(:LobattoIIIE)))
 """
 function TableauLobattoIIIE(::Type{T}, s) where {T}
-    Tableau{T}(:LobattoIIIE, 2s-2, lobatto_e_coefficients(s), lobatto_legendre_weights(BigFloat, s), lobatto_legendre_nodes(BigFloat, s); R∞=(-1)^s)
+    Tableau{T}(:LobattoIIIE, 2s-2, lobatto_e_coefficients(s),
+        lobatto_legendre_weights(BigFloat, s),
+        lobatto_legendre_nodes(BigFloat, s); R∞ = (-1)^s)
 end
-
 
 """
 Lobatto IIIĒ tableau with s stages
@@ -433,10 +450,9 @@ and thus the numerical values are slightly different.
 function TableauLobattoIIIĒ(::Type{T}, s) where {T}
     a = lobatto_e_coefficients(s)
     b = lobatto_legendre_weights(BigFloat, s)
-    ā = symplectic_conjugate_coefficients(a,b)
-    Tableau{T}(:LobattoIIIĒ, 2s-2, ā, b, lobatto_legendre_nodes(BigFloat, s); R∞=(-1)^s)
+    ā = symplectic_conjugate_coefficients(a, b)
+    Tableau{T}(:LobattoIIIĒ, 2s-2, ā, b, lobatto_legendre_nodes(BigFloat, s); R∞ = (-1)^s)
 end
-
 
 reference(::Val{:LobattoIIIF}) = """
 References:
@@ -458,9 +474,10 @@ The constructor takes the number of stages `s` and optionally the element type `
 $(reference(Val(:LobattoIIIF)))
 """
 function TableauLobattoIIIF(::Type{T}, s) where {T}
-    Tableau{T}(:LobattoIIIF, 2s,   lobatto_f_coefficients(s), lobatto_legendre_weights(BigFloat, s), lobatto_legendre_nodes(BigFloat, s); R∞=(-1)^s)
+    Tableau{T}(
+        :LobattoIIIF, 2s, lobatto_f_coefficients(s), lobatto_legendre_weights(BigFloat, s),
+        lobatto_legendre_nodes(BigFloat, s); R∞ = (-1)^s)
 end
-
 
 """
 Lobatto IIIF̄ tableau with s stages
@@ -476,10 +493,9 @@ The Lobatto IIIF̄ tableau is the conjugate symplectic to [`TableauLobattoIIIF`]
 function TableauLobattoIIIF̄(::Type{T}, s) where {T}
     a = lobatto_f_coefficients(s)
     b = lobatto_legendre_weights(BigFloat, s)
-    ā = symplectic_conjugate_coefficients(a,b)
-    Tableau{T}(:LobattoIIIF̄, 2s, ā, b, lobatto_legendre_nodes(BigFloat, s); R∞=(-1)^s)
+    ā = symplectic_conjugate_coefficients(a, b)
+    Tableau{T}(:LobattoIIIF̄, 2s, ā, b, lobatto_legendre_nodes(BigFloat, s); R∞ = (-1)^s)
 end
-
 
 @doc raw"""
 Lobatto IIIG tableau with s stages
@@ -497,9 +513,10 @@ the symplecticity conditions $b_{i} \bar{a}_{i,j} + \bar{b}_{j} a_{j,i} = b_{i} 
 for all $1 \le i,j \le s$.
 """
 function TableauLobattoIIIG(::Type{T}, s) where {T}
-    Tableau{T}(:LobattoIIIG, 2s,   lobatto_g_coefficients(s), lobatto_legendre_weights(BigFloat, s), lobatto_legendre_nodes(BigFloat, s); R∞=(-1)^s)
+    Tableau{T}(
+        :LobattoIIIG, 2s, lobatto_g_coefficients(s), lobatto_legendre_weights(BigFloat, s),
+        lobatto_legendre_nodes(BigFloat, s); R∞ = (-1)^s)
 end
-
 
 """
 Lobatto IIIḠ tableau with s stages
@@ -518,10 +535,9 @@ and thus the numerical values are slightly different.
 function TableauLobattoIIIḠ(::Type{T}, s) where {T}
     a = lobatto_g_coefficients(s)
     b = lobatto_legendre_weights(BigFloat, s)
-    ā = symplectic_conjugate_coefficients(a,b)
-    Tableau{T}(:LobattoIIIḠ, 2s, ā, b, lobatto_legendre_nodes(BigFloat, s); R∞=(-1)^s)
+    ā = symplectic_conjugate_coefficients(a, b)
+    Tableau{T}(:LobattoIIIḠ, 2s, ā, b, lobatto_legendre_nodes(BigFloat, s); R∞ = (-1)^s)
 end
-
 
 TableauLobattoIII(s) = TableauLobattoIII(Float64, s)
 TableauLobattoIIIA(s) = TableauLobattoIIIA(Float64, s)

@@ -1,5 +1,6 @@
 
-reference(::Val{:ExplicitEuler}) = """
+function reference(::Val{:ExplicitEuler})
+    """
 Reference:
 
     Leonhard Euler.
@@ -8,6 +9,7 @@ Reference:
     In: Opera Omnia, 1st Series, Volume 11, Institutiones Calculi Integralis. Teubner, Leipzig, Pages 424-434, 1913.
     Sectio secunda. Caput VII. De integratione aequationum differentialium per approximationem. Problema 85.
 """
+end
 
 """
 Tableau of one-stage, 1st order explicit (forward) Euler method
@@ -19,19 +21,18 @@ The constructor takes one optional argument, that is the element type of the tab
 
 $(reference(Val(:ExplicitEuler)))
 """
-function TableauExplicitEuler(::Type{T}=Float64) where {T}
+function TableauExplicitEuler(::Type{T} = Float64) where {T}
     a = zeros(BigFloat, 1, 1)
     b = ones(BigFloat, 1)
     c = zeros(BigFloat, 1)
     o = 1
 
-    Tableau{T}(:ExplicitEuler, o, a, b, c; R∞=Inf)
+    Tableau{T}(:ExplicitEuler, o, a, b, c; R∞ = Inf)
 end
 
 "Alias for [`TableauExplicitEuler`](@ref)"
 const TableauForwardEuler = TableauExplicitEuler
 reference(::Val{:ForwardEuler}) = reference(Val(:ExplicitEuler))
-
 
 reference(::Val{:ExplicitMidpoint}) = """
 Reference:
@@ -53,18 +54,18 @@ The constructor takes one optional argument, that is the element type of the tab
 
 $(reference(Val(:ExplicitMidpoint)))
 """
-function TableauExplicitMidpoint(::Type{T}=Float64) where {T}
-    a = @big [[ 0     0    ]
-              [ 1//2  0    ]]
-    b = @big  [ 0,    1    ]
-    c = @big  [ 0,    1//2 ]
+function TableauExplicitMidpoint(::Type{T} = Float64) where {T}
+    a = @big [[0 0]
+              [1//2 0]]
+    b = @big [0, 1]
+    c = @big [0, 1//2]
     o = 2
 
     Tableau{T}(:ExplicitMidpoint, o, a, b, c)
 end
 
-
-reference(::Val{:Heun2}) = """
+function reference(::Val{:Heun2})
+    """
 Reference:
 
     Karl Heun.
@@ -72,6 +73,7 @@ Reference:
     Zeitschrift für Mathematik und Physik, Volume 45, Pages 23-38, 1900.
     Algorithm II.
 """
+end
 
 """
 Tableau of Heun's two-stage, 2nd order method
@@ -83,11 +85,11 @@ The constructor takes one optional argument, that is the element type of the tab
 
 $(reference(Val(:Heun2)))
 """
-function TableauHeun2(::Type{T}=Float64) where {T}
-    a = @big [[ 0      0    ]
-              [ 1      0    ]]
-    b = @big  [ 1//2,  1//2 ]
-    c = @big  [ 0,     1    ]
+function TableauHeun2(::Type{T} = Float64) where {T}
+    a = @big [[0 0]
+              [1 0]]
+    b = @big [1//2, 1//2]
+    c = @big [0, 1]
     o = 2
 
     Tableau{T}(:Heun2, o, a, b, c)
@@ -104,8 +106,8 @@ Alias for [`TableauHeun2`](@ref)
 const TableauRK21 = TableauHeun2
 reference(::Val{:RK21}) = reference(Val(:Heun2))
 
-
-reference(::Val{:Heun3}) = """
+function reference(::Val{:Heun3})
+    """
 Reference:
 
     Karl Heun.
@@ -113,6 +115,7 @@ Reference:
     Zeitschrift für Mathematik und Physik, Volume 45, Pages 23-38, 1900.
     Algorithm VI.
 """
+end
 
 """
 Tableau of Heun's three-stage, 3rd order method
@@ -124,17 +127,16 @@ The constructor takes one optional argument, that is the element type of the tab
 
 $(reference(Val(:Heun3)))
 """
-function TableauHeun3(::Type{T}=Float64) where {T}
-    a = @big [[ 0      0      0    ]
-              [ 1//3   0      0    ]
-              [ 0      2//3   0    ]]
-    b = @big  [ 1//4,  0,     3//4 ]
-    c = @big  [ 0,     1//3,  2//3 ]
+function TableauHeun3(::Type{T} = Float64) where {T}
+    a = @big [[0 0 0]
+              [1//3 0 0]
+              [0 2//3 0]]
+    b = @big [1//4, 0, 3//4]
+    c = @big [0, 1//3, 2//3]
     o = 3
 
     Tableau{T}(:Heun3, o, a, b, c)
 end
-
 
 reference(::Val{:Ralston2}) = """
 Reference:
@@ -156,16 +158,15 @@ The constructor takes one optional argument, that is the element type of the tab
 
 $(reference(Val(:Ralston2)))
 """
-function TableauRalston2(::Type{T}=Float64) where {T}
-    a = @big [[ 0      0    ]
-              [ 2//3   0    ]]
-    b = @big  [ 1//4,  3//4 ]
-    c = @big  [ 0,     2//3 ]
+function TableauRalston2(::Type{T} = Float64) where {T}
+    a = @big [[0 0]
+              [2//3 0]]
+    b = @big [1//4, 3//4]
+    c = @big [0, 2//3]
     o = 2
 
     Tableau{T}(:Ralston2, o, a, b, c)
 end
-
 
 reference(::Val{:Ralston3}) = """
 Reference:
@@ -187,17 +188,16 @@ The constructor takes one optional argument, that is the element type of the tab
 
 $(reference(Val(:Ralston3)))
 """
-function TableauRalston3(::Type{T}=Float64) where {T}
-    a = @big [[ 0      0      0    ]
-              [ 1//2   0      0    ]
-              [ 0      3//4   0    ]]
-    b = @big  [ 2//9,  3//9,  4//9 ]
-    c = @big  [ 0,     1//2,  3//4 ]
+function TableauRalston3(::Type{T} = Float64) where {T}
+    a = @big [[0 0 0]
+              [1//2 0 0]
+              [0 3//4 0]]
+    b = @big [2//9, 3//9, 4//9]
+    c = @big [0, 1//2, 3//4]
     o = 3
 
     Tableau{T}(:Ralston3, o, a, b, c)
 end
-
 
 reference(::Val{:Runge}) = """
 Reference:
@@ -219,11 +219,11 @@ The constructor takes one optional argument, that is the element type of the tab
 
 $(reference(Val(:Runge)))
 """
-function TableauRunge(::Type{T}=Float64) where {T}
-    a = @big [[ 0      0    ]
-              [ 1//2   0    ]]
-    b = @big  [ 0,     1    ]
-    c = @big  [ 0,     1//2 ]
+function TableauRunge(::Type{T} = Float64) where {T}
+    a = @big [[0 0]
+              [1//2 0]]
+    b = @big [0, 1]
+    c = @big [0, 1//2]
     o = 2
 
     Tableau{T}(:Runge, o, a, b, c)
@@ -244,7 +244,6 @@ Alias for [`TableauRunge`](@ref)
 const TableauRK22 = TableauRunge
 reference(::Val{:RK22}) = reference(Val(:Runge))
 
-
 reference(::Val{:Kutta}) = """
 Reference:
 
@@ -264,12 +263,12 @@ The constructor takes one optional argument, that is the element type of the tab
 
 $(reference(Val(:Kutta)))
 """
-function TableauKutta(::Type{T}=Float64) where {T}
-    a = @big [[ 0      0      0    ]
-              [ 1//2   0      0    ]
-              [-1      2      0    ]]
-    b = @big  [ 1//6,  4//6,  1//6 ]
-    c = @big  [ 0,     1//2,  1    ]
+function TableauKutta(::Type{T} = Float64) where {T}
+    a = @big [[0 0 0]
+              [1//2 0 0]
+              [-1 2 0]]
+    b = @big [1//6, 4//6, 1//6]
+    c = @big [0, 1//2, 1]
     o = 3
 
     Tableau{T}(:Kutta, o, a, b, c)
@@ -289,7 +288,6 @@ Alias for [`TableauKutta`](@ref) according to
 const TableauRK32 = TableauKutta
 reference(::Val{:RK32}) = reference(Val(:Kutta))
 
-
 reference(::Val{:RK31}) = """
 Reference:
 
@@ -308,17 +306,16 @@ The constructor takes one optional argument, that is the element type of the tab
 
 $(reference(Val(:RK31)))
 """
-function TableauRK31(::Type{T}=Float64) where {T}
-    a = @big [[ 0      0      0    ]
-              [ 2//3   0      0    ]
-              [ 1//3   1//3   0    ]]
-    b = @big  [ 1//4,  0,     3//4 ]
-    c = @big  [ 0,     2//3,  2//3 ]
+function TableauRK31(::Type{T} = Float64) where {T}
+    a = @big [[0 0 0]
+              [2//3 0 0]
+              [1//3 1//3 0]]
+    b = @big [1//4, 0, 3//4]
+    c = @big [0, 2//3, 2//3]
     o = 3
 
     Tableau{T}(:RK31, o, a, b, c)
 end
-
 
 reference(::Val{:RK416}) = """
 Reference:
@@ -339,13 +336,13 @@ The constructor takes one optional argument, that is the element type of the tab
 
 $(reference(Val(:RK416)))
 """
-function TableauRK416(::Type{T}=Float64) where {T}
-    a = @big [[ 0      0      0      0    ]
-              [ 1//2   0      0      0    ]
-              [ 0      1//2   0      0    ]
-              [ 0      0      1      0    ]]
-    b = @big  [ 1//6,  1//3,  1//3,  1//6 ]
-    c = @big  [ 0,     1//2,  1//2,  1    ]
+function TableauRK416(::Type{T} = Float64) where {T}
+    a = @big [[0 0 0 0]
+              [1//2 0 0 0]
+              [0 1//2 0 0]
+              [0 0 1 0]]
+    b = @big [1//6, 1//3, 1//3, 1//6]
+    c = @big [0, 1//2, 1//2, 1]
     o = 4
 
     Tableau{T}(:RK416, o, a, b, c)
@@ -365,7 +362,6 @@ reference(::Val{:RK41}) = reference(Val(:RK416))
 const TableauRK4 = TableauRK416
 reference(::Val{:RK4}) = reference(Val(:RK416))
 
-
 reference(::Val{:RK42}) = """
 Reference:
 
@@ -384,18 +380,17 @@ The constructor takes one optional argument, that is the element type of the tab
 
 $(reference(Val(:RK42)))
 """
-function TableauRK42(::Type{T}=Float64) where {T}
-    a = @big [[ 0      0      0      0    ]
-              [ 1//4   0      0      0    ]
-              [ 0      1//2   0      0    ]
-              [ 1     -2      1      0    ]]
-    b = @big  [ 1//6,  0,     2//3,  1//6 ]
-    c = @big  [ 0,     1//4,  1//2,  1    ]
+function TableauRK42(::Type{T} = Float64) where {T}
+    a = @big [[0 0 0 0]
+              [1//4 0 0 0]
+              [0 1//2 0 0]
+              [1 -2 1 0]]
+    b = @big [1//6, 0, 2//3, 1//6]
+    c = @big [0, 1//4, 1//2, 1]
     o = 4
 
     Tableau{T}(:RK42, o, a, b, c)
 end
-
 
 reference(::Val{:RK438}) = """
 Reference:
@@ -416,18 +411,17 @@ The constructor takes one optional argument, that is the element type of the tab
 
 $(reference(Val(:RK438)))
 """
-function TableauRK438(::Type{T}=Float64) where {T}
-    a = @big [[ 0      0      0      0    ]
-              [ 1//3   0      0      0    ]
-              [-1//3   1      0      0    ]
-              [ 1     -1      1      0    ]]
-    b = @big  [ 1//8,  3//8,  3//8,  1//8 ]
-    c = @big  [ 0,     1//3,  2//3,  1    ]
+function TableauRK438(::Type{T} = Float64) where {T}
+    a = @big [[0 0 0 0]
+              [1//3 0 0 0]
+              [-1//3 1 0 0]
+              [1 -1 1 0]]
+    b = @big [1//8, 3//8, 3//8, 1//8]
+    c = @big [0, 1//3, 2//3, 1]
     o = 4
 
     Tableau{T}(:RK438, o, a, b, c)
 end
-
 
 reference(::Val{:RK5}) = """
 Reference:
@@ -447,20 +441,19 @@ The constructor takes one optional argument, that is the element type of the tab
 
 $(reference(Val(:RK5)))
 """
-function TableauRK5(::Type{T}=Float64) where {T}
-    a = @big [[ 0       0       0       0       0       0    ]
-              [ 1//4    0       0       0       0       0    ]
-              [ 1//8    1//8    0       0       0       0    ]
-              [ 0       0       1//2    0       0       0    ]
-              [ 3//16  -3//8    3//8    9//16   0       0    ]
-              [-3//7    8//7    6//7   -12//7   8//7    0    ]]
-    b = @big  [ 7//90,  0,      32//90, 12//90, 32//90, 7//90]
-    c = @big  [ 0,      1//4,   1//4,   1//2,   3//4,   1    ]
+function TableauRK5(::Type{T} = Float64) where {T}
+    a = @big [[0 0 0 0 0 0]
+              [1//4 0 0 0 0 0]
+              [1//8 1//8 0 0 0 0]
+              [0 0 1//2 0 0 0]
+              [3//16 -3//8 3//8 9//16 0 0]
+              [-3//7 8//7 6//7 -12//7 8//7 0]]
+    b = @big [7//90, 0, 32//90, 12//90, 32//90, 7//90]
+    c = @big [0, 1//4, 1//4, 1//2, 3//4, 1]
     o = 5
 
     Tableau{T}(:RK5, o, a, b, c)
 end
-
 
 reference(::Val{:SSPRK2}) = """
 Reference:
@@ -489,7 +482,6 @@ function TableauSSPRK2(args...)
     Tableau(:SSPRK2, tab.o, tab.a, tab.b, tab.c)
 end
 
-
 reference(::Val{:SSPRK3}) = """
 Reference:
 
@@ -510,12 +502,12 @@ The constructor takes one optional argument, that is the element type of the tab
 
 $(reference(Val(:SSPRK3)))
 """
-function TableauSSPRK3(::Type{T}=Float64) where {T}
-    a = @big [[ 0      0      0    ]
-              [ 1      0      0    ]
-              [ 1//4   1//4   0    ]]
-    b = @big  [ 1//6,  1//6,  4//6 ]
-    c = @big  [ 0,     1,     1//2 ]
+function TableauSSPRK3(::Type{T} = Float64) where {T}
+    a = @big [[0 0 0]
+              [1 0 0]
+              [1//4 1//4 0]]
+    b = @big [1//6, 1//6, 4//6]
+    c = @big [0, 1, 1//2]
     o = 3
 
     Tableau{T}(:SSPRK3, o, a, b, c)

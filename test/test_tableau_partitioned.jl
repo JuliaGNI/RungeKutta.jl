@@ -1,13 +1,11 @@
 using RungeKutta: name, order, eachstage, nstages
 
 @testset "$(rpad("Partitioned Tableau",80))" begin
-
     for s in 1:5
-        for T ∈ (Float64, BigFloat)
+        for T in (Float64, BigFloat)
+            q = Tableau(:qTest, 2s, rand(T, s, s), rand(T, s), rand(T, s))
+            p = Tableau(:pTest, 2s, rand(T, s, s), rand(T, s), rand(T, s))
 
-            q = Tableau(:qTest, 2s, rand(T,s,s), rand(T,s), rand(T,s))
-            p = Tableau(:pTest, 2s, rand(T,s,s), rand(T,s), rand(T,s))
-            
             tab1 = PartitionedTableau{T}(:Test, 2s, q, p)
             tab2 = PartitionedTableau{T}(:Test, q, p)
             tab3 = PartitionedTableau(:Test, q, p)
@@ -32,9 +30,6 @@ using RungeKutta: name, order, eachstage, nstages
             @test ismissing(tab2.R∞)
             @test ismissing(tab3.R∞)
             @test ismissing(tab4.R∞)
-
         end
-
     end
-
 end

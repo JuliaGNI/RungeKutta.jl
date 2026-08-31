@@ -33,7 +33,8 @@ PartitionedTableau(name::Symbol, q::Tableau, p::Tableau)
 PartitionedTableau(name::Symbol, q::Tableau)
 ```
 """
-struct PartitionedTableau{T, S, RT <: Union{Real,Missing}, RTq, RTp, L} <: AbstractPartitionedTableau{T}
+struct PartitionedTableau{T, S, RT <: Union{Real, Missing}, RTq, RTp, L} <:
+       AbstractPartitionedTableau{T}
     @TableauHeader
 
     q::Tableau{T, S, RTq, L}
@@ -41,14 +42,15 @@ struct PartitionedTableau{T, S, RT <: Union{Real,Missing}, RTq, RTp, L} <: Abstr
 
     R∞::RT
 
-    function PartitionedTableau{T}(name, o, q, p; R∞=missing) where {T}
+    function PartitionedTableau{T}(name, o, q, p; R∞ = missing) where {T}
         @assert q.s == p.s
         if ismissing(R∞) && !ismissing(q.R∞) && !ismissing(p.R∞)
             if q.R∞ == p.R∞
                 R∞ = q.R∞
             end
         end
-        new{T, q.s, typeof(R∞), typeof(q.R∞), typeof(p.R∞), q.s * q.s}(name, o, q.s, q, p, R∞)
+        new{T, q.s, typeof(R∞), typeof(q.R∞), typeof(p.R∞), q.s * q.s}(
+            name, o, q.s, q, p, R∞)
     end
 
     function PartitionedTableau{T}(name, q, p; kwargs...) where {T}
@@ -56,28 +58,41 @@ struct PartitionedTableau{T, S, RT <: Union{Real,Missing}, RTq, RTp, L} <: Abstr
     end
 end
 
-PartitionedTableau(name::Symbol, q::Tableau{T}, p::Tableau{T}; kwargs...) where {T} = PartitionedTableau{T}(name, q, p; kwargs...)
-PartitionedTableau(name::Symbol, q::Tableau) = PartitionedTableau(name, q, q; R∞=q.R∞)
-PartitionedTableau(q::Tableau, p::Tableau; kwargs...) = PartitionedTableau(Symbol(q.name, p.name), q, p; kwargs...)
+function PartitionedTableau(name::Symbol, q::Tableau{T}, p::Tableau{T}; kwargs...) where {T}
+    PartitionedTableau{T}(name, q, p; kwargs...)
+end
+PartitionedTableau(name::Symbol, q::Tableau) = PartitionedTableau(name, q, q; R∞ = q.R∞)
+function PartitionedTableau(q::Tableau, p::Tableau; kwargs...)
+    PartitionedTableau(Symbol(q.name, p.name), q, p; kwargs...)
+end
 PartitionedTableau(q::Tableau) = PartitionedTableau(q.name, q)
 
-Base.hash(tab::PartitionedTableau, h::UInt) = hash(tab.o, hash(tab.s, hash(tab.q, hash(tab.p, hash(:PartitionedTableau, h)))))
+function Base.hash(tab::PartitionedTableau, h::UInt)
+    hash(tab.o, hash(tab.s, hash(tab.q, hash(tab.p, hash(:PartitionedTableau, h)))))
+end
 
-Base.:(==)(tab1::PartitionedTableau, tab2::PartitionedTableau) = (
-                                            tab1.o == tab2.o
-                                         && tab1.s == tab2.s
-                                         && tab1.q == tab2.q
-                                         && tab1.p == tab2.p
-                                         && ((ismissing(tab1.R∞) && ismissing(tab2.R∞)) || (tab1.R∞ == tab2.R∞)))
+function Base.:(==)(tab1::PartitionedTableau, tab2::PartitionedTableau)
+    (
+        tab1.o == tab2.o
+        && tab1.s == tab2.s
+        && tab1.q == tab2.q
+        && tab1.p == tab2.p
+        && ((ismissing(tab1.R∞) && ismissing(tab2.R∞)) || (tab1.R∞ == tab2.R∞)))
+end
 
-Base.isapprox(tab1::PartitionedTableau, tab2::PartitionedTableau; kwargs...) = (
-                                            tab1.o == tab2.o
-                                         && tab1.s == tab2.s
-                                         && ((ismissing(tab1.R∞) && ismissing(tab2.R∞)) || (tab1.R∞ == tab2.R∞))
-                                         && isapprox(tab1.q, tab2.q; kwargs...)
-                                         && isapprox(tab1.p, tab2.p; kwargs...))
- 
-Base.isequal(tab1::PartitionedTableau{T1}, tab2::PartitionedTableau{T2}) where {T1,T2} = (tab1 == tab2 && T1 == T2 && tab1.name == tab2.name)
+function Base.isapprox(tab1::PartitionedTableau, tab2::PartitionedTableau; kwargs...)
+    (
+        tab1.o == tab2.o
+        && tab1.s == tab2.s
+        && ((ismissing(tab1.R∞) && ismissing(tab2.R∞)) || (tab1.R∞ == tab2.R∞))
+        && isapprox(tab1.q, tab2.q; kwargs...)
+        && isapprox(tab1.p, tab2.p; kwargs...))
+end
+
+function Base.isequal(tab1::PartitionedTableau{T1}, tab2::PartitionedTableau{T2}) where {
+        T1, T2}
+    (tab1 == tab2 && T1 == T2 && tab1.name == tab2.name)
+end
 
 Base.eltype(::PartitionedTableau{T}) where {T} = T
 
@@ -86,14 +101,21 @@ GeometricBase.order(tab::PartitionedTableau) = tab.o
 nstages(tab::PartitionedTableau) = tab.s
 eachstage(tab::PartitionedTableau) = 1:nstages(tab)
 
-GeometricBase.description(tab::PartitionedTableau) = "$(tab.name) with $(tab.s) $(tab.s == 1 ? "stage" : "stages") and order $(tab.o)"
+function GeometricBase.description(tab::PartitionedTableau)
+    "$(tab.name) with $(tab.s) $(tab.s == 1 ? "stage" : "stages") and order $(tab.o)"
+end
 GeometricBase.reference(tab::PartitionedTableau) = reference(Val(tab.name))
 
-isexplicit(tab::PartitionedTableau) = istril(tab.q.a) && istril(tab.p.a) && all([tab.q.a[i,i] == 0 || tab.p.a[i,i] == 0 for i in 1:tab.s]) && (tab.q.c[1] == 0 || tab.p.c[1] == 0)
+function isexplicit(tab::PartitionedTableau)
+    istril(tab.q.a) && istril(tab.p.a) &&
+        all([tab.q.a[i, i] == 0 || tab.p.a[i, i] == 0 for i in 1:tab.s]) &&
+        (tab.q.c[1] == 0 || tab.p.c[1] == 0)
+end
 isimplicit(tab::PartitionedTableau) = !isexplicit(tab)
-isdiagonallyimplicit(tab::PartitionedTableau) = isimplicit(tab) && tab.s != 1 && istril(tab.q.a) && istril(tab.p.a)
+function isdiagonallyimplicit(tab::PartitionedTableau)
+    isimplicit(tab) && tab.s != 1 && istril(tab.q.a) && istril(tab.p.a)
+end
 isfullyimplicit(tab::PartitionedTableau) = !isexplicit(tab) && !(isdiagonallyimplicit(tab))
-
 
 """
 ```julia

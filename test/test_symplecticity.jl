@@ -1,5 +1,4 @@
 @testset "$(rpad("Symplecticity",80))" begin
-
     for s in 1:10
         g = TableauGauss(s)
         g̃ = SymplecticConjugateTableau(g)
@@ -8,8 +7,8 @@
         @test g.b == g̃.b
         @test g.c == g̃.c
 
-        @test symplecticity_error(g) ≈ zeros(s,s)  atol=eps()
-        @test check_symplecticity(g) == Array{Bool}(ones(s,s))
+        @test symplecticity_error(g) ≈ zeros(s, s) atol=eps()
+        @test check_symplecticity(g) == Array{Bool}(ones(s, s))
 
         @test issymplectic(g)
         @test issymplectic(g̃)
@@ -31,7 +30,6 @@
         @test B.b == Ã.b
         @test B.c == Ã.c
 
-
         Â = SymplecticTableau(A)
         B̂ = SymplecticTableau(B)
         E = TableauLobattoIIIE(s)
@@ -50,5 +48,4 @@
         @test issymplectic(SymplecticPartitionedTableau(A))
         @test issymplectic(SymplecticPartitionedTableau(B))
     end
-
 end

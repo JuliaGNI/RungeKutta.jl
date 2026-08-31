@@ -2,13 +2,12 @@ import LinearAlgebra
 
 using QuadratureRules: lobatto_legendre_nodes, lobatto_legendre_weights
 using RungeKutta.Tableaus: lobatto_nullvector,
-                  lobatto_a_coefficients, lobatto_b_coefficients,
-                  lobatto_c_coefficients, lobatto_c̄_coefficients,
-                  lobatto_d_coefficients, lobatto_e_coefficients,
-                  lobatto_f_coefficients, lobatto_g_coefficients
+                           lobatto_a_coefficients, lobatto_b_coefficients,
+                           lobatto_c_coefficients, lobatto_c̄_coefficients,
+                           lobatto_d_coefficients, lobatto_e_coefficients,
+                           lobatto_f_coefficients, lobatto_g_coefficients
 
 @testset "$(rpad("Lobatto Tableaus",80))" begin
-
     @test_throws ErrorException lobatto_legendre_nodes(BigFloat, 1)
     @test_throws ErrorException lobatto_legendre_weights(BigFloat, 1)
     @test_throws ErrorException lobatto_nullvector(1)
@@ -20,7 +19,6 @@ using RungeKutta.Tableaus: lobatto_nullvector,
     @test_throws ErrorException lobatto_e_coefficients(1)
     @test_throws ErrorException lobatto_f_coefficients(1)
     @test_throws ErrorException lobatto_g_coefficients(1)
-
 
     function _lobatto_nullvector(s)
         if s == 2
@@ -37,7 +35,6 @@ using RungeKutta.Tableaus: lobatto_nullvector,
         return LinearAlgebra.normalize(d) * sign(d[begin])
     end
 
-
     # The vector comes out of unit length with a positive first entry, so it is fixed
     # by the nodes alone and does not flip with the factorisation used to obtain it.
     for s in 2:5
@@ -47,276 +44,248 @@ using RungeKutta.Tableaus: lobatto_nullvector,
         @test lobatto_nullvector(s)[begin] > 0
     end
 
+    function _getTableauLobattoIIIA2(T = Float64)
+        a = BigFloat[[0 0]
+                     [1/2 1/2]]
 
-    function _getTableauLobattoIIIA2(T=Float64)
-        a = BigFloat[
-                [0     0   ]
-                [1/2   1/2 ]
-            ]
-
-        Tableau{T}(:LobattoIIIA2, 2, a, lobatto_legendre_weights(BigFloat, 2), lobatto_legendre_nodes(BigFloat, 2); R∞ = -1)
+        Tableau{T}(:LobattoIIIA2, 2, a, lobatto_legendre_weights(BigFloat, 2),
+            lobatto_legendre_nodes(BigFloat, 2); R∞ = -1)
     end
 
-    function _getTableauLobattoIIIA3(T=Float64)
-        a = BigFloat[
-                [0      0     0    ]
-                [5/24   1/3  -1/24 ]
-                [1/6    2/3   1/6  ]
-            ]
+    function _getTableauLobattoIIIA3(T = Float64)
+        a = BigFloat[[0 0 0]
+                     [5/24 1/3 -1/24]
+                     [1/6 2/3 1/6]]
 
-        Tableau{T}(:LobattoIIIA3, 4, a, lobatto_legendre_weights(BigFloat, 3), lobatto_legendre_nodes(BigFloat, 3); R∞ = +1)
+        Tableau{T}(:LobattoIIIA3, 4, a, lobatto_legendre_weights(BigFloat, 3),
+            lobatto_legendre_nodes(BigFloat, 3); R∞ = +1)
     end
 
-    function _getTableauLobattoIIIA4(T=Float64)
-        a = BigFloat[
-                [0            0               0               0          ]
-                [(11+√5)/120  (25-   √5)/120  (25-13*√5)/120  (-1+√5)/120]
-                [(11-√5)/120  (25+13*√5)/120  (25+   √5)/120  (-1-√5)/120]
-                [      1/12            5/12            5/12         1/12 ]
-            ]
+    function _getTableauLobattoIIIA4(T = Float64)
+        a = BigFloat[[0 0 0 0]
+                     [(11+√5)/120 (25 - √5)/120 (25-13*√5)/120 (-1+√5)/120]
+                     [(11-√5)/120 (25+13*√5)/120 (25 + √5)/120 (-1-√5)/120]
+                     [1/12 5/12 5/12 1/12]]
 
-        Tableau{T}(:LobattoIIIA4, 6, a, lobatto_legendre_weights(BigFloat, 4), lobatto_legendre_nodes(BigFloat, 4); R∞ = -1)
+        Tableau{T}(:LobattoIIIA4, 6, a, lobatto_legendre_weights(BigFloat, 4),
+            lobatto_legendre_nodes(BigFloat, 4); R∞ = -1)
     end
 
+    function _getTableauLobattoIIIA5(T = Float64)
+        a = BigFloat[[0 0 0 0 0]
+                     [
+                      (119+3*√21)/1960 (343 - 9*√21)/2520 (392-96*√21)/2205 (343 - 69*√21)/2520 (-21+3*√21)/1960
+                      ]
+                     [13/320 (392+105*√21)/2880 8/45 (392-105*√21)/2880 3/320]
+                     [
+                      (119-3*√21)/1960 (343 + 69*√21)/2520 (392+96*√21)/2205 (343 + 9*√21)/2520 (-21-3*√21)/1960
+                      ]
+                     [1/20 49/180 16/45 49/180 1/20]]
 
-    function _getTableauLobattoIIIA5(T=Float64)
-        a = BigFloat[
-                [0                 0                   0                  0                   0               ]
-                [(119+3*√21)/1960  (343-  9*√21)/2520  (392-96*√21)/2205  (343- 69*√21)/2520  (-21+3*√21)/1960]
-                [         13/320   (392+105*√21)/2880             8/45    (392-105*√21)/2880            3/320 ]
-                [(119-3*√21)/1960  (343+ 69*√21)/2520  (392+96*√21)/2205  (343+  9*√21)/2520  (-21-3*√21)/1960]
-                [          1/20               49/180             16/45               49/180             1/20  ]
-            ]
-
-        Tableau{T}(:LobattoIIIA5, 8, a, lobatto_legendre_weights(BigFloat, 5), lobatto_legendre_nodes(BigFloat, 5); R∞ = +1)
+        Tableau{T}(:LobattoIIIA5, 8, a, lobatto_legendre_weights(BigFloat, 5),
+            lobatto_legendre_nodes(BigFloat, 5); R∞ = +1)
     end
 
+    function _getTableauLobattoIIIB2(T = Float64)
+        a = BigFloat[[1/2 0]
+                     [1/2 0]]
 
-    function _getTableauLobattoIIIB2(T=Float64)
-        a = BigFloat[
-                [1/2  0]
-                [1/2  0]
-            ]
-
-        Tableau{T}(:LobattoIIIB2, 2, a, lobatto_legendre_weights(BigFloat, 2), lobatto_legendre_nodes(BigFloat, 2); R∞ = -1)
+        Tableau{T}(:LobattoIIIB2, 2, a, lobatto_legendre_weights(BigFloat, 2),
+            lobatto_legendre_nodes(BigFloat, 2); R∞ = -1)
     end
 
-    function _getTableauLobattoIIIB3(T=Float64)
-        a = BigFloat[
-                [1/6  -1/6   0   ]
-                [1/6   1/3   0   ]
-                [1/6   5/6   0   ]
-            ]
+    function _getTableauLobattoIIIB3(T = Float64)
+        a = BigFloat[[1/6 -1/6 0]
+                     [1/6 1/3 0]
+                     [1/6 5/6 0]]
 
-        Tableau{T}(:LobattoIIIB3, 4, a, lobatto_legendre_weights(BigFloat, 3), lobatto_legendre_nodes(BigFloat, 3); R∞ = +1)
+        Tableau{T}(:LobattoIIIB3, 4, a, lobatto_legendre_weights(BigFloat, 3),
+            lobatto_legendre_nodes(BigFloat, 3); R∞ = +1)
     end
 
-    function _getTableauLobattoIIIB4(T=Float64)
-        a = BigFloat[
-                [ 1/12  (-1-   √5)/24   (-1+   √5)/24    0 ]
-                [ 1/12  (25+   √5)/120  (25-13*√5)/120   0 ]
-                [ 1/12  (25+13*√5)/120  (25-   √5)/120   0 ]
-                [ 1/12  (11-   √5)/24   (11+   √5)/24    0 ]
-            ]
+    function _getTableauLobattoIIIB4(T = Float64)
+        a = BigFloat[[1/12 (-1 - √5)/24 (-1 + √5)/24 0]
+                     [1/12 (25 + √5)/120 (25-13*√5)/120 0]
+                     [1/12 (25+13*√5)/120 (25 - √5)/120 0]
+                     [1/12 (11 - √5)/24 (11 + √5)/24 0]]
 
-        Tableau{T}(:LobattoIIIB4, 6, a, lobatto_legendre_weights(BigFloat, 4), lobatto_legendre_nodes(BigFloat, 4); R∞ = -1)
+        Tableau{T}(:LobattoIIIB4, 6, a, lobatto_legendre_weights(BigFloat, 4),
+            lobatto_legendre_nodes(BigFloat, 4); R∞ = -1)
     end
 
+    function _getTableauLobattoIIIB5(T = Float64)
+        a = BigFloat[[1/20 (-7 - √21)/120 1/15 (-7 + √21)/120 0]
+                     [1/20 (343 + 9*√21)/2520 (56-15*√21)/315 (343-69*√21)/2520 0]
+                     [1/20 (49+12*√21)/360 8/45 (49-12*√21)/360 0]
+                     [1/20 (343+69*√21)/2520 (56+15*√21)/315 (343 - 9*√21)/2520 0]
+                     [1/20 (119 - 3*√21)/360 13/45 (119 + 3*√21)/360 0]]
 
-    function _getTableauLobattoIIIB5(T=Float64)
-        a = BigFloat[
-                [ 1/20  ( -7-   √21)/120             1/15   ( -7+   √21)/120    0 ]
-                [ 1/20  (343+ 9*√21)/2520  (56-15*√21)/315  (343-69*√21)/2520   0 ]
-                [ 1/20  ( 49+12*√21)/360             8/45   ( 49-12*√21)/360    0 ]
-                [ 1/20  (343+69*√21)/2520  (56+15*√21)/315  (343- 9*√21)/2520   0 ]
-                [ 1/20  (119- 3*√21)/360            13/45   (119+ 3*√21)/360    0 ]
-            ]
-
-        Tableau{T}(:LobattoIIIB5, 8, a, lobatto_legendre_weights(BigFloat, 5), lobatto_legendre_nodes(BigFloat, 5); R∞ = +1)
+        Tableau{T}(:LobattoIIIB5, 8, a, lobatto_legendre_weights(BigFloat, 5),
+            lobatto_legendre_nodes(BigFloat, 5); R∞ = +1)
     end
 
+    function _getTableauLobattoIIIC2(T = Float64)
+        a = BigFloat[[1/2 -1/2]
+                     [1/2 1/2]]
 
-    function _getTableauLobattoIIIC2(T=Float64)
-        a = BigFloat[
-                [1/2  -1/2 ]
-                [1/2   1/2 ]
-            ]
-
-        Tableau{T}(:LobattoIIIC2, 2, a, lobatto_legendre_weights(BigFloat, 2), lobatto_legendre_nodes(BigFloat, 2); R∞ = -1)
+        Tableau{T}(:LobattoIIIC2, 2, a, lobatto_legendre_weights(BigFloat, 2),
+            lobatto_legendre_nodes(BigFloat, 2); R∞ = -1)
     end
 
-    function _getTableauLobattoIIIC3(T=Float64)
-        a = BigFloat[
-                [1/6  -1/3    1/6  ]
-                [1/6   5/12  -1/12 ]
-                [1/6   2/3    1/6  ]
-            ]
+    function _getTableauLobattoIIIC3(T = Float64)
+        a = BigFloat[[1/6 -1/3 1/6]
+                     [1/6 5/12 -1/12]
+                     [1/6 2/3 1/6]]
 
-        Tableau{T}(:LobattoIIIC3, 4, a, lobatto_legendre_weights(BigFloat, 3), lobatto_legendre_nodes(BigFloat, 3); R∞ = +1)
+        Tableau{T}(:LobattoIIIC3, 4, a, lobatto_legendre_weights(BigFloat, 3),
+            lobatto_legendre_nodes(BigFloat, 3); R∞ = +1)
     end
 
-    function _getTableauLobattoIIIC4(T=Float64)
-        a = BigFloat[
-                [ 1/12        -√5/12         √5/12   -1/12 ]
-                [ 1/12          1/4   (10-7*√5)/60   √5/60 ]
-                [ 1/12  (10+7*√5)/60          1/4   -√5/60 ]
-                [ 1/12          5/12          5/12    1/12 ]
-            ]
+    function _getTableauLobattoIIIC4(T = Float64)
+        a = BigFloat[[1/12 -√5/12 √5/12 -1/12]
+                     [1/12 1/4 (10-7*√5)/60 √5/60]
+                     [1/12 (10+7*√5)/60 1/4 -√5/60]
+                     [1/12 5/12 5/12 1/12]]
 
-        Tableau{T}(:LobattoIIIC4, 6, a, lobatto_legendre_weights(BigFloat, 4), lobatto_legendre_nodes(BigFloat, 4); R∞ = -1)
+        Tableau{T}(:LobattoIIIC4, 6, a, lobatto_legendre_weights(BigFloat, 4),
+            lobatto_legendre_nodes(BigFloat, 4); R∞ = -1)
     end
 
+    function _getTableauLobattoIIIC5(T = Float64)
+        a = BigFloat[[1/20 -21/180 2/15 -21/180 1/20]
+                     [1/20 29/180 (47-15*√21)/315 (203 - 30*√21)/1260 -3/140]
+                     [1/20 (329+105*√21)/2880 73/360 (329-105*√21)/2880 3/160]
+                     [1/20 (203 + 30*√21)/1260 (47+15*√21)/315 29/180 -3/140]
+                     [1/20 49/180 16/45 49/180 1/20]]
 
-    function _getTableauLobattoIIIC5(T=Float64)
-        a = BigFloat[
-                [ 1/20            -21/180             2/15             -21/180     1/20  ]
-                [ 1/20             29/180   (47-15*√21)/315  (203- 30*√21)/1260   -3/140 ]
-                [ 1/20  (329+105*√21)/2880           73/360  (329-105*√21)/2880    3/160 ]
-                [ 1/20  (203+ 30*√21)/1260  (47+15*√21)/315             29/180    -3/140 ]
-                [ 1/20             49/180            16/45              49/180     1/20  ]
-            ]
-
-        Tableau{T}(:LobattoIIIC5, 8, a, lobatto_legendre_weights(BigFloat, 5), lobatto_legendre_nodes(BigFloat, 5); R∞ = +1)
+        Tableau{T}(:LobattoIIIC5, 8, a, lobatto_legendre_weights(BigFloat, 5),
+            lobatto_legendre_nodes(BigFloat, 5); R∞ = +1)
     end
 
+    function _getTableauLobattoIIIC̄2(T = Float64)
+        a = BigFloat[[0 0]
+                     [1 0]]
 
-    function _getTableauLobattoIIIC̄2(T=Float64)
-        a = BigFloat[
-                [0  0]
-                [1  0]
-            ]
-
-        Tableau{T}(:LobattoIIIC̄2, 2, a, lobatto_legendre_weights(BigFloat, 2), lobatto_legendre_nodes(BigFloat, 2); R∞ = -1)
+        Tableau{T}(:LobattoIIIC̄2, 2, a, lobatto_legendre_weights(BigFloat, 2),
+            lobatto_legendre_nodes(BigFloat, 2); R∞ = -1)
     end
 
-    function _getTableauLobattoIIIC̄3(T=Float64)
-        a = BigFloat[
-                [0    0    0 ]
-                [1/4  1/4  0 ]
-                [0    1    0 ]
-            ]
+    function _getTableauLobattoIIIC̄3(T = Float64)
+        a = BigFloat[[0 0 0]
+                     [1/4 1/4 0]
+                     [0 1 0]]
 
-        Tableau{T}(:LobattoIIIC̄3, 4, a, lobatto_legendre_weights(BigFloat, 3), lobatto_legendre_nodes(BigFloat, 3); R∞ = +1)
+        Tableau{T}(:LobattoIIIC̄3, 4, a, lobatto_legendre_weights(BigFloat, 3),
+            lobatto_legendre_nodes(BigFloat, 3); R∞ = +1)
     end
 
-    function _getTableauLobattoIIIC̄4(T=Float64)
-        a = BigFloat[
-                [      0             0             0     0 ]
-                [ (5+√5)/60          1/6   (15-7*√5)/60  0 ]
-                [ (5-√5)/60  (15+7*√5)/60          1/6   0 ]
-                [      1/6      (5-√5)/12     (5+√5)/12  0 ]
-            ]
+    function _getTableauLobattoIIIC̄4(T = Float64)
+        a = BigFloat[[0 0 0 0]
+                     [(5+√5)/60 1/6 (15-7*√5)/60 0]
+                     [(5-√5)/60 (15+7*√5)/60 1/6 0]
+                     [1/6 (5-√5)/12 (5+√5)/12 0]]
 
-        Tableau{T}(:LobattoIIIC̄4, 6, a, lobatto_legendre_weights(BigFloat, 4), lobatto_legendre_nodes(BigFloat, 4); R∞ = -1)
+        Tableau{T}(:LobattoIIIC̄4, 6, a, lobatto_legendre_weights(BigFloat, 4),
+            lobatto_legendre_nodes(BigFloat, 4); R∞ = -1)
     end
 
+    function _getTableauLobattoIIIC̄5(T = Float64)
+        a = BigFloat[[0 0 0 0 0]
+                     [1/14 1/9 (13-3*√21)/63 (14 - 3*√21)/126 0]
+                     [1/32 (91+21*√21)/576 11/72 (91-21*√21)/576 0]
+                     [1/14 (14 + 3*√21)/126 (13+3*√21)/63 1/9 0]
+                     [0 7/18 2/9 7/18 0]]
 
-    function _getTableauLobattoIIIC̄5(T=Float64)
-        a = BigFloat[
-                [ 0     0                0              0                0 ]
-                [ 1/14            1/9    (13-3*√21)/63  (14- 3*√21)/126  0 ]
-                [ 1/32  (91+21*√21)/576          11/72  (91-21*√21)/576  0 ]
-                [ 1/14  (14+ 3*√21)/126  (13+3*√21)/63            1/9    0 ]
-                [ 0               7/18            2/9             7/18   0 ]
-            ]
-
-        Tableau{T}(:LobattoIIIC̄5, 8, a, lobatto_legendre_weights(BigFloat, 5), lobatto_legendre_nodes(BigFloat, 5); R∞ = +1)
+        Tableau{T}(:LobattoIIIC̄5, 8, a, lobatto_legendre_weights(BigFloat, 5),
+            lobatto_legendre_nodes(BigFloat, 5); R∞ = +1)
     end
 
-
-    function _getTableauLobattoIIID2(T=Float64)
+    function _getTableauLobattoIIID2(T = Float64)
         lobC = _getTableauLobattoIIIC2(BigFloat)
         lobC̄ = _getTableauLobattoIIIC̄2(BigFloat)
         Tableau{T}(:LobattoIIID2, lobC.o, (lobC̄.a + lobC.a)/2, lobC.b, lobC.c; R∞ = +1)
     end
 
-    function _getTableauLobattoIIID3(T=Float64)
+    function _getTableauLobattoIIID3(T = Float64)
         lobC = _getTableauLobattoIIIC3(BigFloat)
         lobC̄ = _getTableauLobattoIIIC̄3(BigFloat)
         Tableau{T}(:LobattoIIID3, lobC.o, (lobC̄.a + lobC.a)/2, lobC.b, lobC.c; R∞ = -1)
     end
 
-    function _getTableauLobattoIIID4(T=Float64)
+    function _getTableauLobattoIIID4(T = Float64)
         lobC = _getTableauLobattoIIIC4(BigFloat)
         lobC̄ = _getTableauLobattoIIIC̄4(BigFloat)
         Tableau{T}(:LobattoIIID4, lobC.o, (lobC̄.a + lobC.a)/2, lobC.b, lobC.c; R∞ = +1)
     end
 
-    function _getTableauLobattoIIID5(T=Float64)
+    function _getTableauLobattoIIID5(T = Float64)
         lobC = _getTableauLobattoIIIC5(BigFloat)
         lobC̄ = _getTableauLobattoIIIC̄5(BigFloat)
         Tableau{T}(:LobattoIIID5, lobC.o, (lobC̄.a + lobC.a)/2, lobC.b, lobC.c; R∞ = -1)
     end
 
-
-    function _getTableauLobattoIIIE2(T=Float64)
+    function _getTableauLobattoIIIE2(T = Float64)
         lobA = _getTableauLobattoIIIA2(BigFloat)
         lobB = _getTableauLobattoIIIB2(BigFloat)
         Tableau{T}(:LobattoIIIE2, lobA.o, (lobA.a + lobB.a)/2, lobA.b, lobA.c; R∞ = +1)
     end
 
-    function _getTableauLobattoIIIE3(T=Float64)
+    function _getTableauLobattoIIIE3(T = Float64)
         lobA = _getTableauLobattoIIIA3(BigFloat)
         lobB = _getTableauLobattoIIIB3(BigFloat)
         Tableau{T}(:LobattoIIIE3, lobA.o, (lobA.a + lobB.a)/2, lobA.b, lobA.c; R∞ = -1)
     end
 
-    function _getTableauLobattoIIIE4(T=Float64)
+    function _getTableauLobattoIIIE4(T = Float64)
         lobA = _getTableauLobattoIIIA4(BigFloat)
         lobB = _getTableauLobattoIIIB4(BigFloat)
         Tableau{T}(:LobattoIIIE4, lobA.o, (lobA.a + lobB.a)/2, lobA.b, lobA.c; R∞ = +1)
     end
 
-    function _getTableauLobattoIIIE5(T=Float64)
+    function _getTableauLobattoIIIE5(T = Float64)
         lobA = _getTableauLobattoIIIA5(BigFloat)
         lobB = _getTableauLobattoIIIB5(BigFloat)
         Tableau{T}(:LobattoIIIE5, lobA.o, (lobA.a + lobB.a)/2, lobA.b, lobA.c; R∞ = -1)
     end
 
+    function _getTableauLobattoIIIF2(T = Float64)
+        a = BigFloat[[1/12 -1/12]
+                     [7/12 5/12]]
 
-    function _getTableauLobattoIIIF2(T=Float64)
-        a = BigFloat[
-                [1/12  -1/12 ]
-                [7/12   5/12 ]
-            ]
-
-        Tableau{T}(:LobattoIIIF2, 4, a, lobatto_legendre_weights(BigFloat, 2), lobatto_legendre_nodes(BigFloat, 2); R∞ = +1)
+        Tableau{T}(:LobattoIIIF2, 4, a, lobatto_legendre_weights(BigFloat, 2),
+            lobatto_legendre_nodes(BigFloat, 2); R∞ = +1)
     end
 
-    function _getTableauLobattoIIIF3(T=Float64)
-        a = BigFloat[
-                [1/30   -1/15    1/30 ]
-                [5/24    1/3    -1/24 ]
-                [2/15   11/15    2/15 ]
-            ]
+    function _getTableauLobattoIIIF3(T = Float64)
+        a = BigFloat[[1/30 -1/15 1/30]
+                     [5/24 1/3 -1/24]
+                     [2/15 11/15 2/15]]
 
-        Tableau{T}(:LobattoIIIF3, 6, a, lobatto_legendre_weights(BigFloat, 3), lobatto_legendre_nodes(BigFloat, 3); R∞ = -1)
+        Tableau{T}(:LobattoIIIF3, 6, a, lobatto_legendre_weights(BigFloat, 3),
+            lobatto_legendre_nodes(BigFloat, 3); R∞ = -1)
     end
 
-    function _getTableauLobattoIIIF4(T=Float64)
-        a = BigFloat[
-                [  1/56                 -√5/56           √5/56   -1/56         ]
-                [ 37/420+√5/120  5/24-   √5/210  5/24-47*√5/420  -1/210+√5/120 ]
-                [ 37/420-√5/120  5/24+47*√5/420  5/24+   √5/210  -1/210-√5/120 ]
-                [ 17/168         5/12-   √5/56   5/12+   √5/56   11/168        ]
-            ]
+    function _getTableauLobattoIIIF4(T = Float64)
+        a = BigFloat[[1/56 -√5/56 √5/56 -1/56]
+                     [37/420+√5/120 5/24 - √5/210 5/24-47*√5/420 -1/210+√5/120]
+                     [37/420-√5/120 5/24+47*√5/420 5/24 + √5/210 -1/210-√5/120]
+                     [17/168 5/12 - √5/56 5/12 + √5/56 11/168]]
 
-        Tableau{T}(:LobattoIIIF4, 8, a, lobatto_legendre_weights(BigFloat, 4), lobatto_legendre_nodes(BigFloat, 4); R∞ = +1)
+        Tableau{T}(:LobattoIIIF4, 8, a, lobatto_legendre_weights(BigFloat, 4),
+            lobatto_legendre_nodes(BigFloat, 4); R∞ = +1)
     end
 
-
-    function _getTableauLobattoIIIG2(T=Float64)
-        SymplecticTableau(_getTableauLobattoIIIF2(BigFloat); name=:LobattoIIIG2, T=T)
+    function _getTableauLobattoIIIG2(T = Float64)
+        SymplecticTableau(_getTableauLobattoIIIF2(BigFloat); name = :LobattoIIIG2, T = T)
     end
 
-    function _getTableauLobattoIIIG3(T=Float64)
-        SymplecticTableau(_getTableauLobattoIIIF3(BigFloat); name=:LobattoIIIG3, T=T)
+    function _getTableauLobattoIIIG3(T = Float64)
+        SymplecticTableau(_getTableauLobattoIIIF3(BigFloat); name = :LobattoIIIG3, T = T)
     end
 
-    function _getTableauLobattoIIIG4(T=Float64)
-        SymplecticTableau(_getTableauLobattoIIIF4(BigFloat); name=:LobattoIIIG4, T=T)
+    function _getTableauLobattoIIIG4(T = Float64)
+        SymplecticTableau(_getTableauLobattoIIIF4(BigFloat); name = :LobattoIIIG4, T = T)
     end
-
 
     @test_throws ErrorException TableauLobattoIII(1)
     @test_throws ErrorException TableauLobattoIIIA(1)
@@ -333,7 +302,6 @@ using RungeKutta.Tableaus: lobatto_nullvector,
     @test_throws ErrorException TableauLobattoIIIF̄(1)
     @test_throws ErrorException TableauLobattoIIIG(1)
     @test_throws ErrorException TableauLobattoIIIḠ(1)
-
 
     @test TableauLobattoIII(2) ≈ _getTableauLobattoIIIC̄2()
     @test TableauLobattoIII(3) ≈ _getTableauLobattoIIIC̄3()
@@ -386,21 +354,20 @@ using RungeKutta.Tableaus: lobatto_nullvector,
     @test reference(TableauLobattoIIIE(2)) == reference(Val(:LobattoIIIE))
     @test reference(TableauLobattoIIIF(2)) == reference(Val(:LobattoIIIF))
 
-
     for s in 2:5
         @test TableauLobattoIIIA(s) ≈ TableauLobattoIIIB̄(s)
         @test TableauLobattoIIIB(s) ≈ TableauLobattoIIIĀ(s)
         @test TableauLobattoIIID(s) ≈ TableauLobattoIIID̄(s)
         @test TableauLobattoIIIE(s) ≈ TableauLobattoIIIĒ(s)
         @test TableauLobattoIIIG(s) ≈ TableauLobattoIIIḠ(s)
-    
+
         @test !issymplectic(TableauLobattoIII(s))
         @test !issymplectic(TableauLobattoIIIA(s))
         @test !issymplectic(TableauLobattoIIIB(s))
         @test !issymplectic(TableauLobattoIIIC(s))
         @test !issymplectic(TableauLobattoIIIC̄(s))
-        @test  issymplectic(TableauLobattoIIID(s))
-        @test  issymplectic(TableauLobattoIIIE(s))
+        @test issymplectic(TableauLobattoIIID(s))
+        @test issymplectic(TableauLobattoIIIE(s))
     end
 
     for T in (Float32, Float64, BigFloat, symtype())
@@ -408,62 +375,62 @@ using RungeKutta.Tableaus: lobatto_nullvector,
             @test_nowarn lobatto_legendre_nodes(T, s)
             @test_nowarn lobatto_legendre_weights(T, s)
 
-            @test_nowarn lobatto_a_coefficients(T,s)
-            @test_nowarn lobatto_b_coefficients(T,s)
-            @test_nowarn lobatto_c_coefficients(T,s)
-            @test_nowarn lobatto_c̄_coefficients(T,s)
-            @test_nowarn lobatto_d_coefficients(T,s)
-            @test_nowarn lobatto_e_coefficients(T,s)
-            @test_nowarn lobatto_f_coefficients(T,s)
-            @test_nowarn lobatto_g_coefficients(T,s)
+            @test_nowarn lobatto_a_coefficients(T, s)
+            @test_nowarn lobatto_b_coefficients(T, s)
+            @test_nowarn lobatto_c_coefficients(T, s)
+            @test_nowarn lobatto_c̄_coefficients(T, s)
+            @test_nowarn lobatto_d_coefficients(T, s)
+            @test_nowarn lobatto_e_coefficients(T, s)
+            @test_nowarn lobatto_f_coefficients(T, s)
+            @test_nowarn lobatto_g_coefficients(T, s)
 
-            @test_nowarn TableauLobattoIIIA(T,s)
-            @test_nowarn TableauLobattoIIIB(T,s)
-            @test_nowarn TableauLobattoIIIC(T,s)
-            @test_nowarn TableauLobattoIIID(T,s)
-            @test_nowarn TableauLobattoIIIE(T,s)
-            @test_nowarn TableauLobattoIIIF(T,s)
-            @test_nowarn TableauLobattoIIIG(T,s)
+            @test_nowarn TableauLobattoIIIA(T, s)
+            @test_nowarn TableauLobattoIIIB(T, s)
+            @test_nowarn TableauLobattoIIIC(T, s)
+            @test_nowarn TableauLobattoIIID(T, s)
+            @test_nowarn TableauLobattoIIIE(T, s)
+            @test_nowarn TableauLobattoIIIF(T, s)
+            @test_nowarn TableauLobattoIIIG(T, s)
         end
     end
 
     @test lobatto_legendre_nodes(Float32, 2) ≈ lobatto_legendre_nodes(Float64, 2)
     @test lobatto_legendre_weights(Float32, 2) ≈ lobatto_legendre_weights(Float64, 2)
-    @test lobatto_a_coefficients(Float32,2) ≈ lobatto_a_coefficients(Float64,2)
-    @test lobatto_b_coefficients(Float32,2) ≈ lobatto_b_coefficients(Float64,2)
-    @test lobatto_c_coefficients(Float32,2) ≈ lobatto_c_coefficients(Float64,2)
-    @test lobatto_c̄_coefficients(Float32,2) ≈ lobatto_c̄_coefficients(Float64,2)
-    @test lobatto_d_coefficients(Float32,2) ≈ lobatto_d_coefficients(Float64,2)
-    @test lobatto_e_coefficients(Float32,2) ≈ lobatto_e_coefficients(Float64,2)
-    @test lobatto_f_coefficients(Float32,2) ≈ lobatto_f_coefficients(Float64,2)
-    @test lobatto_g_coefficients(Float32,2) ≈ lobatto_g_coefficients(Float64,2)
+    @test lobatto_a_coefficients(Float32, 2) ≈ lobatto_a_coefficients(Float64, 2)
+    @test lobatto_b_coefficients(Float32, 2) ≈ lobatto_b_coefficients(Float64, 2)
+    @test lobatto_c_coefficients(Float32, 2) ≈ lobatto_c_coefficients(Float64, 2)
+    @test lobatto_c̄_coefficients(Float32, 2) ≈ lobatto_c̄_coefficients(Float64, 2)
+    @test lobatto_d_coefficients(Float32, 2) ≈ lobatto_d_coefficients(Float64, 2)
+    @test lobatto_e_coefficients(Float32, 2) ≈ lobatto_e_coefficients(Float64, 2)
+    @test lobatto_f_coefficients(Float32, 2) ≈ lobatto_f_coefficients(Float64, 2)
+    @test lobatto_g_coefficients(Float32, 2) ≈ lobatto_g_coefficients(Float64, 2)
 
     @test lobatto_legendre_nodes(symtype(), 2) ≈ lobatto_legendre_nodes(Float64, 2)
     @test lobatto_legendre_weights(symtype(), 2) ≈ lobatto_legendre_weights(Float64, 2)
-    @test lobatto_a_coefficients(symtype(),2) ≈ lobatto_a_coefficients(Float64,2)
-    @test lobatto_b_coefficients(symtype(),2) ≈ lobatto_b_coefficients(Float64,2)
-    @test lobatto_c_coefficients(symtype(),2) ≈ lobatto_c_coefficients(Float64,2)
-    @test lobatto_c̄_coefficients(symtype(),2) ≈ lobatto_c̄_coefficients(Float64,2)
-    @test lobatto_d_coefficients(symtype(),2) ≈ lobatto_d_coefficients(Float64,2)
-    @test lobatto_e_coefficients(symtype(),2) ≈ lobatto_e_coefficients(Float64,2)
-    @test lobatto_f_coefficients(symtype(),2) ≈ lobatto_f_coefficients(Float64,2)
-    @test lobatto_g_coefficients(symtype(),2) ≈ lobatto_g_coefficients(Float64,2)
+    @test lobatto_a_coefficients(symtype(), 2) ≈ lobatto_a_coefficients(Float64, 2)
+    @test lobatto_b_coefficients(symtype(), 2) ≈ lobatto_b_coefficients(Float64, 2)
+    @test lobatto_c_coefficients(symtype(), 2) ≈ lobatto_c_coefficients(Float64, 2)
+    @test lobatto_c̄_coefficients(symtype(), 2) ≈ lobatto_c̄_coefficients(Float64, 2)
+    @test lobatto_d_coefficients(symtype(), 2) ≈ lobatto_d_coefficients(Float64, 2)
+    @test lobatto_e_coefficients(symtype(), 2) ≈ lobatto_e_coefficients(Float64, 2)
+    @test lobatto_f_coefficients(symtype(), 2) ≈ lobatto_f_coefficients(Float64, 2)
+    @test lobatto_g_coefficients(symtype(), 2) ≈ lobatto_g_coefficients(Float64, 2)
 
-    @test TableauLobattoIIIA(Float32,2) ≈ TableauLobattoIIIA(Float64,2)
-    @test TableauLobattoIIIB(Float32,2) ≈ TableauLobattoIIIB(Float64,2)
-    @test TableauLobattoIIIC(Float32,2) ≈ TableauLobattoIIIC(Float64,2)
-    @test TableauLobattoIIID(Float32,2) ≈ TableauLobattoIIID(Float64,2)
-    @test TableauLobattoIIIE(Float32,2) ≈ TableauLobattoIIIE(Float64,2)
-    @test TableauLobattoIIIF(Float32,2) ≈ TableauLobattoIIIF(Float64,2)
-    @test TableauLobattoIIIG(Float32,2) ≈ TableauLobattoIIIG(Float64,2)
-    
-    @test TableauLobattoIIIA(symtype(),2) ≈ TableauLobattoIIIA(Float64,2)
-    @test TableauLobattoIIIB(symtype(),2) ≈ TableauLobattoIIIB(Float64,2)
-    @test TableauLobattoIIIC(symtype(),2) ≈ TableauLobattoIIIC(Float64,2)
-    @test TableauLobattoIIID(symtype(),2) ≈ TableauLobattoIIID(Float64,2)
-    @test TableauLobattoIIIE(symtype(),2) ≈ TableauLobattoIIIE(Float64,2)
-    @test TableauLobattoIIIF(symtype(),2) ≈ TableauLobattoIIIF(Float64,2)
-    @test TableauLobattoIIIG(symtype(),2) ≈ TableauLobattoIIIG(Float64,2)
+    @test TableauLobattoIIIA(Float32, 2) ≈ TableauLobattoIIIA(Float64, 2)
+    @test TableauLobattoIIIB(Float32, 2) ≈ TableauLobattoIIIB(Float64, 2)
+    @test TableauLobattoIIIC(Float32, 2) ≈ TableauLobattoIIIC(Float64, 2)
+    @test TableauLobattoIIID(Float32, 2) ≈ TableauLobattoIIID(Float64, 2)
+    @test TableauLobattoIIIE(Float32, 2) ≈ TableauLobattoIIIE(Float64, 2)
+    @test TableauLobattoIIIF(Float32, 2) ≈ TableauLobattoIIIF(Float64, 2)
+    @test TableauLobattoIIIG(Float32, 2) ≈ TableauLobattoIIIG(Float64, 2)
+
+    @test TableauLobattoIIIA(symtype(), 2) ≈ TableauLobattoIIIA(Float64, 2)
+    @test TableauLobattoIIIB(symtype(), 2) ≈ TableauLobattoIIIB(Float64, 2)
+    @test TableauLobattoIIIC(symtype(), 2) ≈ TableauLobattoIIIC(Float64, 2)
+    @test TableauLobattoIIID(symtype(), 2) ≈ TableauLobattoIIID(Float64, 2)
+    @test TableauLobattoIIIE(symtype(), 2) ≈ TableauLobattoIIIE(Float64, 2)
+    @test TableauLobattoIIIF(symtype(), 2) ≈ TableauLobattoIIIF(Float64, 2)
+    @test TableauLobattoIIIG(symtype(), 2) ≈ TableauLobattoIIIG(Float64, 2)
 
     # The s-stage Lobatto quadrature integrates polynomials up to degree 2s-3
     # exactly. This checks the arbitrary precision nodes and weights directly,
@@ -476,9 +443,8 @@ using RungeKutta.Tableaus: lobatto_nullvector,
         @test issorted(c)
         @test c[begin] == 0 && c[end] == 1
 
-        for k in 0:2s-3
-            @test sum(b .* c.^k) ≈ 1 / BigFloat(k+1) atol=1E-60
+        for k in 0:(2s - 3)
+            @test sum(b .* c .^ k) ≈ 1 / BigFloat(k+1) atol=1E-60
         end
     end
-
 end

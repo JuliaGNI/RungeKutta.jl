@@ -1,118 +1,115 @@
 module Tableaus
 
-    import GeometricBase
-    import GeometricBase: description, reference
+import GeometricBase
+import GeometricBase: description, reference
 
-    using QuadratureRules: gauss_legendre_nodes, gauss_legendre_weights,
-                           lobatto_legendre_nodes, lobatto_legendre_weights,
-                           radau_legendre_nodes, radau_legendre_weights
+using QuadratureRules: gauss_legendre_nodes, gauss_legendre_weights,
+                       lobatto_legendre_nodes, lobatto_legendre_weights,
+                       radau_legendre_nodes, radau_legendre_weights
 
-    using ..RungeKutta
-    using ..RungeKutta: big, @big
-    using ..RungeKutta: _nullvector
+using ..RungeKutta
+using ..RungeKutta: big, @big
+using ..RungeKutta: _nullvector
 
+export description, reference
 
-    export description, reference
-    
+include("tableaus/dirk.jl")
 
-    include("tableaus/dirk.jl")
+export TableauCrankNicolson,
+       TableauCrouzeix,
+       TableauKraaijevangerSpijker,
+       TableauQinZhang
 
-    export TableauCrankNicolson,
-           TableauCrouzeix,
-           TableauKraaijevangerSpijker,
-           TableauQinZhang
+include("tableaus/erk.jl")
 
-    include("tableaus/erk.jl")
+export TableauExplicitEuler, TableauForwardEuler,
+       TableauExplicitMidpoint,
+       TableauHeun2, TableauRK21,
+       TableauHeun3,
+       TableauRalston2,
+       TableauRalston3,
+       TableauRunge, TableauRunge2, TableauRK22,
+       TableauKutta, TableauKutta3, TableauRK32,
+       TableauRK31,
+       TableauRK416, TableauRK41, TableauRK4,
+       TableauRK42,
+       TableauRK438,
+       TableauRK5,
+       TableauSSPRK2,
+       TableauSSPRK3
 
-    export TableauExplicitEuler, TableauForwardEuler,
-           TableauExplicitMidpoint, 
-           TableauHeun2, TableauRK21,
-           TableauHeun3,
-           TableauRalston2,
-           TableauRalston3,
-           TableauRunge, TableauRunge2, TableauRK22,
-           TableauKutta, TableauKutta3, TableauRK32,
-           TableauRK31,
-           TableauRK416, TableauRK41, TableauRK4,
-           TableauRK42,
-           TableauRK438,
-           TableauRK5,
-           TableauSSPRK2,
-           TableauSSPRK3
+include("tableaus/firk.jl")
 
-    include("tableaus/firk.jl")
+export TableauImplicitEuler, TableauBackwardEuler,
+       TableauImplicitMidpoint,
+       TableauIRK3,
+       TableauSRK3
 
-    export TableauImplicitEuler, TableauBackwardEuler,
-           TableauImplicitMidpoint,
-           TableauIRK3,
-           TableauSRK3
+include("tableaus/gauss.jl")
 
-    include("tableaus/gauss.jl")
-    
-    export TableauGauss
+export TableauGauss
 
-    include("tableaus/lobatto.jl")
+include("tableaus/lobatto.jl")
 
-    export TableauLobattoIII,
-           TableauLobattoIIIA,
-           TableauLobattoIIIĀ,
-           TableauLobattoIIIB,
-           TableauLobattoIIIB̄,
-           TableauLobattoIIIC,
-           TableauLobattoIIIC̄,
-           TableauLobattoIIID,
-           TableauLobattoIIID̄,
-           TableauLobattoIIIE,
-           TableauLobattoIIIĒ,
-           TableauLobattoIIIF,
-           TableauLobattoIIIF̄,
-           TableauLobattoIIIG,
-           TableauLobattoIIIḠ
+export TableauLobattoIII,
+       TableauLobattoIIIA,
+       TableauLobattoIIIĀ,
+       TableauLobattoIIIB,
+       TableauLobattoIIIB̄,
+       TableauLobattoIIIC,
+       TableauLobattoIIIC̄,
+       TableauLobattoIIID,
+       TableauLobattoIIID̄,
+       TableauLobattoIIIE,
+       TableauLobattoIIIĒ,
+       TableauLobattoIIIF,
+       TableauLobattoIIIF̄,
+       TableauLobattoIIIG,
+       TableauLobattoIIIḠ
 
-    include("tableaus/radau.jl")
+include("tableaus/radau.jl")
 
-    export TableauRadauIA, TableauRadauIIA,
-           TableauRadauIB, TableauRadauIIB
+export TableauRadauIA, TableauRadauIIA,
+       TableauRadauIB, TableauRadauIIB
 
+TableauList = (
+    # explicit
+    forward_euler = TableauForwardEuler,
+    explicit_euler = TableauExplicitEuler,
+    explicit_midpoint = TableauExplicitMidpoint,
+    heun2 = TableauHeun2,
+    heun3 = TableauHeun3,
+    ralston2 = TableauRalston2,
+    ralston3 = TableauRalston3,
+    runge = TableauRunge,
+    runge2 = TableauRunge2,
+    kutta = TableauKutta,
+    kutta3 = TableauKutta3,
+    rk21 = TableauRK21,
+    rk22 = TableauRK22,
+    rk31 = TableauRK31,
+    rk32 = TableauRK32,
+    rk4 = TableauRK4,
+    rk41 = TableauRK41,
+    rk416 = TableauRK416,
+    rk42 = TableauRK42,
+    rk438 = TableauRK438,
+    rk5 = TableauRK5,
+    ssprk2 = TableauSSPRK2,
+    ssprk3 = TableauSSPRK3,
+    # dirk
+    crank_nicolson = TableauCrankNicolson,
+    crouzeix = TableauCrouzeix,
+    kraaijevanger_spijker = TableauKraaijevangerSpijker,
+    qin_zhang = TableauQinZhang,
+    # firk
+    backward_euler = TableauBackwardEuler,
+    implicit_euler = TableauImplicitEuler,
+    implicit_midpoint = TableauImplicitMidpoint,
+    irk3 = TableauIRK3,
+    srk3 = TableauSRK3
+)
 
-    TableauList = (
-       # explicit
-       forward_euler         = TableauForwardEuler,
-       explicit_euler        = TableauExplicitEuler,
-       explicit_midpoint     = TableauExplicitMidpoint, 
-       heun2                 = TableauHeun2,
-       heun3                 = TableauHeun3,
-       ralston2              = TableauRalston2,
-       ralston3              = TableauRalston3,
-       runge                 = TableauRunge,
-       runge2                = TableauRunge2,
-       kutta                 = TableauKutta,
-       kutta3                = TableauKutta3,
-       rk21                  = TableauRK21,
-       rk22                  = TableauRK22,
-       rk31                  = TableauRK31,
-       rk32                  = TableauRK32,
-       rk4                   = TableauRK4,
-       rk41                  = TableauRK41,
-       rk416                 = TableauRK416,
-       rk42                  = TableauRK42,
-       rk438                 = TableauRK438,
-       rk5                   = TableauRK5,
-       ssprk2                = TableauSSPRK2,
-       ssprk3                = TableauSSPRK3,
-       # dirk
-       crank_nicolson        = TableauCrankNicolson,
-       crouzeix              = TableauCrouzeix,
-       kraaijevanger_spijker = TableauKraaijevangerSpijker,
-       qin_zhang             = TableauQinZhang,
-       # firk
-       backward_euler        = TableauBackwardEuler,
-       implicit_euler        = TableauImplicitEuler,
-       implicit_midpoint     = TableauImplicitMidpoint,
-       irk3                  = TableauIRK3,
-       srk3                  = TableauSRK3,
-    )
-
-    export TableauList
+export TableauList
 
 end

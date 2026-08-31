@@ -27,13 +27,13 @@ function _nullvector(A::AbstractMatrix{T}) where {T}
     F = LinearAlgebra.qr(A, LinearAlgebra.ColumnNorm())
     R = F.R
 
-    tol = n * sqrt(eps(real(float(T)))) * abs(R[1,1])
+    tol = n * sqrt(eps(real(float(T)))) * abs(R[1, 1])
 
-    if iszero(R[1,1]) || abs(R[n,n]) > tol || abs(R[n-1,n-1]) ≤ tol
+    if iszero(R[1, 1]) || abs(R[n, n]) > tol || abs(R[n - 1, n - 1]) ≤ tol
         throw(ArgumentError("Matrix is not of rank n-1, so its nullspace is not one-dimensional."))
     end
 
-    y = LinearAlgebra.UpperTriangular(R[1:n-1, 1:n-1]) \ (-R[1:n-1, n])
+    y = LinearAlgebra.UpperTriangular(R[1:(n - 1), 1:(n - 1)]) \ (-R[1:(n - 1), n])
 
     w = Vector{T}(undef, n)
     w[F.p] = vcat(y, one(T))
@@ -42,16 +42,16 @@ function _nullvector(A::AbstractMatrix{T}) where {T}
     return w .* sign(w[findfirst(!iszero, w)])
 end
 
-
 function istriustrict(A::AbstractMatrix)
     m, n = size(A)
     if m == n == 1
-        if A[1,1] ≠ 0
+        if A[1, 1] ≠ 0
             return false
         end
     else
-        @inbounds for j in 1:min(n,m-1), i in j:m
-            if A[i,j] ≠ 0
+        @inbounds for j in 1:min(n, m - 1), i in j:m
+
+            if A[i, j] ≠ 0
                 return false
             end
         end
@@ -62,12 +62,13 @@ end
 function istrilstrict(A::AbstractMatrix)
     m, n = size(A)
     if m == n == 1
-        if A[1,1] ≠ 0
+        if A[1, 1] ≠ 0
             return false
         end
     else
-        @inbounds for j in 2:n, i in 1:min(j,m)
-            if A[i,j] ≠ 0
+        @inbounds for j in 2:n, i in 1:min(j, m)
+
+            if A[i, j] ≠ 0
                 return false
             end
         end

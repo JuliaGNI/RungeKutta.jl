@@ -6,78 +6,77 @@ using Weave
 bib = CitationBibliography(joinpath(@__DIR__, "RungeKutta.bib"))
 
 module RungeKuttaWeaves
-    using Markdown
-    using Markdown: MD, Paragraph, LineBreak
-    using PrettyTables
-    using RungeKutta
-    using QuadratureRules: gauss_legendre_nodes, gauss_legendre_weights,
-                           lobatto_legendre_nodes, lobatto_legendre_weights,
-                           radau_legendre_nodes, radau_legendre_weights
-    using RungeKutta.Tableaus: gauss_coefficients
-    using RungeKutta.Tableaus: lobatto_a_coefficients, lobatto_b_coefficients,
-                               lobatto_c_coefficients, lobatto_c̄_coefficients,
-                               lobatto_d_coefficients, lobatto_e_coefficients,
-                               lobatto_f_coefficients, lobatto_g_coefficients
-    using RungeKutta.Tableaus: radau_1_coefficients, radau_2_coefficients
+using Markdown
+using Markdown: MD, Paragraph, LineBreak
+using PrettyTables
+using RungeKutta
+using QuadratureRules: gauss_legendre_nodes, gauss_legendre_weights,
+                       lobatto_legendre_nodes, lobatto_legendre_weights,
+                       radau_legendre_nodes, radau_legendre_weights
+using RungeKutta.Tableaus: gauss_coefficients
+using RungeKutta.Tableaus: lobatto_a_coefficients, lobatto_b_coefficients,
+                           lobatto_c_coefficients, lobatto_c̄_coefficients,
+                           lobatto_d_coefficients, lobatto_e_coefficients,
+                           lobatto_f_coefficients, lobatto_g_coefficients
+using RungeKutta.Tableaus: radau_1_coefficients, radau_2_coefficients
 
-    import SymPyPythonCall
-    import SymPyPythonCall: latex, simplify
+import SymPyPythonCall
+import SymPyPythonCall: latex, simplify
 
-    """
-        symtype()
+"""
+    symtype()
 
-    Return `Sym{T}` for `T` being the underlying type of `Sym(1)`.
-    """
-    symtype() = typeof(SymPyPythonCall.Sym(1))
+Return `Sym{T}` for `T` being the underlying type of `Sym(1)`.
+"""
+symtype() = typeof(SymPyPythonCall.Sym(1))
 
+"Markdown-print Runge-Kutta tableau with SymPy coefficients."
+function Base.show(io::IO, ::MIME"text/markdown", tab::Tableau{symtype()})
+    show(io,
+        "text/markdown",
+        Markdown.parse("Runge-Kutta Tableau $(tab.name) with $(tab.s) stages and order $(tab.o):"))
 
-    "Markdown-print Runge-Kutta tableau with SymPy coefficients."
-    function Base.show(io::IO, ::MIME"text/markdown", tab::Tableau{symtype()})
-        show(io, "text/markdown", Markdown.parse("Runge-Kutta Tableau $(tab.name) with $(tab.s) stages and order $(tab.o):"))
+    tab_arr = simplify.(convert(Matrix, tab))
+    str_arr = latex.(tab_arr)
+    str_arr[tab.s + 1, 1] = ""
 
-        tab_arr = simplify.(convert(Matrix, tab))
-        str_arr = latex.(tab_arr)
-        str_arr[tab.s+1,1] = ""
+    strio = IOBuffer()
+    pretty_table(strio, LatexCell.(str_arr),
+        backend = :latex,
+        table_format = RungeKutta.butcher_latex_tableau_format(tab),
+        show_column_labels = false,
+        show_row_number_column = false
+    )
+    tab_latex = String(take!(strio))
 
-        strio = IOBuffer()
-        pretty_table(strio, LatexCell.(str_arr),
-            backend=:latex,
-            table_format=RungeKutta.butcher_latex_tableau_format(tab),
-            show_column_labels=false,
-            show_row_number_column=false,
-        )
-        tab_latex = String(take!(strio))
+    tab_markdown = replace(tab_latex, "tabular" => "array")
+    # tab_markdown = replace(tab_markdown, "\\begin{table}" => "```math")
+    # tab_markdown = replace(tab_markdown, "\\end{table}" => "```")
+    tab_markdown = "```math\n" * tab_markdown * "```\n"
 
-        tab_markdown = replace(tab_latex, "tabular" => "array")
-        # tab_markdown = replace(tab_markdown, "\\begin{table}" => "```math")
-        # tab_markdown = replace(tab_markdown, "\\end{table}" => "```")
-        tab_markdown = "```math\n" * tab_markdown * "```\n"
-
-        print(io, tab_markdown * "\n")
-    end
+    print(io, tab_markdown * "\n")
+end
 end
 
-
 weave("src/gauss.jmd",
-         out_path = "src",
-         doctype = "github",
-         mod = RungeKuttaWeaves)
+    out_path = "src",
+    doctype = "github",
+    mod = RungeKuttaWeaves)
 
 weave("src/radau1.jmd",
-         out_path = "src",
-         doctype = "github",
-         mod = RungeKuttaWeaves)
+    out_path = "src",
+    doctype = "github",
+    mod = RungeKuttaWeaves)
 
 weave("src/radau2.jmd",
-         out_path = "src",
-         doctype = "github",
-         mod = RungeKuttaWeaves)
+    out_path = "src",
+    doctype = "github",
+    mod = RungeKuttaWeaves)
 
 weave("src/lobatto.jmd",
-         out_path = "src",
-         doctype = "github",
-         mod = RungeKuttaWeaves)
-
+    out_path = "src",
+    doctype = "github",
+    mod = RungeKuttaWeaves)
 
 makedocs(
     sitename = "RungeKutta.jl",
@@ -98,12 +97,12 @@ makedocs(
         "Radau II Methods" => "radau2.md",
         "Lobatto III Methods" => "lobatto.md",
         "Library" => "library.md",
-        "Bibliography" => "bibliography.md",
-    ],
+        "Bibliography" => "bibliography.md"
+    ]
 )
 
 deploydocs(
     repo = "github.com/JuliaGNI/RungeKutta.jl",
     devurl = "latest",
-    devbranch = "main",
+    devbranch = "main"
 )

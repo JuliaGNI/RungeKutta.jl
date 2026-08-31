@@ -15,8 +15,9 @@ symtype() = typeof(SymPyPythonCall.Sym(1))
 # expressions (e.g. `1/2 - sqrt(3)/6`); the `N` path evaluates them. This is
 # needed for the `symtype() ≈ Float64` comparisons below, whose `isapprox`
 # goes through `convert(Float64, ::Sym)` inside `LinearAlgebra.norm`.
-Base.convert(::Type{T}, x::SymPyPythonCall.Sym) where {T<:AbstractFloat} = T(SymPyPythonCall.N(x))
-
+function Base.convert(::Type{T}, x::SymPyPythonCall.Sym) where {T <: AbstractFloat}
+    T(SymPyPythonCall.N(x))
+end
 
 include("test_utils.jl")
 include("test_tableau.jl")
