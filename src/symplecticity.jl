@@ -17,7 +17,7 @@ function check_symplecticity(tab::PartitionedTableau{T}; atol=16eps(T), rtol=16e
 end
 
 function issymplectic(tab::PartitionedTableau; kwargs...)
-    all(all.(check_symplecticity(tab; kwargs...)))
+    all(all, check_symplecticity(tab; kwargs...))
 end
 
 
