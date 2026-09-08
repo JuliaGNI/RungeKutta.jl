@@ -4,26 +4,37 @@ All notable changes to RungeKutta.jl are documented here. Versions follow
 [semantic versioning](https://semver.org) as it applies to Julia's `0.x` series, where a
 change to the minor version may break compatibility.
 
-## Unreleased
+## [Unreleased] — targeting 0.6.2
 
 ### Changed
 
-- Every tracked source file is now Unicode NFC-normalised. Eleven files stored `ā` (34 times), `Ḡ`
-  (28), `Ē` (28), `Ā` (27), `â` (9), `ĉ` (9), `Ã` (6), `Â` (5), `é` (4) and `ã` (3) as a base letter
-  plus a combining mark, inherited from macOS rather than chosen.
+- Every tracked file is now Unicode NFC-normalised. Thirteen stored `ā` (38 times), `Ḡ` (28), `Ē`
+  (28), `Ā` (27), `â` (9), `ĉ` (9), `Ã` (6), `Â` (5), `é` (4) and `ã` (3) as a base letter plus a
+  combining mark, inherited from macOS rather than chosen. Eleven are `.jl`; the other two are the
+  Weave documents `docs/src/radau1.jmd` and `docs/src/radau2.jmd`, which `docs/make.jl` executes.
 
   Nothing about the compiled code changes: Julia's parser normalises identifiers to NFC, so the
   symbols were already precomposed and dispatch is untouched. What changes is that the source now
   matches what a keyboard, an editor search or a `grep` pattern produces — in an NFD file a pattern
   typed in NFC matches nothing at all, silently.
 
-  **One thing does change at runtime.** String literals are *not* parser-normalised, so
+  **Two kinds of string literal change at runtime**, since string literals are *not*
+  parser-normalised.
+
   `Symbol("LobattoIIIAIIIĀ", s)`, `Symbol("LobattoIIIEIIIĒ", s)` and `Symbol("LobattoIIIGIIIḠ", s)`
   in `src/tableaus/prk.jl` now produce precomposed symbols where they produced decomposed ones.
-  These are the `name` field of the returned `PartitionedTableau`, used for display; nothing in this
-  package or downstream compares them against a symbol written in source, so no result changes. Code
-  that did compare, having had to spell the name decomposed to match, would need the ordinary
-  spelling now.
+  These become the `name` field of the returned `PartitionedTableau` — shown, and also compared in
+  `Base.isequal` (`src/tableau_partitioned.jl:94`), though not in `==` or `hash`. Both operands
+  there are constructed at run time, so both are NFC and the comparison is unaffected. Nothing in
+  this package or downstream compares such a name against a symbol written in source, so no result
+  changes. Code that did compare, having had to spell the name decomposed to match, would need the
+  ordinary spelling now.
+
+  The `reference(::Val{…})` bodies in `src/tableaus/lobatto.jl` and `src/tableaus/radau.jl` also
+  change: `Padé` is now precomposed. `reference` is exported, so a caller sees the new bytes. The
+  tests compare `reference` against `reference` rather than against a literal
+  (`test/test_lobatto.jl:350`, `test/test_radau.jl:108–111`), and `Padé` appears nowhere else in
+  the tree.
 
   Note that the file looked mixed before — `Symbol("LobattoIIIBIIIB̄", s)` and its `C̄`, `D̄` and `F̄`
   siblings were already NFC — but that was not an inconsistency: a macron over `B`, `C`, `D` or `F`

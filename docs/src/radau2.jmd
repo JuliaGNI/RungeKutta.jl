@@ -15,7 +15,7 @@ for s in 2:3
     a = radau_2_coefficients(symtype(),s)
     b = radau_legendre_weights(symtype(), s, Val(:right))
     c = radau_legendre_nodes(symtype(), s, Val(:right))
-    ā = symplectic_conjugate_coefficients(a,b)
-    show(stdout, "text/markdown", Tableau(Symbol("RadauIIB($s)"), 2s-1, ā, b, c))
+    ā = symplectic_conjugate_coefficients(a,b)
+    show(stdout, "text/markdown", Tableau(Symbol("RadauIIB($s)"), 2s-1, ā, b, c))
 end
 ```
