@@ -13,15 +13,15 @@ include("tableaus/prk.jl")
 
 export TableauLobattoIIIAIIIB,
        TableauLobattoIIIBIIIA,
-       TableauLobattoIIIAIIIĀ,
+       TableauLobattoIIIAIIIĀ,
        TableauLobattoIIIBIIIB̄,
        TableauLobattoIIICIIIC̄,
        TableauLobattoIIIC̄IIIC,
        TableauLobattoIIIDIIID̄,
-       TableauLobattoIIIEIIIĒ,
+       TableauLobattoIIIEIIIĒ,
        TableauLobattoIIIFIIIF̄,
        TableauLobattoIIIF̄IIIF,
-       TableauLobattoIIIGIIIḠ,
+       TableauLobattoIIIGIIIḠ,
        PartitionedTableauGauss
 
 PartitionedTableauList = (

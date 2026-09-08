@@ -289,7 +289,7 @@ using RungeKutta.Tableaus: lobatto_nullvector,
 
     @test_throws ErrorException TableauLobattoIII(1)
     @test_throws ErrorException TableauLobattoIIIA(1)
-    @test_throws ErrorException TableauLobattoIIIĀ(1)
+    @test_throws ErrorException TableauLobattoIIIĀ(1)
     @test_throws ErrorException TableauLobattoIIIB(1)
     @test_throws ErrorException TableauLobattoIIIB̄(1)
     @test_throws ErrorException TableauLobattoIIIC(1)
@@ -297,11 +297,11 @@ using RungeKutta.Tableaus: lobatto_nullvector,
     @test_throws ErrorException TableauLobattoIIID(1)
     @test_throws ErrorException TableauLobattoIIID̄(1)
     @test_throws ErrorException TableauLobattoIIIE(1)
-    @test_throws ErrorException TableauLobattoIIIĒ(1)
+    @test_throws ErrorException TableauLobattoIIIĒ(1)
     @test_throws ErrorException TableauLobattoIIIF(1)
     @test_throws ErrorException TableauLobattoIIIF̄(1)
     @test_throws ErrorException TableauLobattoIIIG(1)
-    @test_throws ErrorException TableauLobattoIIIḠ(1)
+    @test_throws ErrorException TableauLobattoIIIḠ(1)
 
     @test TableauLobattoIII(2) ≈ _getTableauLobattoIIIC̄2()
     @test TableauLobattoIII(3) ≈ _getTableauLobattoIIIC̄3()
@@ -356,10 +356,10 @@ using RungeKutta.Tableaus: lobatto_nullvector,
 
     for s in 2:5
         @test TableauLobattoIIIA(s) ≈ TableauLobattoIIIB̄(s)
-        @test TableauLobattoIIIB(s) ≈ TableauLobattoIIIĀ(s)
+        @test TableauLobattoIIIB(s) ≈ TableauLobattoIIIĀ(s)
         @test TableauLobattoIIID(s) ≈ TableauLobattoIIID̄(s)
-        @test TableauLobattoIIIE(s) ≈ TableauLobattoIIIĒ(s)
-        @test TableauLobattoIIIG(s) ≈ TableauLobattoIIIḠ(s)
+        @test TableauLobattoIIIE(s) ≈ TableauLobattoIIIĒ(s)
+        @test TableauLobattoIIIG(s) ≈ TableauLobattoIIIḠ(s)
 
         @test !issymplectic(TableauLobattoIII(s))
         @test !issymplectic(TableauLobattoIIIA(s))
