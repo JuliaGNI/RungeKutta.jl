@@ -69,9 +69,9 @@ import QuadratureRules
             @test tab1.b == tab2.b == tab3.b == tab4.b == b
             @test tab1.c == tab2.c == tab3.c == tab4.c == c
 
-            @test tab1.â == tab2.â == tab3.â == tab4.â == zero(a)
+            @test tab1.â == tab2.â == tab3.â == tab4.â == zero(a)
             @test tab1.b̂ == tab2.b̂ == tab3.b̂ == tab4.b̂ == zero(b)
-            @test tab1.ĉ == tab2.ĉ == tab3.ĉ == tab4.ĉ == zero(c)
+            @test tab1.ĉ == tab2.ĉ == tab3.ĉ == tab4.ĉ == zero(c)
 
             @test tab1 == Tableau(tab1.name, tab1.o, to_array(tab1))
             @test tab1 == Tableau(tab1.name, tab1.o, convert(Matrix, tab1))
@@ -97,9 +97,9 @@ import QuadratureRules
         tab1 = Tableau{T1}(:Test, 2s, s, a, b, c)
         tab2 = Tableau{T2}(:Test, 2s, s, a, b, c)
 
-        @test tab2.â == T2.(tab1.a .- tab2.a)
+        @test tab2.â == T2.(tab1.a .- tab2.a)
         @test tab2.b̂ == T2.(tab1.b .- tab2.b)
-        @test tab2.ĉ == T2.(tab1.c .- tab2.c)
+        @test tab2.ĉ == T2.(tab1.c .- tab2.c)
 
         tmp = mktempdir()
         to_file(tmp, tab2)

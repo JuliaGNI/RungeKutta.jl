@@ -53,7 +53,7 @@ include("tableaus/lobatto.jl")
 
 export TableauLobattoIII,
        TableauLobattoIIIA,
-       TableauLobattoIIIĀ,
+       TableauLobattoIIIĀ,
        TableauLobattoIIIB,
        TableauLobattoIIIB̄,
        TableauLobattoIIIC,
@@ -61,11 +61,11 @@ export TableauLobattoIII,
        TableauLobattoIIID,
        TableauLobattoIIID̄,
        TableauLobattoIIIE,
-       TableauLobattoIIIĒ,
+       TableauLobattoIIIĒ,
        TableauLobattoIIIF,
        TableauLobattoIIIF̄,
        TableauLobattoIIIG,
-       TableauLobattoIIIḠ
+       TableauLobattoIIIḠ
 
 include("tableaus/radau.jl")
 

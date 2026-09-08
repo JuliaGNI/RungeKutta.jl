@@ -53,15 +53,15 @@ struct Tableau{T, S, RT <: Union{Real, Missing}, L} <: AbstractTableau{T}
         @assert s > 0 "Number of stages must be > 0"
         @assert s == size(a, 1) == size(a, 2) == length(b) == length(c)
 
-        ã = SMatrix{s, s}(convert(Matrix{T}, a))
+        ã = SMatrix{s, s}(convert(Matrix{T}, a))
         b̃ = SVector{s}(convert(Vector{T}, b))
         c̃ = SVector{s}(convert(Vector{T}, c))
 
-        â = SMatrix{s, s}(a .- ã)
+        â = SMatrix{s, s}(a .- ã)
         b̂ = SVector{s}(b .- b̃)
         ĉ = SVector{s}(c .- c̃)
 
-        new{T, s, typeof(R∞), s * s}(name, o, s, ã, b̃, c̃, â, b̂, ĉ, R∞)
+        new{T, s, typeof(R∞), s * s}(name, o, s, ã, b̃, c̃, â, b̂, ĉ, R∞)
     end
 
     function Tableau{T}(name, o, a, b, c; kwargs...) where {T}
@@ -93,7 +93,7 @@ end
 function Base.hash(tab::Tableau, h::UInt)
     hash(tab.o,
         hash(tab.s,
-            hash(tab.a, hash(tab.b, hash(tab.c, hash(tab.â, hash(tab.b̂, hash(tab.ĉ, hash(:Tableau, h)))))))))
+            hash(tab.a, hash(tab.b, hash(tab.c, hash(tab.â, hash(tab.b̂, hash(tab.ĉ, hash(:Tableau, h)))))))))
 end
 
 function Base.:(==)(tab1::Tableau, tab2::Tableau)
@@ -102,9 +102,9 @@ function Base.:(==)(tab1::Tableau, tab2::Tableau)
      && tab1.a == tab2.a
      && tab1.b == tab2.b
      && tab1.c == tab2.c
-     && tab1.â == tab2.â
+     && tab1.â == tab2.â
      && tab1.b̂ == tab2.b̂
-     && tab1.ĉ == tab2.ĉ
+     && tab1.ĉ == tab2.ĉ
      && ((ismissing(tab1.R∞) && ismissing(tab2.R∞)) || (tab1.R∞ == tab2.R∞)))
 end
 

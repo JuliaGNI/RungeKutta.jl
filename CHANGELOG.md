@@ -4,6 +4,31 @@ All notable changes to RungeKutta.jl are documented here. Versions follow
 [semantic versioning](https://semver.org) as it applies to Julia's `0.x` series, where a
 change to the minor version may break compatibility.
 
+## Unreleased
+
+### Changed
+
+- Every tracked source file is now Unicode NFC-normalised. Eleven files stored `ā` (34 times), `Ḡ`
+  (28), `Ē` (28), `Ā` (27), `â` (9), `ĉ` (9), `Ã` (6), `Â` (5), `é` (4) and `ã` (3) as a base letter
+  plus a combining mark, inherited from macOS rather than chosen.
+
+  Nothing about the compiled code changes: Julia's parser normalises identifiers to NFC, so the
+  symbols were already precomposed and dispatch is untouched. What changes is that the source now
+  matches what a keyboard, an editor search or a `grep` pattern produces — in an NFD file a pattern
+  typed in NFC matches nothing at all, silently.
+
+  **One thing does change at runtime.** String literals are *not* parser-normalised, so
+  `Symbol("LobattoIIIAIIIĀ", s)`, `Symbol("LobattoIIIEIIIĒ", s)` and `Symbol("LobattoIIIGIIIḠ", s)`
+  in `src/tableaus/prk.jl` now produce precomposed symbols where they produced decomposed ones.
+  These are the `name` field of the returned `PartitionedTableau`, used for display; nothing in this
+  package or downstream compares them against a symbol written in source, so no result changes. Code
+  that did compare, having had to spell the name decomposed to match, would need the ordinary
+  spelling now.
+
+  Note that the file looked mixed before — `Symbol("LobattoIIIBIIIB̄", s)` and its `C̄`, `D̄` and `F̄`
+  siblings were already NFC — but that was not an inconsistency: a macron over `B`, `C`, `D` or `F`
+  has no precomposed codepoint, so NFC leaves those decomposed and they are unchanged here.
+
 ## v0.6.1
 
 ### Fixed

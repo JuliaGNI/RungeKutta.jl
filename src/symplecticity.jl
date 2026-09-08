@@ -11,9 +11,9 @@ end
 
 function check_symplecticity(tab::PartitionedTableau{T}; atol = 16eps(T), rtol = 16eps(T)) where {T}
     a, b = tab.q.a, tab.q.b
-    ā, b̄ = tab.p.a, tab.p.b
+    ā, b̄ = tab.p.a, tab.p.b
     (
-        [isapprox(b[i] * ā[i, j] + b̄[j] * a[j, i], b[i] * b̄[j]; atol = atol, rtol = rtol)
+        [isapprox(b[i] * ā[i, j] + b̄[j] * a[j, i], b[i] * b̄[j]; atol = atol, rtol = rtol)
          for i in axes(a, 1), j in axes(a, 2)],
         [isapprox(b[i], b̄[i]; atol = atol, rtol = rtol) for i in eachindex(b, b̄)])
 end

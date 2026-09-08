@@ -35,7 +35,7 @@ function reference(::Val{:RadauIA})
 References:
 
     Byron Leonard Ehle
-    On Padé approximations to the exponential function and a-stable methods for the numerical solution of initial value problems.
+    On Padé approximations to the exponential function and a-stable methods for the numerical solution of initial value problems.
     Research Report CSRR 2010, Dept. AACS, University of Waterloo, 1969.
 """
 end
@@ -93,9 +93,9 @@ $(reference(Val(:RadauIB)))
 function TableauRadauIB(::Type{T}, s) where {T}
     a = radau_1_coefficients(BigFloat, s)
     b = radau_legendre_weights(BigFloat, s, Val(:left))
-    ā = symplectic_conjugate_coefficients(a, b)
+    ā = symplectic_conjugate_coefficients(a, b)
 
-    Tableau{T}(:RadauIB, 2s-1, (a .+ ā) ./ 2, b,
+    Tableau{T}(:RadauIB, 2s-1, (a .+ ā) ./ 2, b,
         radau_legendre_nodes(BigFloat, s, Val(:left)); R∞ = 0)
 end
 
@@ -106,7 +106,7 @@ function reference(::Val{:RadauIIA})
 References:
 
     Byron Leonard Ehle
-    On Padé approximations to the exponential function and a-stable methods for the numerical solution of initial value problems.
+    On Padé approximations to the exponential function and a-stable methods for the numerical solution of initial value problems.
     Research Report CSRR 2010, Dept. AACS, University of Waterloo, 1969.
 
     Owe Axelsson.
@@ -175,9 +175,9 @@ $(reference(Val(:RadauIIB)))
 function TableauRadauIIB(::Type{T}, s) where {T}
     a = radau_2_coefficients(BigFloat, s)
     b = radau_legendre_weights(BigFloat, s, Val(:right))
-    ā = symplectic_conjugate_coefficients(a, b)
+    ā = symplectic_conjugate_coefficients(a, b)
 
-    Tableau{T}(:RadauIIB, 2s-1, (a .+ ā) ./ 2, b,
+    Tableau{T}(:RadauIIB, 2s-1, (a .+ ā) ./ 2, b,
         radau_legendre_nodes(BigFloat, s, Val(:right)); R∞ = 0)
 end
 
