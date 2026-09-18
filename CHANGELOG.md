@@ -4,7 +4,7 @@ All notable changes to RungeKutta.jl are documented here. Versions follow
 [semantic versioning](https://semver.org) as it applies to Julia's `0.x` series, where a
 change to the minor version may break compatibility.
 
-## [Unreleased] — targeting 0.6.2
+## v0.6.2
 
 ### Changed
 
