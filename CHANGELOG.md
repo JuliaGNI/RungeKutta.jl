@@ -4,6 +4,12 @@ All notable changes to RungeKutta.jl are documented here. Versions follow
 [semantic versioning](https://semver.org) as it applies to Julia's `0.x` series, where a
 change to the minor version may break compatibility.
 
+## Unreleased
+
+### Changed
+
+- Test suite reorganised: files now mirror `src/` structure, dependencies moved to `test/Project.toml`, per-file `@safetestset` groups introduced with filtering via `GROUPS` from `ARGS`, and Aqua checks added. No tests lost.
+
 ## v0.6.2
 
 ### Changed
