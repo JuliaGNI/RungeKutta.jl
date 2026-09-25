@@ -1,3 +1,8 @@
+using RungeKutta
+using Test
+
+include("../helpers/symtype.jl")
+
 import QuadratureRules: gauss_legendre_nodes, gauss_legendre_weights
 import RungeKutta.Tableaus: gauss_coefficients
 

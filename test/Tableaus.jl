@@ -1,4 +1,5 @@
 using RungeKutta
+using Test
 
 @testset "$(rpad("Tableau List",80))" begin
     tab_list = TableauList

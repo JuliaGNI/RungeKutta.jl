@@ -22,12 +22,4 @@ PrettyTables = "3"
 QuadratureRules = "0.2"
 Reexport = "1"
 StaticArrays = "1"
-SymPyPythonCall = "0.5"
 julia = "1.10"
-
-[extras]
-SymPyPythonCall = "bc8888f7-b21e-4b7c-a06a-5d9c9496438c"
-Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
-
-[targets]
-test = ["SymPyPythonCall", "Test"]

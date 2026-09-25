@@ -1,3 +1,8 @@
+using RungeKutta
+using Test
+
+include("../helpers/symtype.jl")
+
 import LinearAlgebra
 
 using QuadratureRules: lobatto_legendre_nodes, lobatto_legendre_weights

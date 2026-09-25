@@ -1,3 +1,6 @@
+using RungeKutta
+using Test
+
 using RungeKutta: name, order, nstages, coefficients, weights, nodes
 
 @testset "$(rpad("Partitioned Tableaus",80))" begin

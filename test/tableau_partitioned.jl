@@ -1,3 +1,9 @@
+using RungeKutta
+using Random
+using Test
+
+Random.seed!(1234)
+
 using RungeKutta: name, order, eachstage, nstages
 
 @testset "$(rpad("Partitioned Tableau",80))" begin

@@ -1,3 +1,6 @@
+using RungeKutta
+using Test
+
 @testset "$(rpad("Symmetry",80))" begin
     for s in 1:10
         @test check_symmetry(TableauGauss(s)) == Array{Bool}(ones(s, s))
