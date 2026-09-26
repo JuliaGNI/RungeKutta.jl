@@ -8,7 +8,11 @@ change to the minor version may break compatibility.
 
 ### Changed
 
-- Test suite reorganised: files now mirror `src/` structure, dependencies moved to `test/Project.toml`, per-file `@safetestset` groups introduced with filtering via `GROUPS` from `ARGS`, and Aqua checks added. No tests lost.
+- Test suite reorganised: files now mirror `src/` structure, dependencies moved to
+  `test/Project.toml`, per-file `@safetestset` groups introduced with filtering via
+  `GROUPS` from `ARGS`, and Aqua checks added. No tests lost.
+- Project.toml now carries compat entries `LinearAlgebra = "1"` and `Markdown = "1"`, so
+  Aqua's deps_compat check passes (issue #32).
 
 ## v0.6.2
 
