@@ -1,3 +1,9 @@
+using RungeKutta
+using Random
+using Test
+
+Random.seed!(1234)
+
 import LinearAlgebra: I, norm, nullspace
 import RungeKutta: istriustrict, istrilstrict, _nullvector
 

@@ -1,3 +1,9 @@
+using RungeKutta
+using Random
+using Test
+
+Random.seed!(1234)
+
 using RungeKutta: name, order, eachstage, nstages, coefficients, weights, nodes, to_array,
                   to_file, from_file
 

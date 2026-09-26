@@ -1,3 +1,8 @@
+using RungeKutta
+using Test
+
+include("../helpers/symtype.jl")
+
 using QuadratureRules: radau_legendre_nodes, radau_legendre_weights
 using RungeKutta.Tableaus: radau_1_coefficients, radau_2_coefficients
 

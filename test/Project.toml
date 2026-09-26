@@ -1,0 +1,18 @@
+[deps]
+Aqua = "4c88cf16-eb10-579e-8560-4a9242c79595"
+GeometricBase = "9a0b12b7-583b-4f04-aa1f-d8551b6addc9"
+LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+QuadratureRules = "a08977f5-a20d-4b99-b11f-f5ea535e0575"
+Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
+RungeKutta = "fb486d5c-30a0-4a8a-8415-a8b4ace5a6f7"
+SafeTestsets = "1bc83da4-3b8d-516f-aca4-4fe02f6d838f"
+SymPyPythonCall = "bc8888f7-b21e-4b7c-a06a-5d9c9496438c"
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[compat]
+Aqua = "0.8"
+SafeTestsets = "0.1"
+SymPyPythonCall = "0.5"
+
+[sources]
+RungeKutta = {path = ".."}

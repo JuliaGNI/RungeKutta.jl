@@ -1,33 +1,19 @@
-using RungeKutta
-using Test
+using SafeTestsets
 
-import SymPyPythonCall
+const GROUPS = isempty(ARGS) ? ["core", "slow"] : ARGS
 
-"""
-symtype()
-
-Return `Sym{T}` for `T` being the underlying type of `Sym(1)`.
-"""
-symtype() = typeof(SymPyPythonCall.Sym(1))
-
-# Convert a symbolic value to a float by evaluating it. SymPyPythonCall's
-# `convert(Float64, ::Sym)` uses `pyconvert`, which rejects unevaluated
-# expressions (e.g. `1/2 - sqrt(3)/6`); the `N` path evaluates them. This is
-# needed for the `symtype() ≈ Float64` comparisons below, whose `isapprox`
-# goes through `convert(Float64, ::Sym)` inside `LinearAlgebra.norm`.
-function Base.convert(::Type{T}, x::SymPyPythonCall.Sym) where {T <: AbstractFloat}
-    T(SymPyPythonCall.N(x))
+if "core" in GROUPS
+    @safetestset "Aqua" include("quality/aqua.jl")
+    @safetestset "Utility functions" include("utils.jl")
+    @safetestset "Tableau" include("tableau.jl")
+    @safetestset "Partitioned tableau" include("tableau_partitioned.jl")
+    @safetestset "Order conditions" include("order_conditions.jl")
+    @safetestset "Symmetry" include("symmetry.jl")
+    @safetestset "Symplecticity" include("symplecticity.jl")
+    @safetestset "Gauss tableaus" include("tableaus/gauss.jl")
+    @safetestset "Lobatto tableaus" include("tableaus/lobatto.jl")
+    @safetestset "Radau tableaus" include("tableaus/radau.jl")
+    @safetestset "Explicit and implicit tableaus" include("tableaus/tableaus.jl")
+    @safetestset "Partitioned tableaus" include("tableaus/prk.jl")
+    @safetestset "Tableau list" include("Tableaus.jl")
 end
-
-include("test_utils.jl")
-include("test_tableau.jl")
-include("test_tableau_partitioned.jl")
-include("test_order_conditions.jl")
-include("test_symmetry.jl")
-include("test_symplecticity.jl")
-include("test_gauss.jl")
-include("test_lobatto.jl")
-include("test_radau.jl")
-include("test_tableaus.jl")
-include("test_tableaus_prk.jl")
-include("test_list.jl")
