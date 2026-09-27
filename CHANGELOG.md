@@ -14,6 +14,14 @@ change to the minor version may break compatibility.
 - Project.toml now carries compat entries `LinearAlgebra = "1"` and `Markdown = "1"`, so
   Aqua's deps_compat check passes (issue #32).
 
+### Fixed
+
+- The documentation builds again. `docs/make.jl` passed the Weave sources as paths relative to
+  the working directory, so it worked only when run from `docs/`. The shared Documentation
+  workflow runs it from the repository root, and every docs build since v0.6.1 stopped at
+  `opening file "src/gauss.jmd": No such file or directory`. The paths now resolve from
+  `docs/make.jl` itself.
+
 ## v0.6.2
 
 ### Changed
