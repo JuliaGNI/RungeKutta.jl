@@ -58,23 +58,23 @@ function Base.show(io::IO, ::MIME"text/markdown", tab::Tableau{symtype()})
 end
 end
 
-weave("src/gauss.jmd",
-    out_path = "src",
+weave(joinpath(@__DIR__, "src", "gauss.jmd"),
+    out_path = joinpath(@__DIR__, "src"),
     doctype = "github",
     mod = RungeKuttaWeaves)
 
-weave("src/radau1.jmd",
-    out_path = "src",
+weave(joinpath(@__DIR__, "src", "radau1.jmd"),
+    out_path = joinpath(@__DIR__, "src"),
     doctype = "github",
     mod = RungeKuttaWeaves)
 
-weave("src/radau2.jmd",
-    out_path = "src",
+weave(joinpath(@__DIR__, "src", "radau2.jmd"),
+    out_path = joinpath(@__DIR__, "src"),
     doctype = "github",
     mod = RungeKuttaWeaves)
 
-weave("src/lobatto.jmd",
-    out_path = "src",
+weave(joinpath(@__DIR__, "src", "lobatto.jmd"),
+    out_path = joinpath(@__DIR__, "src"),
     doctype = "github",
     mod = RungeKuttaWeaves)
 
