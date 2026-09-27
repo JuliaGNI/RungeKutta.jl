@@ -1,12 +1,10 @@
 using RungeKutta
 
-# Verifies that removing the stale `big` import in src/Tableaus.jl does not
-# change the numerical value of any tableau's coefficients. `@big` controls
-# the precision of tableau coefficients at macro-expansion time, so this
-# prints the full-precision `a`, `b`, `c` coefficients of every nullary
-# tableau constructor (those taking only an optional element type) for both
-# Float64 and BigFloat. Run on the base commit and on the branch and diff the
-# output: identical output means the coefficients are bit-identical.
+# Prints the full-precision `a`, `b` and `c` coefficients of every exported
+# tableau constructor whose only argument is the element type, for Float64 and
+# BigFloat. Aliases are left out, and so is `TableauSSPRK2`, which returns the
+# coefficients of `TableauHeun2`. Run the script on two commits and diff the
+# output: identical output means that the coefficients are bit-identical.
 
 const CONSTRUCTORS = [
     TableauCrankNicolson, TableauKraaijevangerSpijker, TableauQinZhang, TableauCrouzeix,
