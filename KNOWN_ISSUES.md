@@ -22,7 +22,7 @@ fixed; the fix goes in `CHANGELOG.md`.
 - **evidence:** `check_no_stale_explicit_imports(RungeKutta)` reports `@big` as a stale import of
   module `RungeKutta`. `@big` is imported there from `GeometricBase.Utils`, and the submodule
   `RungeKutta.Tableaus` reaches it through its parent
-  (`src/Tableaus.jl:11`: `using ..RungeKutta: big, @big`), then uses it in
+  (`src/Tableaus.jl:11`: `using ..RungeKutta: @big`), then uses it in
   `src/tableaus/erk.jl`, `src/tableaus/dirk.jl` and `src/tableaus/firk.jl`. ExplicitImports does
   not follow that path, so it reports the import as unused in `RungeKutta` itself. Removing the
   import breaks `RungeKutta.Tableaus`.

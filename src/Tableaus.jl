@@ -8,7 +8,7 @@ using QuadratureRules: gauss_legendre_nodes, gauss_legendre_weights,
                        radau_legendre_nodes, radau_legendre_weights
 
 using ..RungeKutta
-using ..RungeKutta: big, @big
+using ..RungeKutta: @big
 using ..RungeKutta: _nullvector
 
 export description, reference

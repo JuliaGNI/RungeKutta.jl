@@ -13,6 +13,12 @@ change to the minor version may break compatibility.
   `GROUPS` from `ARGS`, and Aqua checks added. No tests lost.
 - Project.toml now carries compat entries `LinearAlgebra = "1"` and `Markdown = "1"`, so
   Aqua's deps_compat check passes (issue #32).
+- The unused `big` import from `RungeKutta` in `src/Tableaus.jl` is removed. The module
+  only uses the `@big` macro (from GeometricBase.Utils), which expands numeric literals
+  at macro-expansion time using its own internal helper; the plain `big` binding was stale.
+  Bit-identity of all 22 nullary tableau constructors (Float64 and BigFloat) confirmed by
+  `scripts/checksum_tableaus.jl` on the base commit and this branch in separate Julia
+  processes; the full test suite (2,543 tests) passes, confirming nothing else was affected.
 
 ### Fixed
 
