@@ -19,10 +19,10 @@ change to the minor version may break compatibility.
   Bit-identity of all 22 nullary tableau constructors (Float64 and BigFloat) confirmed by
   `scripts/checksum_tableaus.jl` on the base commit and this branch in separate Julia
   processes; the full test suite (2,543 tests) passes, confirming nothing else was affected.
-- `test/Project.toml` now carries the root's `[compat]` entries for the dependencies it shares
-  with `Project.toml`: `GeometricBase = "0.14.8"`, `LinearAlgebra = "1"` and
-  `QuadratureRules = "0.2"`. Aqua's `deps_compat` check reads only the root `Project.toml`, so the
-  test layout's compat rule requires each shared bound to be copied into the test environment.
+- `test/Project.toml` carries the same `[compat]` entries as `Project.toml` for the three
+  dependencies they share: `GeometricBase = "0.14.8"`, `LinearAlgebra = "1"` and
+  `QuadratureRules = "0.2"`. Aqua's `deps_compat` check reads only the root `Project.toml`, so it
+  does not check these entries.
 
 ### Fixed
 
