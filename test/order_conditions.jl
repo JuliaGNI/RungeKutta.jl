@@ -6,7 +6,7 @@ using Test
         g = TableauGauss(s)
 
         for σ in 1:s
-            @test check_order_conditions_b(g, σ) == true
+            @test check_order_conditions_b(g, σ)
             @test check_order_conditions_c(g, σ) == Array{Bool}(ones(s))
             @test check_order_conditions_d(g, σ) == Array{Bool}(ones(s))
         end
