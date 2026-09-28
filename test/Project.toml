@@ -11,6 +11,9 @@ Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [compat]
 Aqua = "0.8"
+GeometricBase = "0.14.8"
+LinearAlgebra = "1"
+QuadratureRules = "0.2"
 SafeTestsets = "0.1"
 SymPyPythonCall = "0.5"
 
