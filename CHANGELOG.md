@@ -19,6 +19,8 @@ change to the minor version may break compatibility.
   Bit-identity of all 22 nullary tableau constructors (Float64 and BigFloat) confirmed by
   `scripts/checksum_tableaus.jl` on the base commit and this branch in separate Julia
   processes; the full test suite (2,543 tests) passes, confirming nothing else was affected.
+- `test/order_conditions.jl` asserts `check_order_conditions_b(g, σ)` directly, not
+  `== true`, so a non-`Bool` result fails the test. No source file changes.
 
 ### Fixed
 
