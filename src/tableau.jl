@@ -180,7 +180,7 @@ function from_file(dir::AbstractString, name::AbstractString)
 
     # TODO Read data in original format (e.g., Rational).
     #      For this we need to save tableaus as jld or hdf5.
-    # tab_array = readdlm(file, T)
+    # tab_array = readdlm(file, T), with T the type named in header[3]
     tab_array = readdlm(file, comments = true)
 
     if s == 0

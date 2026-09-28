@@ -25,7 +25,7 @@ change to the minor version may break compatibility.
   (`test/quality/explicit_imports.jl`, `core` group). `@big` is in its `ignore`, because the
   submodule `Tableaus` reaches it through `RungeKutta`.
 - `fatou lint` reports no finding in `src/` or `test/`. The nested `if` in the
-  `PartitionedTableau` constructor is one condition, and `readTableau` no longer assigns the
+  `PartitionedTableau` constructor is one condition, and `from_file` no longer assigns the
   unused variable `T`; it still evaluates the type named in the file header.
 
 ### Fixed
