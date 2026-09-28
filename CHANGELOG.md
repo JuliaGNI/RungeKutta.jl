@@ -21,6 +21,12 @@ change to the minor version may break compatibility.
   processes; the full test suite (2,543 tests) passes, confirming nothing else was affected.
 - `test/order_conditions.jl` asserts `check_order_conditions_b(g, σ)` directly, not
   `== true`, so a non-`Bool` result fails the test. No source file changes.
+- The test suite checks explicit imports with ExplicitImports.jl
+  (`test/quality/explicit_imports.jl`, `core` group). `@big` is in its `ignore`, because the
+  submodule `Tableaus` reaches it through `RungeKutta`.
+- `fatou lint` reports no finding in `src/` or `test/`. The nested `if` in the
+  `PartitionedTableau` constructor is one condition, and `readTableau` no longer assigns the
+  unused variable `T`; it still evaluates the type named in the file header.
 
 ### Fixed
 

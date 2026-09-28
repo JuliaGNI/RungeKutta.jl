@@ -44,10 +44,8 @@ struct PartitionedTableau{T, S, RT <: Union{Real, Missing}, RTq, RTp, L} <:
 
     function PartitionedTableau{T}(name, o, q, p; R∞ = missing) where {T}
         @assert q.s == p.s
-        if ismissing(R∞) && !ismissing(q.R∞) && !ismissing(p.R∞)
-            if q.R∞ == p.R∞
-                R∞ = q.R∞
-            end
+        if ismissing(R∞) && !ismissing(q.R∞) && !ismissing(p.R∞) && q.R∞ == p.R∞
+            R∞ = q.R∞
         end
         new{T, q.s, typeof(R∞), typeof(q.R∞), typeof(p.R∞), q.s * q.s}(
             name, o, q.s, q, p, R∞)

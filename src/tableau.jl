@@ -175,9 +175,7 @@ function from_file(dir::AbstractString, name::AbstractString)
     end
 
     if length(header) ≥ 3
-        T = Core.eval(Main, Meta.parse(header[3]))
-    else
-        T = Float64
+        Core.eval(Main, Meta.parse(header[3]))
     end
 
     # TODO Read data in original format (e.g., Rational).
