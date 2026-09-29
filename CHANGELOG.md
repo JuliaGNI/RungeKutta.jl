@@ -24,6 +24,12 @@ change to the minor version may break compatibility.
 - `test/Project.toml` no longer carries `QuadratureRules = "0.2.1"` in `[compat]`. A test or
   docs environment gives no `[compat]` entry for a dependency of the root `Project.toml`: the
   resolver already applies the root's bound (`"0.2"`), and a second entry can only narrow it.
+- The test suite checks explicit imports with ExplicitImports.jl
+  (`test/quality/explicit_imports.jl`, `core` group). `@big` is in its `ignore`, because the
+  submodule `Tableaus` reaches it through `RungeKutta`.
+- `fatou lint` reports no finding in `src/` or `test/`. The nested `if` in the
+  `PartitionedTableau` constructor is one condition, and `from_file` no longer assigns the
+  unused variable `T`; it still evaluates the type named in the file header.
 
 ### Fixed
 

@@ -28,3 +28,13 @@ fixed; the fix goes in `CHANGELOG.md`.
   import breaks `RungeKutta.Tableaus`.
 - **kind:** upstream
 - **found:** 2026-09-01
+
+### K3 · No test covers two tableaus with different R∞ in `PartitionedTableau`
+
+- **location:** `src/tableau_partitioned.jl:47`
+- **evidence:** the mutant that deletes ` && q.R∞ == p.R∞` survives the whole `core` group
+  (`mutate.jl <package> src/tableau_partitioned.jl ' && q.R∞ == p.R∞' '' core`). No test builds a
+  `PartitionedTableau` from two tableaus whose R∞ are both present and differ. A test to add:
+  `@test ismissing(PartitionedTableau(:x, TableauGauss(1), TableauImplicitEuler()).R∞)`.
+- **kind:** missing test
+- **found:** 2026-09-28

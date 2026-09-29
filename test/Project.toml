@@ -1,5 +1,6 @@
 [deps]
 Aqua = "4c88cf16-eb10-579e-8560-4a9242c79595"
+ExplicitImports = "7d51a73a-1435-4ff3-83d9-f097790105c7"
 GeometricBase = "9a0b12b7-583b-4f04-aa1f-d8551b6addc9"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 QuadratureRules = "a08977f5-a20d-4b99-b11f-f5ea535e0575"
@@ -11,6 +12,7 @@ Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [compat]
 Aqua = "0.8"
+ExplicitImports = "1.15"
 SafeTestsets = "0.1"
 SymPyPythonCall = "0.5"
 
