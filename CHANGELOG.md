@@ -21,6 +21,9 @@ change to the minor version may break compatibility.
   processes; the full test suite (2,543 tests) passes, confirming nothing else was affected.
 - `test/order_conditions.jl` asserts `check_order_conditions_b(g, σ)` directly, not
   `== true`, so a non-`Bool` result fails the test. No source file changes.
+- `test/Project.toml` no longer carries `QuadratureRules = "0.2.1"` in `[compat]`. A test or
+  docs environment gives no `[compat]` entry for a dependency of the root `Project.toml`: the
+  resolver already applies the root's bound (`"0.2"`), and a second entry can only narrow it.
 
 ### Fixed
 
