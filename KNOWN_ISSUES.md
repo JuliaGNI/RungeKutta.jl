@@ -25,3 +25,25 @@ fixed; the fix goes in `CHANGELOG.md`.
   `@test ismissing(PartitionedTableau(:x, TableauGauss(1), TableauImplicitEuler()).R∞)`.
 - **kind:** missing test
 - **found:** 2026-09-28
+
+### K4 · The docs build has its own `text/markdown` heading for SymPy tableaus
+
+- **location:** `docs/make.jl:33-37`
+- **evidence:** `docs/make.jl` defines its own
+  `Base.show(io, ::MIME"text/markdown", tab::Tableau{symtype()})`. It builds the heading line with
+  `Markdown.parse("Runge-Kutta Tableau $(tab.name) with $(tab.s) stages and order $(tab.o):")`,
+  a copy of the heading in `src/tableau.jl`. The method in `src/tableau.jl` prints the heading as
+  text, so a name with `_` or `*` keeps it literally. The docs method turns such a name into
+  emphasis. A fix: print the heading in `docs/make.jl` as `src/tableau.jl` does.
+- **kind:** docs
+- **found:** 2026-10-02
+
+### K5 · No test pins the line break after the `text/markdown` heading
+
+- **location:** `test/tableau.jl:147-150`
+- **evidence:** the tests compare only the first line of `repr("text/markdown", tab)`. The mutant
+  that changes the end of the heading in `src/tableau.jl` from `:\n"` to `:\n\n"` survives
+  `test/tableau.jl` and `test/quality/explicit_imports.jl`. A test to add:
+  ```` @test startswith(repr("text/markdown", gauss), "Runge-Kutta Tableau Gauss with 2 stages and order 4:\n```math\n") ````.
+- **kind:** missing test
+- **found:** 2026-10-02

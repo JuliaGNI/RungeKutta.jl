@@ -297,9 +297,7 @@ Base.show(io::IO, ::MIME"text/markdown", tab::Tableau)
 Generate and print a nice markdown table for the Runge-Kutta tableau.
 """
 function Base.show(io::IO, ::MIME"text/markdown", tab::Tableau)
-    show(io,
-        "text/markdown",
-        Markdown.parse("Runge-Kutta Tableau $(tab.name) with $(tab.s) stages and order $(tab.o):"))
+    print(io, "Runge-Kutta Tableau $(tab.name) with $(tab.s) stages and order $(tab.o):\n")
 
     tab_arr = convert(Matrix{Any}, tab)
     tab_arr[tab.s + 1, 1] = ""

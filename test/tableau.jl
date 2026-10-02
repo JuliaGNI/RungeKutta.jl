@@ -139,4 +139,13 @@ import QuadratureRules
         @test tabf.c == tab.c
     end
     @test !isdefined(Main, :rk_from_file_probe)
+
+    # The heading line of the `text/markdown` output is printed as text, so a name with an
+    # underscore keeps it literally and is not turned into emphasis.
+    gauss = TableauGauss(2)
+    underscored = Tableau(:my_tab_name, gauss.o, gauss.a, gauss.b, gauss.c)
+    @test first(split(repr("text/markdown", gauss), '\n')) ==
+          "Runge-Kutta Tableau Gauss with 2 stages and order 4:"
+    @test first(split(repr("text/markdown", underscored), '\n')) ==
+          "Runge-Kutta Tableau my_tab_name with 2 stages and order 4:"
 end
