@@ -29,9 +29,22 @@ change to the minor version may break compatibility.
   submodule `Tableaus` reaches it through `RungeKutta`.
 - `fatou lint` reports no finding in `src/` or `test/`. The nested `if` in the
   `PartitionedTableau` constructor is one condition, and `from_file` no longer assigns the
-  unused variable `T`; it still evaluates the type named in the file header.
+  unused variable `T`.
+- The floors rise to Julia 1.12, GeometricBase 0.15.0, QuadratureRules 0.2.2 and
+  CompactBasisFunctions 0.4.2, because GeometricBase 0.15 declares its stubs public and
+  requires Julia 1.11. The Julia floor is 1.12, not 1.11, because `Markdown.parse` is public
+  only from Julia 1.12, and the explicit-imports check requires every qualified access to be
+  public.
+- The five `using` lines of `src/RungeKutta.jl` name every symbol that `src/` takes from
+  DelimitedFiles, Markdown, PrettyTables, Reexport and StaticArrays.
+  `test/quality/explicit_imports.jl` runs every check of `test_explicit_imports`; only `@big`
+  stays in its `ignore`.
 
 ### Fixed
+
+- `from_file` no longer evaluates the third word of a tableau file's header in `Main`. It ran
+  code from the file and discarded the result. A header whose third word does not parse no
+  longer throws.
 
 - The documentation builds again. `docs/make.jl` passed the Weave sources as paths relative to
   the working directory, so it worked only when run from `docs/`. The shared Documentation
