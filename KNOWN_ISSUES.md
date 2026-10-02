@@ -37,3 +37,13 @@ fixed; the fix goes in `CHANGELOG.md`.
   emphasis. A fix: print the heading in `docs/make.jl` as `src/tableau.jl` does.
 - **kind:** pre-existing
 - **found:** 2026-10-02
+
+### K5 · No test pins the line break after the `text/markdown` heading
+
+- **location:** `test/tableau.jl:147-150`
+- **evidence:** the tests compare only the first line of `repr("text/markdown", tab)`. The mutant
+  that changes the end of the heading in `src/tableau.jl` from `:\n"` to `:\n\n"` survives
+  `test/tableau.jl` and `test/quality/explicit_imports.jl`. A test to add:
+  ```` @test startswith(repr("text/markdown", gauss), "Runge-Kutta Tableau Gauss with 2 stages and order 4:\n```math\n") ````.
+- **kind:** missing test
+- **found:** 2026-10-02
