@@ -1,7 +1,6 @@
 module RungeKutta
 
 using DelimitedFiles: DelimitedFiles, readdlm, writedlm
-using Markdown: Markdown
 using PrettyTables: PrettyTables, LatexCell, LatexTableFormat, TextTableBorders,
                     TextTableFormat, pretty_table
 using Reexport: Reexport, @reexport

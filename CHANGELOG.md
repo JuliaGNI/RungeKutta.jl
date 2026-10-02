@@ -4,6 +4,17 @@ All notable changes to RungeKutta.jl are documented here. Versions follow
 [semantic versioning](https://semver.org) as it applies to Julia's `0.x` series, where a
 change to the minor version may break compatibility.
 
+## [Unreleased]
+
+### Changed
+
+- The Julia floor returns to 1.11, and the Markdown dependency goes. The `text/markdown`
+  `show` method of `Tableau` prints its heading line as text instead of passing it through
+  `Markdown.parse`, so no qualified access to `Markdown.parse` is left, and that function is
+  public only from Julia 1.12.
+- The `text/markdown` heading of a tableau whose name has underscores keeps the name
+  literally. Before, `Markdown.parse` turned a name such as `my_tab_name` into emphasis.
+
 ## v0.6.3
 
 ### Changed
