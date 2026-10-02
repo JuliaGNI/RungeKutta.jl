@@ -1,10 +1,11 @@
 module RungeKutta
 
-using DelimitedFiles
-using Markdown
-using PrettyTables
-using Reexport
-using StaticArrays
+using DelimitedFiles: DelimitedFiles, readdlm, writedlm
+using Markdown: Markdown
+using PrettyTables: PrettyTables, LatexCell, LatexTableFormat, TextTableBorders,
+                    TextTableFormat, pretty_table
+using Reexport: Reexport, @reexport
+using StaticArrays: StaticArrays, SMatrix, SVector
 
 import GeometricBase
 import GeometricBase: name, order, description, reference

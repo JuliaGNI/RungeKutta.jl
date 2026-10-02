@@ -118,4 +118,25 @@ import QuadratureRules
         @test tabf.b == tab2.b
         @test tabf.c == tab2.c
     end
+
+    # `from_file` does not evaluate the third word of a header, so a word that does not
+    # parse, or names nothing, or would define a global, is read past like any other.
+    for word in (")", "rk_undefined_type_name", "rk_from_file_probe=1")
+        tab = TableauGauss(2)
+        tmp = mktempdir()
+        to_file(tmp, tab)
+        file = joinpath(tmp, string(tab.name, ".tsv"))
+        lines = readlines(file)
+        lines[1] = string("# ", tab.o, " ", tab.s, " ", word)
+        write(file, join(lines, "\n") * "\n")
+        tabf = from_file(tmp, string(tab.name))
+        rm(tmp, recursive = true)
+
+        @test tabf.o == tab.o
+        @test tabf.s == tab.s
+        @test tabf.a == tab.a
+        @test tabf.b == tab.b
+        @test tabf.c == tab.c
+    end
+    @test !isdefined(Main, :rk_from_file_probe)
 end
