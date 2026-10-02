@@ -135,6 +135,8 @@ import QuadratureRules
         @test tabf.o == tab.o
         @test tabf.s == tab.s
         @test tabf.a == tab.a
+        @test tabf.b == tab.b
+        @test tabf.c == tab.c
     end
     @test !isdefined(Main, :rk_from_file_probe)
 end
