@@ -43,9 +43,8 @@ change to the minor version may break compatibility.
 ### Fixed
 
 - `from_file` no longer evaluates the third word of a tableau file's header in `Main`. It ran
-  code from the file and discarded the result. A header whose third word does not parse no
-  longer throws.
-
+  code from the file and discarded the result. A header whose third word does not parse, or
+  names an undefined name, no longer throws.
 - The documentation builds again. `docs/make.jl` passed the Weave sources as paths relative to
   the working directory, so it worked only when run from `docs/`. The shared Documentation
   workflow runs it from the repository root, and every docs build since v0.6.1 stopped at
