@@ -4,6 +4,13 @@ All notable changes to RungeKutta.jl are documented here. Versions follow
 [semantic versioning](https://semver.org) as it applies to Julia's `0.x` series, where a
 change to the minor version may break compatibility.
 
+## [Unreleased]
+
+### Changed
+
+- CI uploads coverage from the `Julia 1 - ubuntu-latest` job instead of `Julia min`, and a
+  test job saves the Julia cache only when it succeeds.
+
 ## v0.6.4
 
 ### Changed
