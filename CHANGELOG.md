@@ -8,6 +8,10 @@ change to the minor version may break compatibility.
 
 ### Changed
 
+- **Julia 1.12 is the floor** (`[compat] julia = "1.12"`, from 1.11). A breaking change under
+  this package's pre-1.0 convention: a caller on Julia 1.11 can no longer install this version.
+  Nothing in the package's code changes: it carried no workaround that existed only for the
+  1.11 floor.
 - CI uploads coverage from the `Julia 1 - ubuntu-latest` job instead of `Julia min`, and a
   test job saves the Julia cache only when it succeeds.
 
