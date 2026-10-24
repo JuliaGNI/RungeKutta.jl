@@ -4,12 +4,12 @@ All notable changes to RungeKutta.jl are documented here. Versions follow
 [semantic versioning](https://semver.org) as it applies to Julia's `0.x` series, where a
 change to the minor version may break compatibility.
 
-## [Unreleased]
+## v0.6.5
 
 ### Changed
 
-- **Julia 1.12 is the floor** (`[compat] julia = "1.12"`, from 1.11). A breaking change under
-  this package's pre-1.0 convention: a caller on Julia 1.11 can no longer install this version.
+- **Julia 1.12 is the floor** (`[compat] julia = "1.12"`, from 1.11). A patch release, because no
+  API changes: a caller on Julia 1.11 can no longer install this version.
   The `text/markdown` heading of `Tableau` keeps printing as text, and Markdown stays out of the
   dependencies, as in v0.6.4.
 - CI uploads coverage from the `Julia 1 - ubuntu-latest` job instead of `Julia min`, and a
