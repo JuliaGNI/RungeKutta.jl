@@ -8,6 +8,12 @@ change to the minor version may break compatibility.
 
 ### Changed
 
+- The `StaticArrays` compat floor rises from `1` to `1.5.17` (the upper bound `< 2` is unchanged).
+  The General registry caps the Julia compatibility of StaticArrays 1.0.0 through 1.5.16 below
+  Julia 1.12, so on this package's Julia floor no earlier StaticArrays can be installed, and the
+  `Downgrade` job's forced-minimum check failed. This is a compatibility change only, with no
+  behaviour change: a caller who could install this package on Julia 1.12 already had StaticArrays
+  1.5.17 or later.
 - The `PrettyTables` compat floor rises from `3` to `3.0.9` (the upper bound `< 4` is
   unchanged). With PrettyTables 3.0.0, `show` of a `Tableau` throws `MethodError: no method
   matching length(::Nothing)`, because the text backend fails on a table without column labels,
