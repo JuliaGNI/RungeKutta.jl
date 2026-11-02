@@ -47,3 +47,17 @@ fixed; the fix goes in `CHANGELOG.md`.
   ```` @test startswith(repr("text/markdown", gauss), "Runge-Kutta Tableau Gauss with 2 stages and order 4:\n```math\n") ````.
 - **kind:** missing test
 - **found:** 2026-10-02
+
+### K6 · The `Documentation` job cannot load SymPyPythonCall: PythonCall finds no libpython
+
+- **location:** `docs/Project.toml:9`, `docs/make.jl:23`
+- **evidence:** the `Documentation` job fails while it precompiles the docs environment:
+  `InitError: Could not find Python library for Python executable
+  ".../docs/.CondaPkg/.pixi/envs/default/bin/python"`, then
+  `The following 1 package failed to precompile: SymPyPythonCall`. The job resolves PythonCall
+  0.9.36, CondaPkg 0.2.33 and pixi_jll 0.76.2. CondaPkg creates the Python environment with
+  pixi, and PythonCall does not find the shared library of that Python. The cause is outside
+  this repository, so the fix belongs to PythonCall or CondaPkg. The job is red on `main`
+  at Release 0.6.5 (2026-10-24).
+- **kind:** upstream
+- **found:** 2026-11-02
