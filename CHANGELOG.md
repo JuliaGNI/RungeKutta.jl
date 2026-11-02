@@ -4,6 +4,17 @@ All notable changes to RungeKutta.jl are documented here. Versions follow
 [semantic versioning](https://semver.org) as it applies to Julia's `0.x` series, where a
 change to the minor version may break compatibility.
 
+## [Unreleased] — targeting 0.6.6
+
+### Changed
+
+- The `StaticArrays` compat floor rises from `1` to `1.5.17` (the upper bound `< 2` is unchanged).
+  The General registry caps the Julia compatibility of StaticArrays 1.0.0 through 1.5.16 below
+  Julia 1.12, so on this package's Julia floor no earlier StaticArrays can be installed, and the
+  `Downgrade` job's forced-minimum check failed. This is a compatibility change only, with no
+  behaviour change: a caller who could install this package on Julia 1.12 already had StaticArrays
+  1.5.17 or later.
+
 ## v0.6.5
 
 ### Changed
