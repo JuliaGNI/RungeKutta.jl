@@ -14,6 +14,15 @@ change to the minor version may break compatibility.
   `Downgrade` job's forced-minimum check failed. This is a compatibility change only, with no
   behaviour change: a caller who could install this package on Julia 1.12 already had StaticArrays
   1.5.17 or later.
+- The `PrettyTables` compat floor rises from `3` to `3.0.9` (the upper bound `< 4` is
+  unchanged). With PrettyTables 3.0.0, `show` of a `Tableau` throws `MethodError: no method
+  matching length(::Nothing)`, because the text backend fails on a table without column labels,
+  which is how `show` prints the coefficients. PrettyTables 3.0.9 fixes this error (PrettyTables
+  issue #270).
+- The `Aqua` compat floor of the test environment rises from `0.8` to `0.8.14`. Earlier 0.8
+  releases read `Core.TypeName.mt` in `test_piracies`, a field that Julia 1.12 does not have,
+  so `Aqua.test_all` errors on this package's Julia floor; 0.8.14 reads `Core.methodtable`
+  instead.
 
 ## v0.6.5
 
