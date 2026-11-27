@@ -47,3 +47,16 @@ fixed; the fix goes in `CHANGELOG.md`.
   ```` @test startswith(repr("text/markdown", gauss), "Runge-Kutta Tableau Gauss with 2 stages and order 4:\n```math\n") ````.
 - **kind:** missing test
 - **found:** 2026-10-02
+
+### K6 · `check_symplecticity` and `check_symmetry` raise a `MethodError` for an exact element type
+
+- **location:** `src/symplecticity.jl:2`
+- **evidence:** the default tolerances are `atol = 16eps(T), rtol = 16eps(T)` in
+  `src/symplecticity.jl:2`, `src/symplecticity.jl:12` and `src/symmetry.jl:2`, and
+  `eps(Rational{BigInt})` has no method. So `check_symplecticity(TableauGauss(Rational{BigInt}, 2))`
+  and `check_symmetry(TableauGauss(Rational{BigInt}, 2))` raise
+  `MethodError: no method matching eps(::Type{Rational{BigInt}})`. With `atol = 0, rtol = 0` given,
+  `check_symplecticity` runs. The three `check_order_conditions_*` take exact zero as the default
+  for an `Integer` or `Rational` element type; these two checks do not.
+- **kind:** defect
+- **found:** 2026-11-27
