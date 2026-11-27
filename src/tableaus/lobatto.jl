@@ -522,7 +522,7 @@ Coefficients are taken as $a^G = \frac{1}{2} ( a^F + \bar{a}^F )$ where the coef
 the symplecticity conditions $b_{i} \bar{a}_{i,j} + \bar{b}_{j} a_{j,i} = b_{i} \bar{b}_{j}$ and $b_{i} = \bar{b}_i$ hold
 for all $1 \le i,j \le s$.
 
-The classical order and the linear order of the Lobatto IIIG tableau are both $2s-2$.
+The classical order and the linear order of the Lobatto IIIG tableau are both 2s - 2.
 """
 function TableauLobattoIIIG(::Type{T}, s) where {T}
     Tableau{T}(
