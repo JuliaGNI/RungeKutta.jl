@@ -4,6 +4,17 @@ All notable changes to RungeKutta.jl are documented here. Versions follow
 [semantic versioning](https://semver.org) as it applies to Julia's `0.x` series, where a
 change to the minor version may break compatibility.
 
+## [Unreleased]
+
+### Changed
+
+- The documentation no longer uses Weave. The pages of the Gauß, Radau I, Radau II and Lobatto III
+  tableaus are Markdown sources with Documenter `@eval` blocks, which print the same symbolic
+  tableaus. This fixes the `Documentation` job, which failed while it loaded SymPyPythonCall
+  (known issue K6): Weave 0.10.12 holds JSON at 0.21, so the docs environment could not install
+  CondaPkg 0.2.38 and PythonCall 0.9.37, and PythonCall 0.9.36 finds no shared library in
+  conda-forge's Python 3.15. No change to the package itself.
+
 ## v0.6.6
 
 ### Changed
