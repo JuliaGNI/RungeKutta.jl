@@ -123,7 +123,7 @@ function stability_function(tab::Tableau{T}) where {T}
     return StabilityFunction{T}(P, Q)
 end
 
-# The default relative tolerance of the zero count: none for an exact element type.
+# The default relative tolerance `rtol` of every decision: none for an exact element type.
 _default_rtol(::Type{T}) where {T <: AbstractFloat} = 16 * eps(T)
 _default_rtol(::Type{<:Real}) = 0
 
