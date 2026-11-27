@@ -56,3 +56,17 @@ fixed; the fix goes in `CHANGELOG.md`.
   `Tableau{Float64, _A, Int64} where _A`: the type of the coefficient matrix is not inferred.
 - **kind:** defect
 - **found:** 2026-11-27
+
+### K10 · The symmetry and symplecticity checks overflow for a `Rational{Int64}` tableau near the Int64 limit
+
+- **location:** `src/symmetry.jl:5`
+- **evidence:** `check_symmetry` and `check_symplecticity` (`src/symplecticity.jl:5`, `:18`) form
+  their sums in the element type, and checked `Rational{Int64}` arithmetic throws. With
+  `M = typemax(Int64)` and `tab = Tableau(:edge, 1, [M // 1;;], [1 // 1], [0 // 1])`, both
+  `check_symmetry(tab)` and `check_symplecticity(tab)` raise
+  `OverflowError: 9223372036854775807 + 9223372036854775807 overflowed for type Int64`. The order
+  checks avoid this, because `_divide` in `src/order_conditions.jl` forms the right-hand side in
+  BigInt; here the left-hand side overflows before `isapprox` runs. A fix: widen integer and
+  rational entries to BigInt before the sums.
+- **kind:** defect
+- **found:** #57
