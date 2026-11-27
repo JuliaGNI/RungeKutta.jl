@@ -6,9 +6,10 @@ _default_tolerance(::Type{T}) where {T <: Union{Integer, Rational}} = zero(T)
 
 # The right-hand side x / k of an order condition. For an integer or rational x it is the exact
 # rational x // k, because x / k converts an integer x to Float64, where integers above 2^53
-# that differ are equal.
+# that differ are equal. It is formed in BigInt, so that isapprox subtracts it from the left-hand
+# side without the OverflowError of checked Int64 rational arithmetic.
 _divide(x, k) = x / k
-_divide(x::Union{Integer, Rational}, k::Integer) = x // k
+_divide(x::Union{Integer, Rational}, k::Integer) = big(x) // k
 
 function check_order_conditions_b(tab::Tableau{T}, k; atol = _default_tolerance(T),
         rtol = _default_tolerance(T)) where {T}
