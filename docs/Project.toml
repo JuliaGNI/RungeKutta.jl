@@ -7,7 +7,6 @@ PrettyTables = "08abe8d2-0d0c-5749-adfa-8a2ac140af0d"
 QuadratureRules = "a08977f5-a20d-4b99-b11f-f5ea535e0575"
 RungeKutta = "fb486d5c-30a0-4a8a-8415-a8b4ace5a6f7"
 SymPyPythonCall = "bc8888f7-b21e-4b7c-a06a-5d9c9496438c"
-Weave = "44d3d7a6-8a23-5bf8-98c5-b353f8df5ec9"
 
 [sources]
 RungeKutta = {path = ".."}
