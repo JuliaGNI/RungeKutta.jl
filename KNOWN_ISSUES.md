@@ -48,7 +48,16 @@ fixed; the fix goes in `CHANGELOG.md`.
 - **kind:** missing test
 - **found:** 2026-10-02
 
-### K6 · The real interval of `TableauRK5` in a float type is up to 242 ULPs from its exact value
+### K9 · The Lobatto constructors do not infer a concrete tableau type
+
+- **location:** `src/tableaus/lobatto.jl`
+- **evidence:** `Base.return_types(TableauLobattoIIIF, (Type{Float64}, Int))` and
+  `Base.return_types(TableauLobattoIIIA, (Type{Float64}, Int))` both return
+  `Tableau{Float64, _A, Int64} where _A`: the type of the coefficient matrix is not inferred.
+- **kind:** defect
+- **found:** 2026-11-27
+
+### K10 · The real interval of `TableauRK5` in a float type is up to 242 ULPs from its exact value
 
 - **location:** `src/stability.jl:463`
 - **evidence:** `real_stability_interval(TableauRK5(Float64))` is `5.603972407468875`. The exact
@@ -61,7 +70,7 @@ fixed; the fix goes in `CHANGELOG.md`.
 - **found:** 2026-11-27, the decided rule on the zero counts of the floating-point decisions
   (scenario "Float32 decisions"), which computes `P` and `Q` in the element type of the tableau
 
-### K7 · `isastable` refuses an A-stable tableau whose `P` cancels a pole of `Q` in the left half-plane
+### K11 · `isastable` refuses an A-stable tableau whose `P` cancels a pole of `Q` in the left half-plane
 
 - **location:** `src/stability.jl:425`
 - **evidence:** `Tableau{Rational{BigInt}}(:red, 1, [-1 0; 0 1], [0, 1], [0, 0])` has
@@ -71,7 +80,7 @@ fixed; the fix goes in `CHANGELOG.md`.
 - **kind:** found late
 - **found:** 2026-11-27, condition (i) of the requirement "A- and L-stability by an algebraic test"
 
-### K8 · In `Float32`, the interval of a pair can differ from its value in `Float64`
+### K12 · In `Float32`, the interval of a pair can differ from its value in `Float64`
 
 - **location:** `src/stability.jl:534`
 - **evidence:** `imaginary_stability_interval(PartitionedTableau(f(Float32, 5)))` gives
@@ -84,7 +93,7 @@ fixed; the fix goes in `CHANGELOG.md`.
 - **found:** 2026-11-27, the decided rule on the zero counts of the floating-point decisions,
   whose tested domain is `s ≤ 4`
 
-### K9 · `linear_order` exceeds `deg P + deg Q` at a scale beyond `1/rtol`
+### K13 · `linear_order` exceeds `deg P + deg Q` at a scale beyond `1/rtol`
 
 - **location:** `src/stability.jl:190`
 - **evidence:** for the θ-method
@@ -95,7 +104,7 @@ fixed; the fix goes in `CHANGELOG.md`.
 - **kind:** found late
 - **found:** 2026-11-27, the decided bound of the linear-order residual
 
-### K10 · `stability_region` returns `NaN` where `P(z)` and `Q(z)` overflow
+### K14 · `stability_region` returns `NaN` where `P(z)` and `Q(z)` overflow
 
 - **location:** `src/stability.jl:609`
 - **evidence:**
@@ -105,7 +114,7 @@ fixed; the fix goes in `CHANGELOG.md`.
 - **kind:** found late
 - **found:** 2026-11-27
 
-### K11 · `linear_order(TableauLobattoIIIF(BigFloat, 6))` is `1`
+### K15 · `linear_order(TableauLobattoIIIF(BigFloat, 6))` is `1`
 
 - **location:** `src/stability.jl:190`
 - **evidence:** `linear_order(TableauLobattoIIIF(BigFloat, 6))` returns `1`, where the linear
@@ -114,7 +123,7 @@ fixed; the fix goes in `CHANGELOG.md`.
 - **kind:** found late
 - **found:** 2026-11-27
 
-### K12 · The interval of a pair throws an unclear `ArgumentError` where its conditions overflow
+### K16 · The interval of a pair throws an unclear `ArgumentError` where its conditions overflow
 
 - **location:** `src/stability.jl:353`
 - **evidence:** for the θ-method

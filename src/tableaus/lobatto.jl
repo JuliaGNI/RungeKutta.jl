@@ -459,7 +459,7 @@ References:
 
     Wang Fangzong and Liao Xiaobing.
     A Class of Lobatto Methods of Order 2s.
-    Journal of Applied Mathematics, Volume 46, Pages 6-10, 2016.
+    IAENG International Journal of Applied Mathematics, Volume 46, Issue 1, 2016.
 """
 
 """
@@ -471,11 +471,15 @@ TableauLobattoIIIF(s) = TableauLobattoIIIF(Float64, s)
 ```
 The constructor takes the number of stages `s` and optionally the element type `T` of the tableau.
 
+The stability function of the Lobatto IIIF tableau is the (s, s)-Padé approximation of `exp(z)`,
+so its linear order, the order of the stability function, is 2s. Its classical order is 2s - 2,
+because the Lobatto weights satisfy the simplifying assumption B(2s - 2) and not B(2s - 1).
+
 $(reference(Val(:LobattoIIIF)))
 """
 function TableauLobattoIIIF(::Type{T}, s) where {T}
     Tableau{T}(
-        :LobattoIIIF, 2s, lobatto_f_coefficients(s), lobatto_legendre_weights(BigFloat, s),
+        :LobattoIIIF, 2s-2, lobatto_f_coefficients(s), lobatto_legendre_weights(BigFloat, s),
         lobatto_legendre_nodes(BigFloat, s); R∞ = (-1)^s)
 end
 
@@ -489,12 +493,18 @@ TableauLobattoIIIF̄(s) = TableauLobattoIIIF̄(Float64, s)
 The constructor takes the number of stages `s` and optionally the element type `T` of the tableau.
 
 The Lobatto IIIF̄ tableau is the conjugate symplectic to [`TableauLobattoIIIF`](@ref).
+
+The stability function of the Lobatto IIIF̄ tableau is the (s, s)-Padé approximation of `exp(z)`,
+so its linear order, the order of the stability function, is 2s. Its classical order is 2s - 2,
+because the Lobatto weights satisfy the simplifying assumption B(2s - 2) and not B(2s - 1).
+
+$(reference(Val(:LobattoIIIF)))
 """
 function TableauLobattoIIIF̄(::Type{T}, s) where {T}
     a = lobatto_f_coefficients(s)
     b = lobatto_legendre_weights(BigFloat, s)
     ā = symplectic_conjugate_coefficients(a, b)
-    Tableau{T}(:LobattoIIIF̄, 2s, ā, b, lobatto_legendre_nodes(BigFloat, s); R∞ = (-1)^s)
+    Tableau{T}(:LobattoIIIF̄, 2s-2, ā, b, lobatto_legendre_nodes(BigFloat, s); R∞ = (-1)^s)
 end
 
 @doc raw"""
@@ -511,10 +521,12 @@ Symplectizied algorithm for [`TableauLobattoIIIF`](@ref)
 Coefficients are taken as $a^G = \frac{1}{2} ( a^F + \bar{a}^F )$ where the coefficients $\bar{a}^F$ are computed such that
 the symplecticity conditions $b_{i} \bar{a}_{i,j} + \bar{b}_{j} a_{j,i} = b_{i} \bar{b}_{j}$ and $b_{i} = \bar{b}_i$ hold
 for all $1 \le i,j \le s$.
+
+The classical order and the linear order of the Lobatto IIIG tableau are both 2s - 2.
 """
 function TableauLobattoIIIG(::Type{T}, s) where {T}
     Tableau{T}(
-        :LobattoIIIG, 2s, lobatto_g_coefficients(s), lobatto_legendre_weights(BigFloat, s),
+        :LobattoIIIG, 2s-2, lobatto_g_coefficients(s), lobatto_legendre_weights(BigFloat, s),
         lobatto_legendre_nodes(BigFloat, s); R∞ = (-1)^s)
 end
 
@@ -531,12 +543,14 @@ Lobatto IIIḠ tableau is the conjugate symplectic to [`TableauLobattoIIIG`](@re
 On paper, the coefficients of the Lobatto IIIG tableau are symplectic, however, the Lobatto IIIḠ
 coefficients are computed by the symplecticity condition and not by the formula for Lobatto IIIG
 and thus the numerical values are slightly different.
+
+The classical order and the linear order of the Lobatto IIIḠ tableau are both 2s - 2.
 """
 function TableauLobattoIIIḠ(::Type{T}, s) where {T}
     a = lobatto_g_coefficients(s)
     b = lobatto_legendre_weights(BigFloat, s)
     ā = symplectic_conjugate_coefficients(a, b)
-    Tableau{T}(:LobattoIIIḠ, 2s, ā, b, lobatto_legendre_nodes(BigFloat, s); R∞ = (-1)^s)
+    Tableau{T}(:LobattoIIIḠ, 2s-2, ā, b, lobatto_legendre_nodes(BigFloat, s); R∞ = (-1)^s)
 end
 
 TableauLobattoIII(s) = TableauLobattoIII(Float64, s)
