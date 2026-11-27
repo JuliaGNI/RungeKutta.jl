@@ -60,3 +60,32 @@ fixed; the fix goes in `CHANGELOG.md`.
   for an `Integer` or `Rational` element type; these two checks do not.
 - **kind:** defect
 - **found:** 2026-11-27
+
+### K7 · The docs give the quadrature conditions of Radau and Lobatto as B(s-1) and B(s-2)
+
+- **location:** `docs/src/rungekutta.md:99`
+- **evidence:** the sentence states that the weights satisfy "$B(s)$, for the Gauß methods,
+  $B(s-1)$ for the Radau methods, and $B(s-2)$ for the Lobatto methods". The weights of each
+  family are those of an interpolatory quadrature with s nodes, so each satisfies at least B(s),
+  and the quadrature orders are B(2s), B(2s-1) and B(2s-2). For the Lobatto IIIF and IIIG
+  tableaus with s = 2 … 5 in 256-bit `BigFloat`, `check_order_conditions_b` holds up to
+  k = 2s - 2 and fails at k = 2s - 1.
+- **kind:** docs
+- **found:** 2026-11-27
+
+### K8 · The docs misspell "coefficients" as "coffiecients"
+
+- **location:** `docs/src/rungekutta.md:118`
+- **evidence:** `grep -n coffiecients docs/src/rungekutta.md` prints line 118, "where the
+  coffiecients $\bar{a}_{ij}^{F}$ are determined by".
+- **kind:** docs
+- **found:** 2026-11-27
+
+### K9 · The Lobatto constructors do not infer a concrete tableau type
+
+- **location:** `src/tableaus/lobatto.jl`
+- **evidence:** `Base.return_types(TableauLobattoIIIF, (Type{Float64}, Int))` and
+  `Base.return_types(TableauLobattoIIIA, (Type{Float64}, Int))` both return
+  `Tableau{Float64, _A, Int64} where _A`: the type of the coefficient matrix is not inferred.
+- **kind:** defect
+- **found:** 2026-11-27
