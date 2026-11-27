@@ -536,6 +536,12 @@ end
             @test !isalgebraicallystable(tab)
         end
     end
+
+    # the inferred return type
+    for T in (Float64, Float32, BigFloat, RB)
+        @test @inferred(isalgebraicallystable(TableauGauss(T, 2))) isa Bool
+        @test @inferred(isalgebraicallystable(TableauRK4(T))) isa Bool
+    end
 end
 
 @testset "$(rpad("The data of the stability region",80))" begin

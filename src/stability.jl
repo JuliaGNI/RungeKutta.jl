@@ -574,7 +574,7 @@ function isalgebraicallystable(tab::Tableau{T}; rtol = _default_rtol(T)) where {
     tol = rtol * max(maximum(abs, M), maximum(abs, tab.b))
     all(>=(-tol), tab.b) || return false
     while !isempty(M)
-        d, k = findmax([M[i, i] for i in axes(M, 1)])
+        d, k = findmax(LinearAlgebra.diag(M))
         d <= tol && return all(x -> abs(x) <= tol, M)
         rest = [i for i in axes(M, 1) if i != k]
         M = M[rest, rest] - M[rest, k] * transpose(M[k, rest]) / d
