@@ -4,6 +4,33 @@ All notable changes to RungeKutta.jl are documented here. Versions follow
 [semantic versioning](https://semver.org) as it applies to Julia's `0.x` series, where a
 change to the minor version may break compatibility.
 
+## v0.6.8 (unreleased)
+
+### Fixed
+
+- `order` of `TableauLobattoIIIF(s)`, `TableauLobattoIIIF̄(s)`, `TableauLobattoIIIG(s)` and
+  `TableauLobattoIIIḠ(s)` returns `2s - 2`, their classical order, where it returned `2s`. The
+  `s` Lobatto weights satisfy the simplifying assumption B(2s - 2) and not B(2s - 1), so no
+  tableau with these weights reaches order `2s`. The pairs `TableauLobattoIIIFIIIF̄(s)`,
+  `TableauLobattoIIIF̄IIIF(s)` and `TableauLobattoIIIGIIIḠ(s)` take the smaller order of their
+  tableaus, so their `order` changes from `2s` to `2s - 2` as well. The stability function of
+  Lobatto IIIF and IIIF̄ is the (s, s)-Padé approximation of `exp(z)`, so their linear order is
+  `2s`, which their docstrings state beside the classical order. The stored `R∞` of every
+  tableau is unchanged.
+- `check_order_conditions_b` compares with `one(T) / k` in the element type `T` of the tableau,
+  where it compared with the `Float64` value `1/k`. `satisfies_simplifying_assumption_b` therefore
+  holds for the Gauß, Radau IIA and Lobatto IIIA tableaus with 3, 4 and 5 stages in `BigFloat`,
+  where it returned `false`.
+- The default `atol` and `rtol` of `check_order_conditions_b`, `check_order_conditions_c` and
+  `check_order_conditions_d`, and so of the three `satisfies_simplifying_assumption_*`, are
+  exactly zero for an integer or rational element type, so these checks compare exactly. They
+  raised a `MethodError` for `Rational{BigInt}`, because `eps` has no method for it. Other element
+  types keep the default `16eps(T)`.
+- The methods page lists `TableauRK4`, an alias of `TableauRK416`, with 4 stages and order 4, where
+  it listed 6 stages and order 5, and Lobatto IIIF and IIIG with order `2s-2`. The reference of
+  Lobatto IIIF names its journal, the IAENG International Journal of Applied Mathematics,
+  volume 46, issue 1, and no longer gives page numbers, which the paper does not print.
+
 ## v0.6.7
 
 ### Changed
