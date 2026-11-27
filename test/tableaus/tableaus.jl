@@ -206,3 +206,31 @@ end
     @test issymplectic(TableauSRK3())
     @test issymmetric(TableauSRK3())
 end
+
+# The order conditions of the rooted trees up to order four, as (order, sum, 1/γ(t)).
+function rooted_tree_conditions(tab)
+    a, b, c = tab.a, tab.b, tab.c
+    [(1, sum(b), 1),
+        (2, sum(b .* c), 1 // 2),
+        (3, sum(b .* c .^ 2), 1 // 3),
+        (3, sum(b .* (a * c)), 1 // 6),
+        (4, sum(b .* c .^ 3), 1 // 4),
+        (4, sum(b .* c .* (a * c)), 1 // 8),
+        (4, sum(b .* (a * c .^ 2)), 1 // 12),
+        (4, sum(b .* (a * (a * c))), 1 // 24)]
+end
+
+@testset "$(rpad("Order conditions of the explicit tableaus",80))" begin
+    # In BigFloat the rounding error of each sum is below 1e-73; a wrong coefficient leaves a
+    # residual of order 1e-2.
+    atol = 1e-60
+    for T in (TableauExplicitEuler, TableauExplicitMidpoint, TableauHeun2, TableauHeun3,
+        TableauRalston2, TableauRalston3, TableauRunge, TableauKutta, TableauRK31,
+        TableauRK416, TableauRK42, TableauRK438, TableauRK5, TableauSSPRK2, TableauSSPRK3)
+        tab = T(BigFloat)
+        @test isapprox(vec(sum(tab.a; dims = 2)), tab.c; atol)
+        for (p, lhs, rhs) in rooted_tree_conditions(tab)
+            p ≤ order(tab) && @test isapprox(lhs, rhs; atol)
+        end
+    end
+end
