@@ -1,24 +1,14 @@
 using RungeKutta
 using Documenter
 using DocumenterCitations
-using Weave
 
 bib = CitationBibliography(joinpath(@__DIR__, "RungeKutta.bib"))
 
-module RungeKuttaWeaves
+"Helpers for the `@eval` blocks of the pages with symbolic tableaus."
+module SymbolicTableaus
 using Markdown
-using Markdown: MD, Paragraph, LineBreak
 using PrettyTables
 using RungeKutta
-using QuadratureRules: gauss_legendre_nodes, gauss_legendre_weights,
-                       lobatto_legendre_nodes, lobatto_legendre_weights,
-                       radau_legendre_nodes, radau_legendre_weights
-using RungeKutta.Tableaus: gauss_coefficients
-using RungeKutta.Tableaus: lobatto_a_coefficients, lobatto_b_coefficients,
-                           lobatto_c_coefficients, lobatto_c̄_coefficients,
-                           lobatto_d_coefficients, lobatto_e_coefficients,
-                           lobatto_f_coefficients, lobatto_g_coefficients
-using RungeKutta.Tableaus: radau_1_coefficients, radau_2_coefficients
 
 import SymPyPythonCall
 import SymPyPythonCall: latex, simplify
@@ -56,27 +46,12 @@ function Base.show(io::IO, ::MIME"text/markdown", tab::Tableau{symtype()})
 
     print(io, tab_markdown * "\n")
 end
+
+"Markdown of the tableaus `f(s)` for `s` in `stages`, as the value of an `@eval` block."
+function tableaus_markdown(f, stages)
+    Markdown.parse(join(repr("text/markdown", f(s)) for s in stages))
 end
-
-weave(joinpath(@__DIR__, "src", "gauss.jmd"),
-    out_path = joinpath(@__DIR__, "src"),
-    doctype = "github",
-    mod = RungeKuttaWeaves)
-
-weave(joinpath(@__DIR__, "src", "radau1.jmd"),
-    out_path = joinpath(@__DIR__, "src"),
-    doctype = "github",
-    mod = RungeKuttaWeaves)
-
-weave(joinpath(@__DIR__, "src", "radau2.jmd"),
-    out_path = joinpath(@__DIR__, "src"),
-    doctype = "github",
-    mod = RungeKuttaWeaves)
-
-weave(joinpath(@__DIR__, "src", "lobatto.jmd"),
-    out_path = joinpath(@__DIR__, "src"),
-    doctype = "github",
-    mod = RungeKuttaWeaves)
+end
 
 makedocs(
     sitename = "RungeKutta.jl",

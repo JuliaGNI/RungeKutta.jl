@@ -6,15 +6,23 @@ change to the minor version may break compatibility.
 
 ## [Unreleased]
 
+### Changed
+
+- The documentation no longer uses Weave. The pages of the Gauß, Radau I, Radau II and Lobatto III
+  tableaus are Markdown sources with Documenter `@eval` blocks, which print the same symbolic
+  tableaus. This fixes the `Documentation` job, which failed while it loaded SymPyPythonCall
+  (known issue K6): Weave 0.10.12 holds JSON at 0.21, so the docs environment could not install
+  CondaPkg 0.2.38 and PythonCall 0.9.37, and PythonCall 0.9.36 finds no shared library in
+  conda-forge's Python 3.15. No change to the package itself.
+
 ### Fixed
 
 - `TableauRK42` has order four (issue #54). Its coefficient `a[4,3]` was `1`, where the order
   conditions require `2`, so the row sums of `a` did not equal `c`, four order conditions of
   order three and four failed, and an integrator with this tableau converged with order one.
   A new test checks the row sums and the order conditions up to order four of every explicit
-  tableau, and
-  `scripts/verify_rk42_order.jl` checks the tableau in exact rational arithmetic and by its
-  observed convergence order.
+  tableau, and `scripts/verify_rk42_order.jl` checks the tableau in exact rational arithmetic
+  and by its observed convergence order.
 
 ## v0.6.6
 
