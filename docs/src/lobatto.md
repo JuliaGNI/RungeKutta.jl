@@ -62,7 +62,7 @@ end
 
 ```@eval tableaus
 tableaus_markdown(2:4) do s
-    Tableau(Symbol("LobattoIIIF($s)"), 2s,   lobatto_f_coefficients(symtype(), s), lobatto_legendre_weights(symtype(), s), lobatto_legendre_nodes(symtype(), s))
+    Tableau(Symbol("LobattoIIIF($s)"), 2s-2, lobatto_f_coefficients(symtype(), s), lobatto_legendre_weights(symtype(), s), lobatto_legendre_nodes(symtype(), s))
 end
 ```
 
@@ -70,6 +70,6 @@ end
 
 ```@eval tableaus
 tableaus_markdown(2:4) do s
-    Tableau(Symbol("LobattoIIIG($s)"), 2s,   lobatto_g_coefficients(symtype(), s), lobatto_legendre_weights(symtype(), s), lobatto_legendre_nodes(symtype(), s))
+    Tableau(Symbol("LobattoIIIG($s)"), 2s-2, lobatto_g_coefficients(symtype(), s), lobatto_legendre_weights(symtype(), s), lobatto_legendre_nodes(symtype(), s))
 end
 ```

@@ -20,7 +20,7 @@ All constructors take an optional type argument, defaulting to `Float64`.
 | [`TableauRK22`](@ref)                                          | 2      | 2     |
 | [`TableauRK31`](@ref)                                          | 3      | 3     |
 | [`TableauRK32`](@ref)                                          | 3      | 3     |
-| [`TableauRK4`](@ref)                                           | 6      | 5     |
+| [`TableauRK4`](@ref)                                           | 4      | 4     |
 | [`TableauRK41`](@ref)                                          | 4      | 4     |
 | [`TableauRK42`](@ref)                                          | 4      | 4     |
 | [`TableauRK416`](@ref)                                         | 4      | 4     |
@@ -59,8 +59,8 @@ The coefficients of the Gauß, Lobatto and Radau methods are computed on-the-fly
 | [`TableauLobattoIIIC(s)`](@ref)     | Lobatto IIIC with s stages  | $2s-2$  |
 | [`TableauLobattoIIID(s)`](@ref)     | Lobatto IIID with s stages  | $2s-2$  |
 | [`TableauLobattoIIIE(s)`](@ref)     | Lobatto IIIE with s stages  | $2s-2$  |
-| [`TableauLobattoIIIF(s)`](@ref)     | Lobatto IIIF with s stages  | $2s$    |
-| [`TableauLobattoIIIG(s)`](@ref)     | Lobatto IIIG with s stages  | $2s$    |
+| [`TableauLobattoIIIF(s)`](@ref)     | Lobatto IIIF with s stages  | $2s-2$  |
+| [`TableauLobattoIIIG(s)`](@ref)     | Lobatto IIIG with s stages  | $2s-2$  |
 | [`TableauRadauIA(s)`](@ref)         | Radau IA with s stages      | $2s-1$  |
 | [`TableauRadauIB(s)`](@ref)         | Radau IB with s stages      | $2s-1$  |
 | [`TableauRadauIIA(s)`](@ref)        | Radau IIA with s stages     | $2s-1$  |
