@@ -587,3 +587,27 @@ end
             TableauRK4(Float32); kw...)
     end
 end
+
+# A variable that a closure captures and the enclosing method reassigns is a `Core.Box`, and every
+# operation on it infers `Any`. The lowered code of each method of `src/stability.jl` holds none.
+@testset "$(rpad("No captured variable is boxed",80))" begin
+    scanned = Symbol[]
+    boxed = Tuple{Symbol, Int}[]
+    for name in names(RungeKutta; all = true)
+        isdefined(RungeKutta, name) || continue
+        f = getfield(RungeKutta, name)
+        f isa Function || continue
+        for m in methods(f)
+            (m.module === RungeKutta && endswith(string(m.file), "stability.jl")) ||
+                continue
+            push!(scanned, name)
+            occursin("Core.Box", string(Base.uncompressed_ir(m))) &&
+                push!(boxed, (m.name, Int(m.line)))
+        end
+    end
+    @test isempty(boxed)
+    # the scan reaches the methods of the file
+    @test :_has_roots_in_right_half_plane_only in scanned
+    @test :isalgebraicallystable in scanned
+    @test length(scanned) >= 20
+end

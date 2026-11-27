@@ -394,7 +394,7 @@ function _has_roots_in_right_half_plane_only(q)
     for _ in 1:(length(c) - 1)
         append!(r2, zeros(_Exact, length(r1) - length(r2)))
         sign(r2[1]) == σ || return false
-        r1, r2 = r2, [r1[j + 1] - r1[1] * r2[j + 1] / r2[1] for j in 1:(length(r1) - 1)]
+        r1, r2 = r2, r1[2:end] .- r1[1] .* r2[2:end] ./ r2[1]
     end
     return true
 end
