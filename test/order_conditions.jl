@@ -99,4 +99,15 @@ end
     @test check_order_conditions_c(euler, 1) == trues(1)
     @test check_order_conditions_d(euler, 1) == falses(1)   # b₁a₁₁ = 0, b₁(1 - c₁) = 1
     @test !check_order_conditions_b(Tableau(:int2, 1, [0;;], [2], [0]), 1)
+
+    # N + 1 and N are equal in Float64, so an integer tableau compares exactly only where
+    # the right-hand sides of C and D stay exact and are not converted to Float64
+    N = Int64(2)^53
+    @test Float64(N + 1) == Float64(N)
+    # C(1) reads a₁₁ = c₁
+    @test check_order_conditions_c(Tableau(:bigc, 1, [N+1;;], [1], [N]), 1) == falses(1)
+    @test check_order_conditions_c(Tableau(:bigc, 1, [N;;], [1], [N]), 1) == trues(1)
+    # D(1) reads b₁a₁₁ = b₁(1 - c₁), here with b₁ = 1 and 1 - c₁ = N
+    @test check_order_conditions_d(Tableau(:bigd, 1, [N+1;;], [1], [1-N]), 1) == falses(1)
+    @test check_order_conditions_d(Tableau(:bigd, 1, [N;;], [1], [1-N]), 1) == trues(1)
 end

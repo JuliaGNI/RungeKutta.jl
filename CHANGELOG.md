@@ -23,9 +23,10 @@ change to the minor version may break compatibility.
   where it returned `false`.
 - The default `atol` and `rtol` of `check_order_conditions_b`, `check_order_conditions_c` and
   `check_order_conditions_d`, and so of the three `satisfies_simplifying_assumption_*`, are
-  exactly zero for an integer or rational element type, so these checks compare exactly. They
+  exactly zero for an integer or rational element type, and these checks form the right-hand
+  side `x / k` as the exact rational `x // k` for such a type, so they compare exactly. They
   raised a `MethodError` for `Rational{BigInt}`, because `eps` has no method for it. Other element
-  types keep the default `16eps(T)`.
+  types keep the default `16eps(T)` and the division in the element type.
 - The methods page lists `TableauRK4`, an alias of `TableauRK416`, with 4 stages and order 4, where
   it listed 6 stages and order 5, and Lobatto IIIF and IIIG with order `2s-2`. The reference of
   Lobatto IIIF names its journal, the IAENG International Journal of Applied Mathematics,

@@ -4,10 +4,17 @@
 _default_tolerance(::Type{T}) where {T} = 16eps(T)
 _default_tolerance(::Type{T}) where {T <: Union{Integer, Rational}} = zero(T)
 
+# The right-hand side x / k of an order condition. For an integer or rational x it is the exact
+# rational x // k, because x / k converts an integer x to Float64, where integers above 2^53
+# that differ are equal.
+_divide(x, k) = x / k
+_divide(x::Union{Integer, Rational}, k::Integer) = x // k
+
 function check_order_conditions_b(tab::Tableau{T}, k; atol = _default_tolerance(T),
         rtol = _default_tolerance(T)) where {T}
     b, c, s = tab.b, tab.c, tab.s
-    isapprox(mapreduce(i -> b[i] * c[i]^(k-1), +, 1:s), one(T) / k; atol = atol, rtol = rtol)
+    isapprox(mapreduce(i -> b[i] * c[i]^(k-1), +, 1:s), _divide(one(T), k);
+        atol = atol, rtol = rtol)
 end
 
 function satisfies_simplifying_assumption_b(tab::Tableau, σ = tab.s; kwargs...)
@@ -17,7 +24,7 @@ end
 function check_order_conditions_c(tab::Tableau{T}, k; atol = _default_tolerance(T),
         rtol = _default_tolerance(T)) where {T}
     a, c, s = tab.a, tab.c, tab.s
-    [isapprox(mapreduce(j -> a[i, j] * c[j]^(k-1), +, 1:s), c[i]^k/k; atol = atol, rtol = rtol)
+    [isapprox(mapreduce(j -> a[i, j] * c[j]^(k-1), +, 1:s), _divide(c[i]^k, k); atol = atol, rtol = rtol)
      for i in 1:s]
 end
 
@@ -29,7 +36,7 @@ function check_order_conditions_d(tab::Tableau{T}, k; atol = _default_tolerance(
         rtol = _default_tolerance(T)) where {T}
     a, b, c, s = tab.a, tab.b, tab.c, tab.s
     [isapprox(mapreduce(j -> b[j] * c[j]^(k-1) * a[j, i], +, 1:s),
-         b[i] * (1 - c[i]^k)/k; atol = atol, rtol = rtol) for i in 1:s]
+         _divide(b[i] * (1 - c[i]^k), k); atol = atol, rtol = rtol) for i in 1:s]
 end
 
 function satisfies_simplifying_assumption_d(tab::Tableau, σ = tab.s; kwargs...)
