@@ -119,6 +119,14 @@ const families_lo = (TableauRadauIA, TableauRadauIIA, TableauRadauIB, TableauLob
     for tab in (Tableau(:bad, 1, [NaN;;], [1.0], [0.0]), Tableau(
         :bad, 1, [0.0;;], [Inf], [0.0]))
         @test_throws r"^ArgumentError: the tableau has a coefficient that is not finite$" stability_function(tab)
+        for f in (linear_order, isalgebraicallystable, imaginary_stability_interval ∘
+                                                       PartitionedTableau)
+            @test_throws r"^ArgumentError: the tableau has a coefficient that is not finite$" f(tab)
+        end
+        for pair in (PartitionedTableau(:x, tab, TableauExplicitEuler()),
+            PartitionedTableau(:x, TableauExplicitEuler(), tab))
+            @test_throws r"^ArgumentError: the tableau has a coefficient that is not finite$" imaginary_stability_interval(pair)
+        end
     end
 end
 
@@ -164,6 +172,9 @@ end
         @test r isa Float64
         @test within(r, Float64(-(1 - big(θ)) / big(θ)), 16)
     end
+    # in a rational type nothing counts as zero that is not 0
+    θ = 1 // big(10)^30
+    @test stability_at_infinity(θmethod(RB, θ)) == -(1 - θ) / θ
 
     # the linear order and the Padé type
     for T in (BigFloat, Float64), s in 1:4
@@ -224,6 +235,9 @@ end
         @test !isastable(tab)
         @test !islstable(tab)
     end
+    # Q(z) = P(z) = 1 + z², E ≡ 0: only the Routh test sees the poles ±i on the axis, where its
+    # first column holds a zero
+    @test !isastable(Tableau{RB}(:axis, 1, [0 1; -1 0], [0, 0], [0, 0]))
 
     # a symbolic tableau
     tab = TableauGauss(symtype(), 2)
@@ -321,6 +335,17 @@ end
     y = imaginary_stability_interval(TableauLobattoIIIAIIIB(BigFloat, 2))
     @test y isa BigFloat
     @test within(y, BigFloat(2), 16)
+
+    # M(ν) = [1 ν; ν 1], with det M = 1 - ν² and the eigenvalue 1 + ν > 1 for every ν > 0: only
+    # the condition det(I - M) ≥ 0 ends the interval, at 0
+    tab = PartitionedTableau(:hyperbolic, TableauExplicitEuler(RB),
+        Tableau{RB}(:minus, 1, [0;;], [-1], [0]))
+    @test isvalue(imaginary_stability_interval(tab), zero(BigFloat))
+
+    # two roots closer than the precision of Float64 are both found
+    roots = RungeKutta._positive_roots(RB[1 + big(2) ^ -60, -2 - big(2) ^ -60, 1], Float64)
+    @test length(roots) == 2
+    @test all(within.(Float64.(roots), 1.0, 1))
 
     # every other name raises a MethodError for a pair
     pair = PartitionedTableau(TableauGauss(2))

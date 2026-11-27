@@ -125,21 +125,28 @@ as an approximation of ``\\exp(z)``, and so the order of convergence on a linear
 constant coefficients; the classical order, from the rooted trees, can be lower. It is at most
 ``\\deg P + \\deg Q ≤ 2s``, because a rational ``R`` is not ``\\exp``, so ``k`` runs to ``2s``.
 
-A residual counts as zero when ``|b^T A^{k-1} 𝟙 - 1/k!| ≤ \\mathrm{rtol} / k!``. The default
-`rtol` is `16 * eps(T)` for a floating-point `T` and `0` for a rational one.
+A residual counts as zero when
+``|b^T A^{k-1} 𝟙 - 1/k!| ≤ \\mathrm{rtol} \\cdot k \\cdot |b|^T |A|^{k-1} 𝟙``, with ``|\\cdot|``
+taken entrywise: the first-order bound on the change of ``b^T A^{k-1} 𝟙`` when every entry of
+``A`` and ``b`` changes by a relative `rtol`, which covers the rounding of the stored tableau and
+the round-off of the products. The default `rtol` is `16 * eps(T)` for a floating-point `T` and
+`0` for a rational one, where the test is exact.
 """
 function linear_order(tab::Tableau{T}; rtol = _default_rtol(T)) where {T <: Real}
     _check_finite(tab)
     A = Matrix{T}(tab.a)
     b = Vector{T}(tab.b)
     v = ones(T, tab.s)
+    w = ones(T, tab.s)
     kfactorial = one(T)
     q = 0
     for k in 1:(2 * tab.s)
         kfactorial *= k
-        abs(sum(b .* v) - inv(kfactorial)) <= rtol * inv(kfactorial) || break
+        bound = rtol * k * sum(abs.(b) .* w)
+        abs(sum(b .* v) - inv(kfactorial)) <= bound || break
         q = k
         v = A * v
+        w = abs.(A) * w
     end
     return q
 end
@@ -297,9 +304,10 @@ end
 
 # The supremum of the r ≥ 0 with f ≥ 0 on [0, r], as F: the first root at which f changes its sign
 # to negative, that is a root of odd multiplicity. Where `touch` is true, a sign change counts only
-# where f, between that root and the next, falls below -tol Σₖ xᵏ, the bound of a change of each
-# coefficient by tol: a point where f touches zero then does not end the interval when round-off
-# splits it into two close roots.
+# where f, with the factor xʲ of its lowest nonzero coefficient divided out, falls below
+# -tol Σₖ xᵏ between that root and the next, or is negative beyond the last root; tol Σₖ xᵏ bounds
+# a change of each coefficient by tol. A point where f touches zero then does not end the interval
+# when round-off splits it into two close roots.
 function _nonnegative_until(f, tol, ::Type{F}; touch = false) where {F}
     g = _positive_part(f, tol)
     g === nothing && return zero(F)
@@ -435,17 +443,23 @@ Return the supremum of the ``r ≥ 0`` such that the amplification matrix ``M(ν
 the harmonic oscillator ``\\dot{q} = p``, ``\\dot{p} = -ω^2 q``, with ``ν = h ω``, the tableau
 `tab.q` acting on ``\\dot{q}`` and the tableau `tab.p` on ``\\dot{p}``, has spectral radius at
 most 1 for every ``ν ∈ [0, r]``; of type `float(T)`, and `Inf` where no bound exists. For a
-tableau paired with itself, it equals the interval of that tableau.
+tableau paired with itself, it equals the interval of that tableau, up to round-off for a
+floating-point `T`.
 
 The spectral radius of the real ``2 × 2`` matrix ``M`` is at most 1 exactly when
 ``|\\det M| ≤ 1``, ``\\det(I + M) ≥ 0`` and ``\\det(I - M) ≥ 0``. With ``\\det M = N_1/D`` and
 ``\\det(I + M) = N_2/D`` as quotients of polynomials in ``ν``, these are the polynomial
 conditions ``D^2 - N_1^2 ≥ 0``, ``D N_2 ≥ 0`` and ``D (2D + 2N_1 - N_2) ≥ 0``, each decided as in
-[`real_stability_interval`](@ref). For a floating-point `T`, a coefficient of ``D``, ``N_1`` or
-``N_2`` counts as zero when its magnitude is at most ``\\mathrm{rtol} \\cdot m``, with ``m`` the
-largest magnitude of their coefficients, and a coefficient of a condition when its magnitude is
-at most ``\\mathrm{rtol} \\cdot m^2``. The default `rtol` is `16 * eps(T)` for a floating-point
-`T` and `0` for a rational one.
+[`real_stability_interval`](@ref), and the interval ends at the first point where one of them
+turns negative. For a floating-point `T`, a coefficient of ``D``, ``N_1`` or ``N_2`` counts as
+zero when its magnitude is at most ``\\mathrm{rtol} \\cdot m``, with ``m`` the largest magnitude
+of their coefficients, and a coefficient of a condition ``g`` when its magnitude is at most
+``τ = \\mathrm{rtol} \\cdot m^2``. With the factor ``ν^j`` of its lowest nonzero coefficient
+divided out, a root where ``g`` changes its sign ends the interval only where ``g`` falls below
+``-τ \\sum_k ν^k`` between that root and the next, or is negative beyond the last root: a point where a condition touches zero, such as ``\\det(I + M) = 0`` at
+``M = -I`` for the Gauss tableaus, then does not end the interval when round-off splits it into
+two close roots. The default `rtol` is `16 * eps(T)` for a floating-point `T` and `0` for a
+rational one, where every decision is exact.
 """
 function imaginary_stability_interval(
         tab::PartitionedTableau{T}; rtol = _default_rtol(T)) where {T <: Real}
@@ -453,12 +467,12 @@ function imaginary_stability_interval(
     _check_finite(tab.p)
     D, N1, N2 = _amplification_coefficients(tab.q, tab.p)
     m = max(maximum(abs, D), maximum(abs, N1), maximum(abs, N2))
-    D, N1, N2 = _count_zeros(D, rtol * m), _count_zeros(N1, rtol * m),
-    _count_zeros(N2, rtol * m)
+    D, N1, N2 = (_count_zeros(p, rtol * m) for p in (D, N1, N2))
     conditions = (_psub(_pmul(D, D), _pmul(N1, N1)), _pmul(D, N2),
         _pmul(D, _psub(_padd(2 .* D, 2 .* N1), N2)))
-    return minimum(_nonnegative_until(g, rtol * m^2, float(T); touch = true)
-    for g in conditions)
+    intervals = [_nonnegative_until(g, rtol * m^2, float(T); touch = true)
+                 for g in conditions]
+    return minimum(intervals)
 end
 
 """
@@ -516,8 +530,9 @@ Throws an `ArgumentError` when a limit is not finite, when a window is not incre
 """
 function stability_region(tab::Tableau{T}; xlims = (-6.0, 2.0), ylims = (-4.0, 4.0),
         n = 201) where {T <: Real}
-    all(isfinite, (xlims..., ylims...)) && xlims[1] < xlims[2] && ylims[1] < ylims[2] &&
-    n >= 2 ||
+    finite = all(isfinite, (xlims..., ylims...))
+    increasing = xlims[1] < xlims[2] && ylims[1] < ylims[2]
+    finite && increasing && n >= 2 ||
         throw(ArgumentError("the window must have finite, increasing limits and n ≥ 2"))
     F = float(T)
     R = stability_function(tab)
