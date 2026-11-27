@@ -18,8 +18,8 @@ change to the minor version may break compatibility.
   stability intervals on the two axes, and the second also the interval of a `PartitionedTableau`
   on the harmonic oscillator; `algebraic_stability_matrix` and `isalgebraicallystable` give
   algebraic stability; and `stability_region` returns the values of `|R|` on a grid, for a plot.
-  Each predicate takes a keyword `rtol`, which is zero for a rational element type, so that the
-  decisions are exact there. `stability_at_infinity` computes `R(∞)` and does not read the
+  Each predicate takes a keyword `rtol`, whose default is zero for a rational element type, so
+  that the decisions are exact there. `stability_at_infinity` computes `R(∞)` and does not read the
   tableau's stored `R∞`.
 
 ## v0.6.7
