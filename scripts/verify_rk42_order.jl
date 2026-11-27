@@ -1,7 +1,7 @@
 using RungeKutta
 using LinearAlgebra
 
-# Checks that `TableauRK42` has order four (Butcher 2016, p. 102), in two independent ways:
+# Checks that `TableauRK42` has order four, in two independent ways:
 #
 # 1. the conditions of the rooted trees up to order four hold in exact rational arithmetic, and
 #    the row sums of `a` equal `c`;

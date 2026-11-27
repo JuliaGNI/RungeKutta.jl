@@ -10,8 +10,9 @@ change to the minor version may break compatibility.
 
 - `TableauRK42` has order four (issue #54). Its coefficient `a[4,3]` was `1`, where the order
   conditions require `2`, so the row sums of `a` did not equal `c`, four order conditions of
-  order three and four failed, and an integrator with this tableau converged with order one. A new test checks the row
-  sums and the order conditions up to order four of every explicit tableau, and
+  order three and four failed, and an integrator with this tableau converged with order one.
+  A new test checks the row sums and the order conditions up to order four of every explicit
+  tableau, and
   `scripts/verify_rk42_order.jl` checks the tableau in exact rational arithmetic and by its
   observed convergence order.
 
