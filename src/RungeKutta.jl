@@ -57,6 +57,21 @@ export check_symplecticity,
        issymplectic,
        symplectic_conjugate_coefficients
 
+include("stability.jl")
+
+export StabilityFunction,
+       stability_function,
+       stability_at_infinity,
+       linear_order,
+       pade_type,
+       isastable,
+       islstable,
+       isalgebraicallystable,
+       algebraic_stability_matrix,
+       real_stability_interval,
+       imaginary_stability_interval,
+       stability_region
+
 include("Tableaus.jl")
 @reexport using .Tableaus
 

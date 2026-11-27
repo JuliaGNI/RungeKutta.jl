@@ -4,6 +4,24 @@ All notable changes to RungeKutta.jl are documented here. Versions follow
 [semantic versioning](https://semver.org) as it applies to Julia's `0.x` series, where a
 change to the minor version may break compatibility.
 
+## Unreleased
+
+### Added
+
+- The stability function and the linear and nonlinear stability of a tableau, in the new file
+  `src/stability.jl`. `stability_function(tab)` returns a `StabilityFunction`, the coefficients of
+  `R(z) = P(z)/Q(z)`, computed exactly in `Rational{BigInt}` and in SymPy, and callable as `R(z)`.
+  From it, `stability_at_infinity`, `linear_order` and `pade_type` give `R(∞)`, the linear order
+  (the order of `R` as an approximation of `exp`, which can differ from the classical order) and
+  the Padé type; `isastable` and `islstable` decide A- and L-stability from the coefficients,
+  without sampling; `real_stability_interval` and `imaginary_stability_interval` give the
+  stability intervals on the two axes, and the second also the interval of a `PartitionedTableau`
+  on the harmonic oscillator; `algebraic_stability_matrix` and `isalgebraicallystable` give
+  algebraic stability; and `stability_region` returns the values of `|R|` on a grid, for a plot.
+  Each predicate takes a keyword `rtol`, which is zero for a rational element type, so that the
+  decisions are exact there. `stability_at_infinity` computes `R(∞)` and does not read the
+  tableau's stored `R∞`.
+
 ## v0.6.7
 
 ### Changed
