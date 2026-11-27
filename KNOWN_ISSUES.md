@@ -48,39 +48,6 @@ fixed; the fix goes in `CHANGELOG.md`.
 - **kind:** missing test
 - **found:** 2026-10-02
 
-### K6 · `check_symplecticity` and `check_symmetry` raise a `MethodError` for an exact element type
-
-- **location:** `src/symplecticity.jl:2`
-- **evidence:** the default tolerances are `atol = 16eps(T), rtol = 16eps(T)` in
-  `src/symplecticity.jl:2`, `src/symplecticity.jl:12` and `src/symmetry.jl:2`, and
-  `eps(Rational{BigInt})` has no method. So `check_symplecticity(TableauGauss(Rational{BigInt}, 2))`
-  and `check_symmetry(TableauGauss(Rational{BigInt}, 2))` raise
-  `MethodError: no method matching eps(::Type{Rational{BigInt}})`. With `atol = 0, rtol = 0` given,
-  `check_symplecticity` runs. The three `check_order_conditions_*` take exact zero as the default
-  for an `Integer` or `Rational` element type; these two checks do not.
-- **kind:** defect
-- **found:** 2026-11-27
-
-### K7 · The docs give the quadrature conditions of Radau and Lobatto as B(s-1) and B(s-2)
-
-- **location:** `docs/src/rungekutta.md:99`
-- **evidence:** the sentence states that the weights satisfy "$B(s)$, for the Gauß methods,
-  $B(s-1)$ for the Radau methods, and $B(s-2)$ for the Lobatto methods". The weights of each
-  family are those of an interpolatory quadrature with s nodes, so each satisfies at least B(s),
-  and the quadrature orders are B(2s), B(2s-1) and B(2s-2). For the Lobatto IIIF and IIIG
-  tableaus with s = 2 … 5 in 256-bit `BigFloat`, `check_order_conditions_b` holds up to
-  k = 2s - 2 and fails at k = 2s - 1.
-- **kind:** docs
-- **found:** 2026-11-27
-
-### K8 · The docs misspell "coefficients" as "coffiecients"
-
-- **location:** `docs/src/rungekutta.md:118`
-- **evidence:** `grep -n coffiecients docs/src/rungekutta.md` prints line 118, "where the
-  coffiecients $\bar{a}_{ij}^{F}$ are determined by".
-- **kind:** docs
-- **found:** 2026-11-27
-
 ### K9 · The Lobatto constructors do not infer a concrete tableau type
 
 - **location:** `src/tableaus/lobatto.jl`

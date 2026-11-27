@@ -1,6 +1,7 @@
 
-# The default tolerance of the order-condition checks: exactly zero for an exact element type,
-# so that the check compares exactly, and 16 machine epsilons of the element type otherwise.
+# The default tolerance of the order-condition, symmetry and symplecticity checks: exactly zero
+# for an exact element type, so that the check compares exactly, and 16 machine epsilons of the
+# element type otherwise.
 _default_tolerance(::Type{T}) where {T} = 16eps(T)
 _default_tolerance(::Type{T}) where {T <: Union{Integer, Rational}} = zero(T)
 

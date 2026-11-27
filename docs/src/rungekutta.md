@@ -96,7 +96,7 @@ In a similar fashion, the nodes of the Radau I and II and the Lobatto III method
 \end{aligned}
 ```
 
-The weights $b_{1}, ..., b_{s}$ are chosen such that the methods satisfy $B(\sigma)$, that is $B(s)$, for the Gauß methods, $B(s-1)$ for the Radau methods, and $B(s-2)$ for the Lobatto methods.
+The weights $b_{1}, ..., b_{s}$ are chosen such that the methods satisfy $B(\sigma)$, that is $B(2s)$ for the Gauß methods, $B(2s-1)$ for the Radau methods, and $B(2s-2)$ for the Lobatto methods.
 
 The coefficients $a_{ij}$ for $i,j = 1, ..., s$ are obtained by the simplifying assumption $C(s)$ for the Gauß, Radau IIA and Lobatto IIIA methods, and by the simplifying assumption $D(s)$ for the Radau IA and Lobatto IIIB methods.
 The coefficients of the Lobatto IIIC methods are determined by setting $a_{i,1} = b_1$ for $i = 1, ..., s$ and solving the simplifying assumption $C(s-1)$, while the coefficients of the Lobatto IIIC̄ methods are determined by setting $a_{i,s} = 0$ and solving $C(s-1)$. Note that the Lobatto IIIC̄ methods are sometimes also called Lobatto III or Lobatto III*. For reasons of code symmetry we chose to stick with the less common name Lobatto IIIC̄.
@@ -115,7 +115,7 @@ The Lobatto IIIG method is constructed in a similar fashion as the Lobatto IIID 
 ```math
 a_{ij}^{G} = \tfrac{1}{2} ( a_{ij}^{F} + \bar{a}_{ij}^{F} ) ,
 ```
-where the coffiecients $\bar{a}_{ij}^{F}$ are determined by
+where the coefficients $\bar{a}_{ij}^{F}$ are determined by
 ```math
 \begin{aligned}
 b_{i} \bar{a}^{F}_{ij} + \bar{b}_{j} a^{F}_{ji} &= b_{i} \bar{b}_{j}  &

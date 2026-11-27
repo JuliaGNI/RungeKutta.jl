@@ -27,3 +27,19 @@ using Test
         @test !issymmetric(TableauRadauIIA(s))
     end
 end
+
+@testset "$(rpad("Symmetry in Rational{BigInt}",80))" begin
+    QQ = Rational{BigInt}
+
+    # the default tolerance of an exact element type is exactly zero
+    midpoint = Tableau(:midpoint, 2, QQ[1//2;;], QQ[1], QQ[1 // 2])
+    trapezoidal = Tableau(:trapezoidal, 2, QQ[0 0; 1//2 1//2], QQ[1 // 2, 1 // 2], QQ[0, 1])
+    @test eltype(midpoint) == eltype(trapezoidal) == QQ
+    @test check_symmetry(midpoint) == trues(1, 1)
+    @test check_symmetry(trapezoidal) == trues(2, 2)
+    @test issymmetric(midpoint)
+    @test issymmetric(trapezoidal)
+    @test !issymmetric(TableauRK4(QQ))
+    @test check_symmetry(PartitionedTableau(:trapezoidal, trapezoidal)) ==
+          (trues(2, 2), trues(2, 2))
+end

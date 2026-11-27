@@ -52,3 +52,22 @@ using Test
         @test issymplectic(SymplecticPartitionedTableau(B))
     end
 end
+
+@testset "$(rpad("Symplecticity in Rational{BigInt}",80))" begin
+    QQ = Rational{BigInt}
+
+    # the default tolerance of an exact element type is exactly zero
+    midpoint = Tableau(:midpoint, 2, QQ[1//2;;], QQ[1], QQ[1 // 2])
+    @test eltype(midpoint) == QQ
+    @test check_symplecticity(midpoint) == trues(1, 1)
+    @test issymplectic(midpoint)
+    @test !issymplectic(TableauRK4(QQ))
+
+    # the Lobatto IIIA-IIIB pair with two stages is symplectic, the Lobatto IIIA tableau is not
+    A = Tableau(:LobattoIIIA2, 2, QQ[0 0; 1//2 1//2], QQ[1 // 2, 1 // 2], QQ[0, 1])
+    B = Tableau(:LobattoIIIB2, 2, QQ[1//2 0; 1//2 0], QQ[1 // 2, 1 // 2], QQ[0, 1])
+    @test !issymplectic(A)
+    @test check_symplecticity(PartitionedTableau(:LobattoIIIAIIIB2, A, B)) ==
+          (trues(2, 2), trues(2))
+    @test !issymplectic(PartitionedTableau(:LobattoIIIAIIIA2, A, A))
+end

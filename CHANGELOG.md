@@ -27,10 +27,20 @@ change to the minor version may break compatibility.
   side `x / k` as the exact rational `x // k` for such a type, so they compare exactly. They
   raised a `MethodError` for `Rational{BigInt}`, because `eps` has no method for it. Other element
   types keep the default `16eps(T)` and the division in the element type.
+- The default `atol` and `rtol` of `check_symplecticity` (for a `Tableau` and a
+  `PartitionedTableau`) and of `check_symmetry` are exactly zero for an integer or rational
+  element type, so `issymplectic` and `issymmetric` decide exactly for such a tableau. In 0.6.7
+  all four raised a `MethodError` for `Rational{BigInt}`, because `eps` has no method for it. For
+  `Rational{BigInt}`, `issymplectic` and `issymmetric` are now true for the implicit midpoint rule
+  and false for `TableauRK4`. `check_symmetry` and `issymmetric` of a `PartitionedTableau` forward
+  to the `Tableau` method and are fixed with it. Other element types keep the default `16eps(T)`.
 - The methods page lists `TableauRK4`, an alias of `TableauRK416`, with 4 stages and order 4, where
   it listed 6 stages and order 5, and Lobatto IIIF and IIIG with order `2s-2`. The reference of
   Lobatto IIIF names its journal, the IAENG International Journal of Applied Mathematics,
   volume 46, issue 1, and no longer gives page numbers, which the paper does not print.
+- The page on Runge-Kutta methods states the quadrature conditions of the weights as B(2s) for
+  the Gauß methods, B(2s-1) for the Radau methods and B(2s-2) for the Lobatto methods, where it
+  stated B(s), B(s-1) and B(s-2).
 
 ## v0.6.7
 

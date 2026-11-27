@@ -1,5 +1,6 @@
 
-function check_symmetry(tab::Tableau{T}; atol = 16eps(T), rtol = 16eps(T)) where {T}
+function check_symmetry(tab::Tableau{T}; atol = _default_tolerance(T),
+        rtol = _default_tolerance(T)) where {T}
     a, b, s = tab.a, tab.b, tab.s
     [isapprox(a[s + 1 - i, s + 1 - j] + a[i, j], b[j]; atol = atol, rtol = rtol)
      for i in axes(a, 1), j in axes(a, 2)]
