@@ -47,3 +47,12 @@ fixed; the fix goes in `CHANGELOG.md`.
   ```` @test startswith(repr("text/markdown", gauss), "Runge-Kutta Tableau Gauss with 2 stages and order 4:\n```math\n") ````.
 - **kind:** missing test
 - **found:** 2026-10-02
+
+### K9 · The Lobatto constructors do not infer a concrete tableau type
+
+- **location:** `src/tableaus/lobatto.jl`
+- **evidence:** `Base.return_types(TableauLobattoIIIF, (Type{Float64}, Int))` and
+  `Base.return_types(TableauLobattoIIIA, (Type{Float64}, Int))` both return
+  `Tableau{Float64, _A, Int64} where _A`: the type of the coefficient matrix is not inferred.
+- **kind:** defect
+- **found:** 2026-11-27

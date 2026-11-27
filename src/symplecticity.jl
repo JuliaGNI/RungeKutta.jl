@@ -1,5 +1,6 @@
 
-function check_symplecticity(tab::Tableau{T}; atol = 16eps(T), rtol = 16eps(T)) where {T}
+function check_symplecticity(tab::Tableau{T}; atol = _default_tolerance(T),
+        rtol = _default_tolerance(T)) where {T}
     a, b = tab.a, tab.b
     [isapprox(b[i] * a[i, j] + b[j] * a[j, i], b[i] * b[j]; atol = atol, rtol = rtol)
      for i in axes(a, 1), j in axes(a, 2)]
@@ -9,7 +10,8 @@ function issymplectic(tab::Tableau; kwargs...)
     all(check_symplecticity(tab; kwargs...))
 end
 
-function check_symplecticity(tab::PartitionedTableau{T}; atol = 16eps(T), rtol = 16eps(T)) where {T}
+function check_symplecticity(tab::PartitionedTableau{T}; atol = _default_tolerance(T),
+        rtol = _default_tolerance(T)) where {T}
     a, b = tab.q.a, tab.q.b
     ā, b̄ = tab.p.a, tab.p.b
     (

@@ -1,16 +1,32 @@
 
-function check_order_conditions_b(tab::Tableau{T}, k; atol = 16eps(T), rtol = 16eps(T)) where {T}
+# The default tolerance of the order-condition, symmetry and symplecticity checks: exactly zero
+# for an exact element type, so that the check compares exactly, and 16 machine epsilons of the
+# element type otherwise.
+_default_tolerance(::Type{T}) where {T} = 16eps(T)
+_default_tolerance(::Type{T}) where {T <: Union{Integer, Rational}} = zero(T)
+
+# The right-hand side x / k of an order condition. For an integer or rational x it is the exact
+# rational x // k, because x / k converts an integer x to Float64, where integers above 2^53
+# that differ are equal. It is formed in BigInt, so that isapprox subtracts it from the left-hand
+# side without the OverflowError of checked Int64 rational arithmetic.
+_divide(x, k) = x / k
+_divide(x::Union{Integer, Rational}, k::Integer) = big(x) // k
+
+function check_order_conditions_b(tab::Tableau{T}, k; atol = _default_tolerance(T),
+        rtol = _default_tolerance(T)) where {T}
     b, c, s = tab.b, tab.c, tab.s
-    isapprox(mapreduce(i -> b[i] * c[i]^(k-1), +, 1:s), 1/k; atol = atol, rtol = rtol)
+    isapprox(mapreduce(i -> b[i] * c[i]^(k-1), +, 1:s), _divide(one(T), k);
+        atol = atol, rtol = rtol)
 end
 
 function satisfies_simplifying_assumption_b(tab::Tableau, σ = tab.s; kwargs...)
     all([check_order_conditions_b(tab, k; kwargs...) for k in 1:σ])
 end
 
-function check_order_conditions_c(tab::Tableau{T}, k; atol = 16eps(T), rtol = 16eps(T)) where {T}
+function check_order_conditions_c(tab::Tableau{T}, k; atol = _default_tolerance(T),
+        rtol = _default_tolerance(T)) where {T}
     a, c, s = tab.a, tab.c, tab.s
-    [isapprox(mapreduce(j -> a[i, j] * c[j]^(k-1), +, 1:s), c[i]^k/k; atol = atol, rtol = rtol)
+    [isapprox(mapreduce(j -> a[i, j] * c[j]^(k-1), +, 1:s), _divide(c[i]^k, k); atol = atol, rtol = rtol)
      for i in 1:s]
 end
 
@@ -18,10 +34,11 @@ function satisfies_simplifying_assumption_c(tab::Tableau, σ = tab.s; kwargs...)
     all(hcat([check_order_conditions_c(tab, k; kwargs...) for k in 1:σ]...))
 end
 
-function check_order_conditions_d(tab::Tableau{T}, k; atol = 16eps(T), rtol = 16eps(T)) where {T}
+function check_order_conditions_d(tab::Tableau{T}, k; atol = _default_tolerance(T),
+        rtol = _default_tolerance(T)) where {T}
     a, b, c, s = tab.a, tab.b, tab.c, tab.s
     [isapprox(mapreduce(j -> b[j] * c[j]^(k-1) * a[j, i], +, 1:s),
-         b[i] * (1 - c[i]^k)/k; atol = atol, rtol = rtol) for i in 1:s]
+         _divide(b[i] * (1 - c[i]^k), k); atol = atol, rtol = rtol) for i in 1:s]
 end
 
 function satisfies_simplifying_assumption_d(tab::Tableau, σ = tab.s; kwargs...)

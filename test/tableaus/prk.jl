@@ -89,6 +89,12 @@ using RungeKutta: name, order, nstages, coefficients, weights, nodes
     @test order(TableauLobattoIIIC̄IIIC(2)) == 2
     @test order(TableauLobattoIIIC̄IIIC(3)) == 4
 
+    for s in 2:4
+        @test order(TableauLobattoIIIFIIIF̄(s)) == 2s - 2
+        @test order(TableauLobattoIIIF̄IIIF(s)) == 2s - 2
+        @test order(TableauLobattoIIIGIIIḠ(s)) == 2s - 2
+    end
+
     @test nstages(TableauLobattoIIIAIIIB(2)) == 2
     @test nstages(TableauLobattoIIIAIIIB(3)) == 3
     @test nstages(TableauLobattoIIIBIIIA(2)) == 2

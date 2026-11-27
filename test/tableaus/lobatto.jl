@@ -257,7 +257,7 @@ using RungeKutta.Tableaus: lobatto_nullvector,
         a = BigFloat[[1/12 -1/12]
                      [7/12 5/12]]
 
-        Tableau{T}(:LobattoIIIF2, 4, a, lobatto_legendre_weights(BigFloat, 2),
+        Tableau{T}(:LobattoIIIF2, 2, a, lobatto_legendre_weights(BigFloat, 2),
             lobatto_legendre_nodes(BigFloat, 2); R∞ = +1)
     end
 
@@ -266,7 +266,7 @@ using RungeKutta.Tableaus: lobatto_nullvector,
                      [5/24 1/3 -1/24]
                      [2/15 11/15 2/15]]
 
-        Tableau{T}(:LobattoIIIF3, 6, a, lobatto_legendre_weights(BigFloat, 3),
+        Tableau{T}(:LobattoIIIF3, 4, a, lobatto_legendre_weights(BigFloat, 3),
             lobatto_legendre_nodes(BigFloat, 3); R∞ = -1)
     end
 
@@ -276,7 +276,7 @@ using RungeKutta.Tableaus: lobatto_nullvector,
                      [37/420-√5/120 5/24+47*√5/420 5/24 + √5/210 -1/210-√5/120]
                      [17/168 5/12 - √5/56 5/12 + √5/56 11/168]]
 
-        Tableau{T}(:LobattoIIIF4, 8, a, lobatto_legendre_weights(BigFloat, 4),
+        Tableau{T}(:LobattoIIIF4, 6, a, lobatto_legendre_weights(BigFloat, 4),
             lobatto_legendre_nodes(BigFloat, 4); R∞ = +1)
     end
 
@@ -350,6 +350,10 @@ using RungeKutta.Tableaus: lobatto_nullvector,
     @test TableauLobattoIIIG(2) ≈ _getTableauLobattoIIIG2()
     @test TableauLobattoIIIG(3) ≈ _getTableauLobattoIIIG3()
     @test TableauLobattoIIIG(4) ≈ _getTableauLobattoIIIG4()
+
+    @test order(_getTableauLobattoIIIF2()) == order(_getTableauLobattoIIIG2()) == 2
+    @test order(_getTableauLobattoIIIF3()) == order(_getTableauLobattoIIIG3()) == 4
+    @test order(_getTableauLobattoIIIF4()) == order(_getTableauLobattoIIIG4()) == 6
 
     @test reference(TableauLobattoIII(2)) == reference(Val(:LobattoIII))
     @test reference(TableauLobattoIIIA(2)) == reference(Val(:LobattoIIIA))
@@ -451,5 +455,44 @@ using RungeKutta.Tableaus: lobatto_nullvector,
         for k in 0:(2s - 3)
             @test sum(b .* c .^ k) ≈ 1 / BigFloat(k+1) atol=1E-60
         end
+    end
+end
+
+# The linear order of a tableau: the largest q with bᵀA^(k-1)𝟙 = 1/k! for k = 1, …, q, which is
+# the order of its stability function as an approximation of exp(z). The coefficients are
+# BigFloat; a condition that holds exactly leaves a residual at the rounding level of BigFloat,
+# far below √eps(BigFloat) / k!, and a condition that fails leaves one far above it.
+function _linear_order(tab::Tableau{BigFloat})
+    v = ones(BigFloat, tab.s)
+    for k in 1:(2tab.s + 2)
+        target = 1 / factorial(big(k))
+        abs(LinearAlgebra.dot(tab.b, v) - target) > sqrt(eps(BigFloat)) * target &&
+            return k - 1
+        v = tab.a * v
+    end
+    return 2tab.s + 2
+end
+
+@testset "$(rpad("Classical and linear order of Lobatto IIIF, IIIF̄, IIIG, IIIḠ",80))" begin
+    for s in 2:4
+        for f in (TableauLobattoIIIF, TableauLobattoIIIF̄, TableauLobattoIIIG, TableauLobattoIIIḠ)
+            @test order(f(s)) == 2s - 2
+
+            tab = f(BigFloat, s)
+            @test eltype(tab) == BigFloat
+            @test order(tab) == 2s - 2
+            @test tab.R∞ == (-1)^s
+
+            # the Lobatto weights satisfy B(2s - 2) and not B(2s - 1)
+            for k in 1:(2s - 2)
+                @test check_order_conditions_b(tab, k)
+            end
+            @test !check_order_conditions_b(tab, 2s - 1)
+        end
+
+        @test _linear_order(TableauLobattoIIIF(BigFloat, s)) == 2s
+        @test _linear_order(TableauLobattoIIIF̄(BigFloat, s)) == 2s
+        @test _linear_order(TableauLobattoIIIG(BigFloat, s)) == 2s - 2
+        @test _linear_order(TableauLobattoIIIḠ(BigFloat, s)) == 2s - 2
     end
 end
