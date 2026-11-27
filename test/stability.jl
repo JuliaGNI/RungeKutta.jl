@@ -109,6 +109,20 @@ const families_lo = (TableauRadauIA, TableauRadauIIA, TableauRadauIB, TableauLob
         @test abs(R(z) - ref) <= 1e-60 * abs(ref)
     end
 
+    # R(z) at a real and a complex z in Float64, and at a rational z, each in the type of z
+    R = stability_function(TableauRK4(Float64))
+    for z in (-0.7, 2.3, complex(-0.3, 0.7), complex(-2.5, 1.5))
+        ref = resolvent(TableauRK4(BigFloat), big(z))
+        @test R(z) isa typeof(z)
+        @test within(real(R(z)), Float64(real(ref)), 16)
+        @test within(imag(R(z)), Float64(imag(ref)), 16)
+    end
+    R = stability_function(TableauImplicitMidpoint(RB))
+    for z in (3 // big(5), -7 // big(2))
+        @test R(z) isa RB
+        @test R(z) == (1 + z / 2) / (1 - z / 2)
+    end
+
     # symbolic coefficients
     R = stability_function(TableauGauss(symtype(), 2))
     @test R isa StabilityFunction{symtype()}
@@ -277,6 +291,17 @@ end
         @test x isa float(T)
         @test within(x, float(T)(8), 16)
     end
+    # R(x) = T₃(1 + x/9) touches |R| = 1 at x = -4.5 and -13.5, where the rounding of b in a
+    # floating-point type splits each touching point into two close roots; the endpoint -18 has
+    # the condition number 272
+    cheb(T) = Tableau{T}(
+        :cheb, 1, [0 0 0; 1 0 0; 0 1 0], [621 // 729, 104 // 729, 4 // 729],
+        [0, 1, 1])
+    for T in (RB, Float64, Float32)
+        x = real_stability_interval(cheb(T))
+        @test x isa float(T)
+        @test within(x, float(T)(18), 1024)
+    end
 
     # closed forms on the imaginary axis
     for T in (RB, Float64)
@@ -291,6 +316,23 @@ end
             @test y isa F
             @test within(y, F(r), 16)
         end
+    end
+    # an explicit tableau with R(z) = 1 + z + βz² + γz³ + z⁴/10, whose
+    # E(y) = -y²(y² - 1)²(y² - u₀)/100 touches zero at y = 1; the rounding of its coefficients
+    # splits the touching point into two close roots, at which the interval must not end
+    β = big"0.5262500227059282687825755391373232433684"
+    γ = big"0.1809694977871384716612685727462138383356"
+    u₀ = big"5.2500045411856537565151078274646486736725"
+    for T in (Float64, Float32)
+        b, c, d = T(β), T(γ), T(1 // 10)
+        tab = Tableau{T}(:touch, 1, [0 0 0 0; 1 0 0 0; 0 1 0 0; 0 0 1 0],
+            [1 - b, b - c, c - d, d], [0, 1, 1, 1])
+        exact = Tableau{RB}(
+            :touch, 1, RB.(Matrix(tab.a)), RB.(Vector(tab.b)), RB.(Vector(tab.c)))
+        @test imaginary_stability_interval(exact) < 1.01
+        y = imaginary_stability_interval(tab)
+        @test y isa T
+        @test within(y, T(sqrt(u₀)), 16)
     end
     @test isvalue(imaginary_stability_interval(TableauLobattoIII(BigFloat, 3)), zero(BigFloat))
     for s in 2:4, family in (TableauGauss, TableauRadauIIA, TableauLobattoIIIC)
@@ -347,6 +389,9 @@ end
     @test length(roots) == 2
     @test all(within.(Float64.(roots), 1.0, 1))
 
+    # Gauss(4) paired with itself in Float64: no round-off of D, N1 or N2 ends the interval
+    @test imaginary_stability_interval(PartitionedTableau(TableauGauss(Float64, 4))) === Inf
+
     # every other name raises a MethodError for a pair
     pair = PartitionedTableau(TableauGauss(2))
     for f in (stability_function, stability_at_infinity, linear_order, pade_type, isastable,
@@ -356,6 +401,102 @@ end
     end
 end
 
+@testset "$(rpad("Float32 decisions",80))" begin
+    F = Float32
+    # A-stability
+    for s in 1:4
+        @test isastable(TableauGauss(F, s))
+    end
+    for s in 2:4
+        for family in (TableauRadauIA, TableauRadauIIA, TableauLobattoIIIA, TableauLobattoIIIC)
+            @test isastable(family(F, s))
+        end
+        @test !isastable(TableauLobattoIII(F, s))
+    end
+    # the constant coefficient Q(0) = 1 never counts as zero, at a scale beyond 1/rtol
+    @test isastable(θmethod(Float64, 1e15))
+
+    # the intervals of the single tableaus
+    gauss = [TableauGauss(F, s) for s in 1:4]
+    radau = [TableauRadauIIA(F, s) for s in 2:4]
+    lobatto = [TableauLobattoIIIC(F, s) for s in 2:4]
+    for tab in vcat(gauss, radau, lobatto)
+        @test imaginary_stability_interval(tab) === Inf32
+    end
+    for tab in vcat(gauss, radau)
+        @test real_stability_interval(tab) === Inf32
+    end
+    for (tab, r) in ((TableauRK4(F), 2 * sqrt(big(2))), (TableauKutta(F), sqrt(big(3))))
+        y = imaginary_stability_interval(tab)
+        @test y isa F
+        @test within(y, F(r), 16)
+    end
+    for (tab, c, x0) in ((TableauRK4(F), [-24, 12, -4, 1], 2.8),
+        (TableauKutta(F), [-12, 6, -3, 1], 2.5))
+        x = real_stability_interval(tab)
+        @test x isa F
+        @test within(x, F(newton_root(c, x0)), 16)
+    end
+    # the endpoint of TableauRK5 has the condition number 778
+    x = real_stability_interval(TableauRK5(F))
+    @test x isa F
+    @test within(x, F(real_stability_interval(TableauRK5(RB))), 1024)
+
+    # a tableau paired with itself
+    for tab in vcat(
+        [TableauExplicitEuler(F), TableauKutta(F), TableauRK4(F)], gauss, radau,
+        lobatto)
+        y = imaginary_stability_interval(PartitionedTableau(tab))
+        y1 = imaginary_stability_interval(tab)
+        @test y isa F
+        if isfinite(y1) && !iszero(y1)
+            @test within(y, y1, 16)
+        else
+            @test y === y1
+        end
+    end
+end
+
+@testset "$(rpad("The round-off bounds of the decisions",80))" begin
+    B = RungeKutta._BoundedPoly
+    r = 1 // 100
+
+    # P and Q of the θ-method, θ = 1/4: the constant and a zero coefficient carry no bound, every
+    # other coefficient rtol · m, with m = 1
+    rtol = 16 * eps(Float64)
+    P, Q = RungeKutta._bounded_stability_function(θmethod(Float64, 0.25), rtol)
+    @test P.v == [1, 0.75, 0] && Q.v == [1, -0.25, 0]
+    @test P.e == [0, rtol, 0] && Q.e == [0, rtol, 0]
+
+    # a product: Σ (aₓᵢ e_yⱼ + eₓᵢ a_yⱼ + rtol aₓᵢ a_yⱼ) over i + j = k, in exact arithmetic
+    x = B(RB[1, 2], RB[1, 2], RB[0, 1 // 10])
+    y = B(RB[3, -1], RB[3, 1], RB[1 // 10, 1 // 5])
+    xy = RungeKutta._bmul(x, y, r)
+    @test xy.v == [3, 5, -2] && xy.a == [3, 7, 2]
+    @test xy.e == [13 // 100, 77 // 100, 13 // 25]
+    # a negative factor scales the bounds by its magnitude
+    @test RungeKutta._bscale(-2, x).e == [0, 1 // 5]
+
+    # Faddeev–LeVerrier with its bounds on diag(1, 2): det(I - z M) = 1 - 3z + 2z², with the
+    # bounds 3 rtol (|a| + |d|) and (5 rtol (a² + d²) + 14 rtol |a d|) / 2
+    D = RungeKutta._det_coefficients_bounded(RB[1 0; 0 2], r)
+    @test D.v == [1, -3, 2]
+    @test D.e == [0, 9 * r, 53 * r / 2]
+
+    # |p(iy)|² is even in y: its odd coefficients are exactly zero, also where the product
+    # p(z) p(-z) holds round-off in them
+    for tab in TableauList, p in RungeKutta._bounded_stability_function(tab(Float64), rtol)
+
+        E = RungeKutta._abs2_on_imaginary_axis(p, rtol)
+        @test all(iszero, E.v[2:2:end]) && all(iszero, E.e[2:2:end])
+    end
+
+    # roots closer than the bisection can separate are an error, not one root
+    ε = 1 // big(2)^5000
+    @test_throws r"^the bisection did not isolate a root of the Sturm sequence$" RungeKutta._positive_roots(
+        RB[1 + ε, -2 - ε, 1], Float64)
+end
+
 @testset "$(rpad("Algebraic stability",80))" begin
     # the matrix
     for θ in (1 // 4, 1 // 2, 1 // 1)
@@ -363,33 +504,43 @@ end
         @test M isa Matrix{RB}
         @test M == [-(1 - θ)^2 0; 0 θ^2]
     end
-    for s in 1:4
-        M = algebraic_stability_matrix(TableauGauss(BigFloat, s))
-        @test M isa Matrix{BigFloat}
-        @test all(abs.(M) .<= 1e-70)
+    for θ in (0.25, 0.5, 1.0)
+        M = algebraic_stability_matrix(θmethod(Float64, θ))
+        @test M isa Matrix{Float64}
+        @test all(within.(M, [-(1 - θ)^2 0; 0 θ^2], 16))
+    end
+    for T in (BigFloat, Float64), s in 1:4
+
+        M = algebraic_stability_matrix(TableauGauss(T, s))
+        @test M isa Matrix{T}
+        @test all(abs.(M) .<= (T == BigFloat ? 1e-70 : 16 * eps(Float64)))
     end
 
     # the predicate
-    for s in 1:4
-        @test isalgebraicallystable(TableauGauss(BigFloat, s))
-    end
-    for s in 2:4
-        for family in (TableauRadauIA, TableauRadauIIA, TableauLobattoIIIC)
-            @test isalgebraicallystable(family(BigFloat, s))
+    for T in (BigFloat, Float64)
+        for s in 1:4
+            @test isalgebraicallystable(TableauGauss(T, s))
         end
-        @test !isalgebraicallystable(TableauLobattoIIIA(BigFloat, s))
+        for s in 2:4
+            for family in (TableauRadauIA, TableauRadauIIA, TableauLobattoIIIC)
+                @test isalgebraicallystable(family(T, s))
+            end
+            @test !isalgebraicallystable(TableauLobattoIIIA(T, s))
+        end
     end
-    for tab in (TableauImplicitEuler(RB), θmethod(RB, 1))
-        @test isalgebraicallystable(tab)
-    end
-    for tab in (θmethod(RB, 1 // 2), TableauExplicitEuler(RB), TableauRK4(RB), poletableau(RB))
-        @test !isalgebraicallystable(tab)
+    for T in (RB, Float64)
+        for tab in (TableauImplicitEuler(T), θmethod(T, 1))
+            @test isalgebraicallystable(tab)
+        end
+        for tab in (θmethod(T, 1 // 2), TableauExplicitEuler(T), TableauRK4(T), poletableau(T))
+            @test !isalgebraicallystable(tab)
+        end
     end
 end
 
 @testset "$(rpad("The data of the stability region",80))" begin
     # a grid through a pole
-    for T in (Float64, RB)
+    for T in (Float64, BigFloat, RB)
         F = float(T)
         x, y, absR = stability_region(TableauImplicitEuler(T); xlims = (-1.0, 3.0),
             ylims = (-2.0, 2.0), n = 5)
@@ -423,5 +574,10 @@ end
         (; ylims = (-Inf, 0.0)), (; n = 1))
         @test_throws r"^ArgumentError: the window must have finite, increasing limits and n ≥ 2$" stability_region(
             tab; kw...)
+    end
+    # the limits are checked in the precision of the grid, float(T)
+    for kw in ((; xlims = (-1e300, 1e300)), (; ylims = (1.0, 1.0 + 1e-12)))
+        @test_throws r"^ArgumentError: the window must have finite, increasing limits and n ≥ 2$" stability_region(
+            TableauRK4(Float32); kw...)
     end
 end

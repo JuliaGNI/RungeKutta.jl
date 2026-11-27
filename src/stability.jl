@@ -42,12 +42,56 @@ function _det_coefficients(M::AbstractMatrix{T}) where {T}
     end
     for k in 1:s
         N = M * N
-        c[k + 1] = -sum(N[i, i] for i in 1:s) / k
-        for i in 1:s
-            N[i, i] += c[k + 1]
-        end
+        c[k + 1] = -LinearAlgebra.tr(N) / k
+        N += c[k + 1] * LinearAlgebra.I
     end
     return c
+end
+
+# A polynomial with a first-order bound on its round-off: the coefficients `v`, the sums `a` of
+# the magnitudes of the terms that make each one, and the bounds `e` on their errors. A sum adds
+# the bounds, a factor c scales them by |c|, and the coefficient k of a product p q has the bound
+# Σ_{i+j=k} (aₚᵢ e_qⱼ + eₚᵢ a_qⱼ + rtol aₚᵢ a_qⱼ). With rtol = 0, every bound is 0.
+struct _BoundedPoly{T}
+    v::Vector{T}
+    a::Vector{T}
+    e::Vector{T}
+end
+
+_BoundedPoly(v::Vector{T}, a, e) where {T} = _BoundedPoly{T}(v, a, e)
+
+_badd(x, y) = _BoundedPoly(_padd(x.v, y.v), _padd(x.a, y.a), _padd(x.e, y.e))
+_bscale(c, x) = _BoundedPoly(c .* x.v, abs(c) .* x.a, abs(c) .* x.e)
+_bsub(x, y) = _badd(x, _bscale(-1, y))
+
+function _bmul(x, y, rtol)
+    a = _pmul(x.a, y.a)
+    return _BoundedPoly(_pmul(x.v, y.v), a,
+        _padd(_padd(_pmul(x.a, y.e), _pmul(x.e, y.a)), rtol .* a))
+end
+
+# p(-z), with the bounds of p
+_breflect(x) = _BoundedPoly(_reflect(x.v), x.a, x.e)
+
+# The coefficients of det(I - z M) as by `_det_coefficients`, with a first-order bound on their
+# round-off. The entries of M carry rtol |M|; each product X = M N carries
+# |M| E_N + 2 rtol |M| |N|; c_k = -tr X / k carries (tr E_X + rtol Σᵢ |X_ii|) / k, which the
+# diagonal of N takes on, with the round-off of that addition.
+function _det_coefficients_bounded(M::AbstractMatrix{T}, rtol) where {T}
+    s = size(M, 1)
+    c, e = zeros(T, s + 1), zeros(T, s + 1)
+    c[1] = one(T)
+    absM = abs.(M)
+    N, EN = Matrix{T}(LinearAlgebra.I, s, s), zeros(T, s, s)
+    for k in 1:s
+        X = M * N
+        EX = absM * EN + 2 * rtol * absM * abs.(N)
+        c[k + 1] = -LinearAlgebra.tr(X) / k
+        e[k + 1] = (LinearAlgebra.tr(EX) + rtol * sum(abs, LinearAlgebra.diag(X))) / k
+        N = X + c[k + 1] * LinearAlgebra.I
+        EN = EX + LinearAlgebra.Diagonal(e[k + 1] .+ rtol .* abs.(LinearAlgebra.diag(N)))
+    end
+    return _BoundedPoly(c, abs.(c), e)
 end
 
 """
@@ -83,14 +127,23 @@ end
 _default_rtol(::Type{T}) where {T <: AbstractFloat} = 16 * eps(T)
 _default_rtol(::Type{<:Real}) = 0
 
-# The coefficients of P and Q with each one of magnitude at most rtol · m set to zero, where m is
-# the largest magnitude of a coefficient of P and Q; and m.
+# The coefficients of P and Q with each one of degree 1 or more and of magnitude at most rtol · m
+# set to zero, where m is the largest magnitude of a coefficient of P and Q; and m. The constant
+# coefficients P(0) = Q(0) = 1 are exact and never count as zero.
 function _zero_counted(R::StabilityFunction, rtol)
     m = max(maximum(abs, R.P), maximum(abs, R.Q))
-    return _count_zeros(R.P, rtol * m), _count_zeros(R.Q, rtol * m), m
+    counted(p) = [k > 1 && abs(c) <= rtol * m ? zero(c) : c for (k, c) in enumerate(p)]
+    return counted(R.P), counted(R.Q), m
 end
 
-_count_zeros(p, tol) = [abs(c) <= tol ? zero(c) : c for c in p]
+# P and Q of `tab` after the zero count, with their bounds: rtol · m on each coefficient that is
+# not zero after the count, other than the constant; 0 on the constant and on a zero.
+function _bounded_stability_function(tab::Tableau, rtol)
+    P, Q, m = _zero_counted(stability_function(tab), rtol)
+    bounded(p) = _BoundedPoly(p, abs.(p),
+        [k == 1 || iszero(c) ? zero(c) : oftype(c, rtol * m) for (k, c) in enumerate(p)])
+    return bounded(P), bounded(Q)
+end
 
 # The degree of a polynomial whose constant coefficient is not zero.
 _degree(p) = findlast(!iszero, p) - 1
@@ -104,9 +157,11 @@ degrees are equal, `zero(T)` where ``\\deg P < \\deg Q``, and the positive infin
 ``\\deg P > \\deg Q`` (`1//0` for a rational `T`). It is computed from the coefficients of
 [`stability_function`](@ref), and does not read the field `R∞` of `tab`.
 
-The degrees follow from a zero count: a coefficient ``c`` of ``P`` or ``Q`` counts as zero when
-``|c| ≤ \\mathrm{rtol} \\cdot m``, with ``m`` the largest magnitude of a coefficient of ``P`` and
-``Q``. The default `rtol` is `16 * eps(T)` for a floating-point `T` and `0` for a rational one.
+The degrees follow from a zero count: a coefficient ``c`` of ``P`` or ``Q`` of degree 1 or more
+counts as zero when ``|c| ≤ \\mathrm{rtol} \\cdot m``, with ``m`` the largest magnitude of a
+coefficient of ``P`` and ``Q``; the constant coefficients ``P(0) = Q(0) = 1`` are exact and never
+count as zero. The default `rtol` is `16 * eps(T)` for a floating-point `T` and `0` for a rational
+one.
 """
 function stability_at_infinity(tab::Tableau{T}; rtol = _default_rtol(T)) where {T <: Real}
     P, Q, _ = _zero_counted(stability_function(tab), rtol)
@@ -192,13 +247,12 @@ end
 # p(-z)
 _reflect(p) = [isodd(k) ? -p[k + 1] : p[k + 1] for k in 0:(length(p) - 1)]
 
-# |p(iy)|² as a polynomial in y, for real coefficients: p(iy) = re(y) + i im(y).
-function _abs2_on_imaginary_axis(p::AbstractVector{T}) where {T}
-    re = [iseven(k) ? (iseven(k ÷ 2) ? p[k + 1] : -p[k + 1]) : zero(T)
-          for k in 0:(length(p) - 1)]
-    im = [isodd(k) ? (iseven(k ÷ 2) ? p[k + 1] : -p[k + 1]) : zero(T)
-          for k in 0:(length(p) - 1)]
-    return _padd(_pmul(re, re), _pmul(im, im))
+# |p(iy)|² as a polynomial in y, with its bounds, for real coefficients: |p(iy)|² = r(iy) with
+# r(z) = p(z) p(-z), which is even, so the coefficient of y²ʲ is (-1)ʲ r₂ⱼ and every odd one is 0.
+function _abs2_on_imaginary_axis(p::_BoundedPoly, rtol)
+    r = _bmul(p, _breflect(p), rtol)
+    σ = [isodd(k) ? 0 : iseven(k ÷ 2) ? 1 : -1 for k in 0:(length(r.v) - 1)]
+    return _BoundedPoly(σ .* r.v, abs.(σ) .* r.a, abs.(σ) .* r.e)
 end
 
 _ptrim(p) = p[1:something(findlast(!iszero, p), 0)]
@@ -285,31 +339,33 @@ function _positive_roots(p::Vector{_Exact}, ::Type{F}) where {F}
                 lo = mid
             end
         end
+        vhi == va - 1 || error("the bisection did not isolate a root of the Sturm sequence")
         push!(roots, (lo + hi) / 2)
         a, va = hi, vhi
     end
     return roots
 end
 
-# The coefficients of f, a polynomial that is zero at 0, in exact arithmetic, with each one of
-# magnitude at most tol counted as zero and the factor xʲ of the lowest nonzero one divided out;
-# `nothing` where f is negative just right of 0.
-function _positive_part(f, tol)
-    g = _Exact[abs(c) <= tol ? 0 : _Exact(c) for c in f]
+# The coefficients of the bounded polynomial f in exact arithmetic, each one of magnitude at most
+# its bound counted as zero, with the factor xʲ of the lowest nonzero one divided out, and their
+# bounds; `nothing` where f is negative just right of 0.
+function _positive_part(f::_BoundedPoly)
+    g = _Exact[abs(c) <= t ? 0 : _Exact(c) for (c, t) in zip(f.v, f.e)]
     k = findfirst(!iszero, g)
-    k === nothing && return _Exact[]
-    g[k] < 0 && return nothing
-    return _ptrim(g[k:end])
+    k === nothing && return _Exact[], _Exact[]
+    g[k] < 0 && return nothing, nothing
+    n = findlast(!iszero, g)
+    return g[k:n], _Exact.(f.e[k:n])
 end
 
 # The supremum of the r ≥ 0 with f ≥ 0 on [0, r], as F: the first root at which f changes its sign
 # to negative, that is a root of odd multiplicity. Where `touch` is true, a sign change counts only
-# where f, with the factor xʲ of its lowest nonzero coefficient divided out, falls below
-# -tol Σₖ xᵏ between that root and the next, or is negative beyond the last root; tol Σₖ xᵏ bounds
-# a change of each coefficient by tol. A point where f touches zero then does not end the interval
-# when round-off splits it into two close roots.
-function _nonnegative_until(f, tol, ::Type{F}; touch = false) where {F}
-    g = _positive_part(f, tol)
+# where f, with the factor xʲ of its lowest nonzero coefficient divided out, falls below the bound
+# -Σₖ eₖ xᵏ of its round-off between that root and the next, or is negative beyond the last root.
+# A point where f touches zero then does not end the interval when round-off splits it into two
+# close roots.
+function _nonnegative_until(f::_BoundedPoly, ::Type{F}; touch = false) where {F}
+    g, t = _positive_part(f)
     g === nothing && return zero(F)
     isempty(g) && return F(Inf)
     roots = _positive_roots(_odd_multiplicity_part(g), F)
@@ -320,13 +376,13 @@ function _nonnegative_until(f, tol, ::Type{F}; touch = false) where {F}
             g[end] < 0 && return F(ρ)
         else
             x = (ρ + roots[i + 1]) / 2
-            evalpoly(x, g) < -tol * evalpoly(x, ones(_Exact, length(g))) && return F(ρ)
+            evalpoly(x, g) < -evalpoly(x, t) && return F(ρ)
         end
     end
     return F(Inf)
 end
 
-_isnonnegative(f, tol) = isinf(_nonnegative_until(f, tol, Float64))
+_isnonnegative(f) = isinf(_nonnegative_until(f, Float64))
 
 # Whether every root of q, whose constant coefficient is not zero, has a positive real part: the
 # Routh–Hurwitz test of q(-z), each entry of the first column of the Routh array of the sign of
@@ -348,22 +404,28 @@ end
 
 Return whether `tab` is A-stable, that is whether ``|R(z)| ≤ 1`` for every ``z`` with
 ``\\mathrm{Re}\\, z ≤ 0``. It is decided from the coefficients of ``R = P/Q`` without sampling
-``z``, by the two conditions that are together equivalent to it:
+``z``, by two conditions:
 
 1. ``Q`` has no zero with ``\\mathrm{Re}\\, z ≤ 0`` (the Routh–Hurwitz test of ``Q(-z)``);
 2. ``E(y) = |Q(iy)|^2 - |P(iy)|^2 ≥ 0`` for every real ``y`` (a sign count of the polynomial
    ``E`` on ``y > 0``, by its square-free factorisation and a Sturm sequence).
 
+Together they are sufficient for A-stability, and equivalent to it where ``P`` and ``Q`` have no
+common zero. A zero of ``Q`` with ``\\mathrm{Re}\\, z ≤ 0`` that ``P`` cancels fails the first
+condition, so that such a tableau is not called A-stable.
+
 Both are exact for a rational `T`. For a floating-point `T`, a coefficient of ``Q`` counts as
-zero by the zero count of [`stability_at_infinity`](@ref), a coefficient of ``E`` when its
-magnitude is at most ``\\mathrm{rtol} \\cdot m^2``, with the same ``m``, and the decision is then
-exact for the remaining coefficients. The default `rtol` is `16 * eps(T)` for a floating-point
-`T` and `0` for a rational one. Returns a `Bool`.
+zero by the zero count of [`stability_at_infinity`](@ref), and a coefficient of ``E`` when its
+magnitude is at most a first-order bound on its round-off: each coefficient of ``P`` and ``Q``
+that is not zero after the count, other than the constant, carries ``\\mathrm{rtol} \\cdot m``,
+and the products and sums that make ``E`` carry these bounds on. The decision is then exact for
+the remaining coefficients. The default `rtol` is `16 * eps(T)` for a floating-point `T` and `0`
+for a rational one. Returns a `Bool`.
 """
 function isastable(tab::Tableau{T}; rtol = _default_rtol(T)) where {T <: Real}
-    P, Q, m = _zero_counted(stability_function(tab), rtol)
-    E = _psub(_abs2_on_imaginary_axis(Q), _abs2_on_imaginary_axis(P))
-    return _has_roots_in_right_half_plane_only(Q) && _isnonnegative(E, rtol * m^2)
+    P, Q = _bounded_stability_function(tab, rtol)
+    E = _bsub(_abs2_on_imaginary_axis(Q, rtol), _abs2_on_imaginary_axis(P, rtol))
+    return _has_roots_in_right_half_plane_only(Q.v) && _isnonnegative(E)
 end
 
 """
@@ -390,13 +452,18 @@ It is decided from the coefficients of ``R = P/Q``: the interval ends at the fir
 Sturm sequence in exact rational arithmetic, and an irrational endpoint is located by bisection to
 the precision of `float(T)`. For a floating-point `T`, the coefficients of ``P`` and ``Q`` are
 counted as zero as in [`stability_at_infinity`](@ref), and a coefficient of
-``Q(-u)^2 - P(-u)^2`` when its magnitude is at most ``\\mathrm{rtol} \\cdot m^2``. The default
-`rtol` is `16 * eps(T)` for a floating-point `T` and `0` for a rational one.
+``Q(-u)^2 - P(-u)^2`` when its magnitude is at most its first-order bound, as in
+[`isastable`](@ref). For a nonzero `rtol`, a root where the polynomial changes its sign then ends
+the interval only where the polynomial, with the factor ``u^j`` of its lowest nonzero coefficient
+divided out, falls below the bound ``-\\sum_k e_k u^k`` of its round-off between that root and the
+next, or is negative beyond the last root, so that a touching point that round-off splits into
+two close roots does not end it. The default `rtol` is `16 * eps(T)` for a floating-point `T` and
+`0` for a rational one, where every decision is exact.
 """
 function real_stability_interval(tab::Tableau{T}; rtol = _default_rtol(T)) where {T <: Real}
-    P, Q, m = _zero_counted(stability_function(tab), rtol)
-    P, Q = _reflect(P), _reflect(Q)
-    return _nonnegative_until(_psub(_pmul(Q, Q), _pmul(P, P)), rtol * m^2, float(T))
+    P, Q = _breflect.(_bounded_stability_function(tab, rtol))
+    G = _bsub(_bmul(Q, Q, rtol), _bmul(P, P, rtol))
+    return _nonnegative_until(G, float(T); touch = !iszero(rtol))
 end
 
 """
@@ -409,20 +476,21 @@ sides does not end the interval, and an interval where ``|R(iy)| > 1`` for every
 
 It is decided from the coefficients of ``R = P/Q``, by the sign of
 ``E(y) = |Q(iy)|^2 - |P(iy)|^2`` on ``y > 0`` as in [`real_stability_interval`](@ref), with the
-same zero count and the same default `rtol`.
+same zero count, the same bounds, the same test of a touching point and the same default `rtol`.
 """
 function imaginary_stability_interval(tab::Tableau{T}; rtol = _default_rtol(T)) where {T <:
                                                                                        Real}
-    P, Q, m = _zero_counted(stability_function(tab), rtol)
-    E = _psub(_abs2_on_imaginary_axis(Q), _abs2_on_imaginary_axis(P))
-    return _nonnegative_until(E, rtol * m^2, float(T))
+    P, Q = _bounded_stability_function(tab, rtol)
+    E = _bsub(_abs2_on_imaginary_axis(Q, rtol), _abs2_on_imaginary_axis(P, rtol))
+    return _nonnegative_until(E, float(T); touch = !iszero(rtol))
 end
 
 # The coefficients, in ν, of the denominator D and of the numerators of det M and det(M + I),
 # where M(ν) is the amplification matrix of one step on q̇ = p, ṗ = -q with the step ν, the
 # tableau q acting on q̇ and the tableau p on ṗ. The stages solve (I + ν K) X = V, and
-# M = I + ν W X, so that det(I + ν W X) = det(I + ν K + ν V W) / det(I + ν K).
-function _amplification_coefficients(q::Tableau{T}, p::Tableau{T}) where {T}
+# M = I + ν W X, so that det(I + ν W X) = det(I + ν K + ν V W) / det(I + ν K). Each comes with
+# its first-order bound for the tolerance rtol.
+function _amplification_coefficients(q::Tableau{T}, p::Tableau{T}, rtol) where {T}
     s = q.s
     o, z = ones(T, s), zeros(T, s)
     Z = zeros(T, s, s)
@@ -430,9 +498,9 @@ function _amplification_coefficients(q::Tableau{T}, p::Tableau{T}) where {T}
     V = [o z; z o]
     W = [transpose(z) transpose(Vector{T}(q.b)); -transpose(Vector{T}(p.b)) transpose(z)]
     VW = V * W
-    D = _det_coefficients(-K)
-    N1 = _det_coefficients(-(K + VW))
-    N2 = 4 .* _det_coefficients(-(K + VW / 2))
+    D = _det_coefficients_bounded(-K, rtol)
+    N1 = _det_coefficients_bounded(-(K + VW), rtol)
+    N2 = _bscale(4, _det_coefficients_bounded(-(K + VW / 2), rtol))
     return D, N1, N2
 end
 
@@ -451,28 +519,26 @@ The spectral radius of the real ``2 × 2`` matrix ``M`` is at most 1 exactly whe
 ``\\det(I + M) = N_2/D`` as quotients of polynomials in ``ν``, these are the polynomial
 conditions ``D^2 - N_1^2 ≥ 0``, ``D N_2 ≥ 0`` and ``D (2D + 2N_1 - N_2) ≥ 0``, each decided as in
 [`real_stability_interval`](@ref), and the interval ends at the first point where one of them
-turns negative. For a floating-point `T`, a coefficient of ``D``, ``N_1`` or ``N_2`` counts as
-zero when its magnitude is at most ``\\mathrm{rtol} \\cdot m``, with ``m`` the largest magnitude
-of their coefficients, and a coefficient of a condition ``g`` when its magnitude is at most
-``τ = \\mathrm{rtol} \\cdot m^2``. With the factor ``ν^j`` of its lowest nonzero coefficient
-divided out, a root where ``g`` changes its sign ends the interval only where ``g`` falls below
-``-τ \\sum_k ν^k`` between that root and the next, or is negative beyond the last root: a point where a condition touches zero, such as ``\\det(I + M) = 0`` at
-``M = -I`` for the Gauss tableaus, then does not end the interval when round-off splits it into
-two close roots. The default `rtol` is `16 * eps(T)` for a floating-point `T` and `0` for a
-rational one, where every decision is exact.
+turns negative. For a floating-point `T`, the coefficients of ``D``, ``N_1`` and ``N_2`` come
+from the Faddeev–LeVerrier recursion with a first-order bound on their round-off, for entries of
+the tableaus that carry a relative error `rtol`, and none of them counts as zero. A coefficient
+of a condition ``g`` counts as zero when its magnitude is at most its bound, which the products
+and sums that make ``g`` carry on as in [`isastable`](@ref). With the factor ``ν^j`` of its
+lowest nonzero coefficient divided out, a root where ``g`` changes its sign ends the interval only
+where ``g`` falls below ``-\\sum_k e_k ν^k``, with ``e_k`` the bound of its coefficient ``k``,
+between that root and the next, or is negative beyond the last root: a point where a condition
+touches zero, such as ``\\det(I + M) = 0`` at ``M = -I`` for the Gauss tableaus, then does not
+end the interval when round-off splits it into two close roots. The default `rtol` is
+`16 * eps(T)` for a floating-point `T` and `0` for a rational one, where every decision is exact.
 """
 function imaginary_stability_interval(
         tab::PartitionedTableau{T}; rtol = _default_rtol(T)) where {T <: Real}
     _check_finite(tab.q)
     _check_finite(tab.p)
-    D, N1, N2 = _amplification_coefficients(tab.q, tab.p)
-    m = max(maximum(abs, D), maximum(abs, N1), maximum(abs, N2))
-    D, N1, N2 = (_count_zeros(p, rtol * m) for p in (D, N1, N2))
-    conditions = (_psub(_pmul(D, D), _pmul(N1, N1)), _pmul(D, N2),
-        _pmul(D, _psub(_padd(2 .* D, 2 .* N1), N2)))
-    intervals = [_nonnegative_until(g, rtol * m^2, float(T); touch = true)
-                 for g in conditions]
-    return minimum(intervals)
+    D, N1, N2 = _amplification_coefficients(tab.q, tab.p, rtol)
+    conditions = (_bsub(_bmul(D, D, rtol), _bmul(N1, N1, rtol)), _bmul(D, N2, rtol),
+        _bmul(D, _bsub(_badd(_bscale(2, D), _bscale(2, N1)), N2), rtol))
+    return minimum(_nonnegative_until(g, float(T); touch = true) for g in conditions)
 end
 
 """
@@ -526,19 +592,20 @@ wherever ``Q(x_i + i y_j) = 0``. All three hold `float(T)`. The stability region
 `absR ≤ 1`.
 
 Throws an `ArgumentError` when a limit is not finite, when a window is not increasing, or when
-`n < 2`.
+`n < 2`; the limits are checked after their conversion to `float(T)`.
 """
 function stability_region(tab::Tableau{T}; xlims = (-6.0, 2.0), ylims = (-4.0, 4.0),
         n = 201) where {T <: Real}
-    finite = all(isfinite, (xlims..., ylims...))
-    increasing = xlims[1] < xlims[2] && ylims[1] < ylims[2]
+    F = float(T)
+    xl, yl = F.(xlims), F.(ylims)
+    finite = all(isfinite, (xl..., yl...))
+    increasing = xl[1] < xl[2] && yl[1] < yl[2]
     finite && increasing && n >= 2 ||
         throw(ArgumentError("the window must have finite, increasing limits and n ≥ 2"))
-    F = float(T)
     R = stability_function(tab)
     P, Q = F.(R.P), F.(R.Q)
-    x = collect(range(F(xlims[1]), F(xlims[2]); length = n))
-    y = collect(range(F(ylims[1]), F(ylims[2]); length = n))
+    x = collect(range(xl[1], xl[2]; length = n))
+    y = collect(range(yl[1], yl[2]; length = n))
     absR = [_abs_quotient(P, Q, complex(xi, yj)) for xi in x, yj in y]
     return (; x, y, absR)
 end
