@@ -30,9 +30,9 @@ change to the minor version may break compatibility.
   SymPy. `computed_order(tab; pmax = 10)` tests these conditions up to order `pmax`, and above
   it takes the order that the simplifying assumptions B, C and D give; its result names the
   route and whether the order is exact or a lower bound. `stage_order(tab)` gives the largest
-  `q ≤ s` with C(1) to C(q), `error_constant(tab)` the 2-norm of the coefficients of the leading term
-  of the local error, and `isconsistent(tab)` tells whether the stored nodes are `c = A𝟙`. The
-  trees use `A𝟙`, not the stored `c`. The test suite compares the trees, their densities and
+  `q ≤ s` with C(1) to C(q), `error_constant(tab)` the 2-norm of the coefficients of the leading
+  term of the local error, and `isconsistent(tab)` tells whether the stored nodes are `c = A𝟙`.
+  The trees use `A𝟙`, not the stored `c`. The test suite compares the trees, their densities and
   symmetries and the elementary weights with RootedTrees.jl, a test dependency only.
 - `stabilityplot(tab)` and `stabilityplot!(ax, tab)` plot the stability region of a tableau: the
   set where `|R(z)| ≤ 1` filled, its boundary, and the real and imaginary axes. They are a Makie

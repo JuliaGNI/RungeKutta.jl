@@ -263,8 +263,9 @@ fixed; the fix goes in `CHANGELOG.md`.
   `(order = 10, route = :trees, exact = false)` for Radau IA(6), whose order is 11;
   `stage_order` gives 0 for Radau IA(4), (5) and (6), Lobatto IIIB(5) and (6), Radau IB(5) (4 in
   `Float64`) and Lobatto IIIF(6) (5 in `Float64`). In `Float64` the same tableaus are within
-  0.5 eps, and `computed_order(TableauRadauIA(Float64, 6))` is 11. The tests use `BigFloat` only up to
-  Gauss(5), Radau IIA(4), Lobatto IIIA(5) and IIIF(5).
+  0.5 eps, and `computed_order(TableauRadauIA(Float64, 6))` is 11. The tests of `computed_order`
+  and `stage_order` use `BigFloat` only up to Gauss(5), Radau IIA(4), Lobatto IIIA(5) and
+  IIIF(5), and up to three stages for the other families.
 - **kind:** found late
 - **found:** 2026-11-28; the same inaccuracy as K16
 
@@ -277,8 +278,8 @@ fixed; the fix goes in `CHANGELOG.md`.
   `TableauLobattoIIIC` (order 10). The count of B on these tableaus is 12 and 11, one more than
   in exact arithmetic: the residual of B(12) and B(11), 3.9e-7 for Radau and 1.7e-6 for Lobatto
   (the same weights and nodes in IIIA and IIIC) in `BigFloat`, lies below the absolute tolerance
-  `16eps(Float32)` = 1.9e-6. The counts of C and D are the exact ones. In `Float64` each gives its order. The tests use
-  `Float32` only up to four stages.
+  `16eps(Float32)` = 1.9e-6. The counts of C and D are the exact ones. In `Float64` each gives
+  its order. The tests use `Float32` only up to four stages.
 - **kind:** found late
 - **found:** 2026-11-28
 

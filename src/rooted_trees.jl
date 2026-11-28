@@ -8,7 +8,8 @@
     RootedTree
 
 A rooted tree, with its level sequence (the depths of its nodes in preorder, the root at depth 1),
-the positions of its subtrees in the enumeration of all trees by increasing order, its density ``γ(t)`` and its symmetry ``σ(t)``.
+the positions of its subtrees in the enumeration of all trees by increasing order, its density
+``γ(t)`` and its symmetry ``σ(t)``.
 """
 struct RootedTree
     levels::Vector{Int}
