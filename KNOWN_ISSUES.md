@@ -223,3 +223,28 @@ fixed; the fix goes in `CHANGELOG.md`.
   box.
 - **kind:** missing test
 - **found:** #59
+
+### K24 · A stability plot does not take a tableau of another concrete type after it is made
+
+- **location:** `ext/RungeKuttaMakieExt.jl:9`
+- **evidence:** with `p = stabilityplot!(Axis(Figure()[1, 1]), TableauRK4(); n = 5)`,
+  `p[1][] = Tableau{Float64}(:ie, 1, [1.0;;], [1.0], [1.0])` throws
+  `MethodError: Cannot convert an object of type Tableau{Float64,1,Missing,1} to an object of type Tableau{Float64,4,Missing,16}`.
+  Makie stores the argument of a plot with its concrete type. A tableau of the same type,
+  `p[1][] = TableauRK438()`, recomputes the plot. A change of an attribute (`p.n[] = 9`)
+  recomputes it too.
+- **kind:** found late
+- **found:** 2026-11-28, the decided return values of `stabilityplot!`, which name only a change
+  of an attribute
+
+### K25 · With Makie loaded, the help of `stabilityplot` shows "No docstring defined"
+
+- **location:** `ext/RungeKuttaMakieExt.jl:9`
+- **evidence:** after `using CairoMakie`, `@doc stabilityplot` shows the docstring of
+  `src/stabilityplot.jl`, then "No docstring defined." and the plot type and attributes that
+  `@recipe` generates. `keys(Base.Docs.meta(Base.get_extension(RungeKutta, :RungeKuttaMakieExt)))`
+  holds `RungeKutta.stabilityplot`, `RungeKutta.stabilityplot!` and
+  `RungeKuttaMakieExt.StabilityPlot`. The docs build does not load Makie, so the docs pages show
+  the docstring of `src/stabilityplot.jl` only.
+- **kind:** docs
+- **found:** 2026-11-28, the decided docstrings on the stubs in `src/` and the decided `@recipe`

@@ -99,7 +99,11 @@ end
 @testset "A change of an attribute recomputes the children" begin
     p = stableplot(TableauRK4(); n = 5)
     @test length(child(p, Makie.Contourf)[1][]) == 5
+    b = child(p, Makie.Contour)
+    seen = Tuple{Int, Int, Tuple{Int, Int}}[]
+    on(_ -> push!(seen, (length(b[1][]), length(b[2][]), size(b[3][]))), b[1])
     p.n[] = 9
+    @test !isempty(seen) && all(==((9, 9, (9, 9))), seen)
     @test length(child(p, Makie.Contourf)[1][]) == 9
     @test size(child(p, Makie.Contour)[3][]) == (9, 9)
 end
@@ -117,6 +121,28 @@ end
         file = joinpath(dir, "window$k.png")
         save(file, fig)
         @test read(file)[1:4] == [0x89, 0x50, 0x4e, 0x47]
+    end
+end
+
+@testset "A window whose region data is all NaN" begin
+    dir = mktempdir()
+    for (k, (tab, kw)) in enumerate(((TableauRK4(), (; xlims = (1e300, 2e300))),
+        (TableauGauss(4), (; xlims = (1e80, 2e80), ylims = (1e80, 2e80)))))
+        @test all(isnan, stability_region(tab; kw..., n = 21).absR)
+        fig = Figure()
+        p = stabilityplot!(Axis(fig[1, 1]), tab; kw..., n = 21)
+        @test length(children(p, Makie.Contourf)) == 1
+        @test length(children(p, Makie.Contour)) == 1
+        @test all(isnan, child(p, Makie.Contour)[3][])
+        @test all(isnan, child(p, Makie.Contourf)[3][])
+        @test isempty(child(child(p, Makie.Contourf), Makie.Poly)[1][])
+        @test isempty(boundary_vertices(p))
+        fap = stabilityplot(tab; kw..., n = 21)
+        for (name, figure) in (("plot$k.png", fig), ("fap$k.png", fap))
+            file = joinpath(dir, name)
+            save(file, figure)
+            @test read(file)[1:4] == [0x89, 0x50, 0x4e, 0x47]
+        end
     end
 end
 

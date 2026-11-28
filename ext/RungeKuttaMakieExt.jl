@@ -19,11 +19,15 @@ function Makie.plot!(p::StabilityPlot)
     region = lift(p[1], p.xlims, p.ylims, p.n) do tab, xlims, ylims, n
         stability_region(tab; xlims, ylims, n)
     end
-    x = lift(r -> r.x, region)
-    y = lift(r -> r.y, region)
-    absR = lift(r -> r.absR, region)
-    contourf!(p, x, y, absR; levels = [0.0, 1.0])
-    contour!(p, x, y, absR; levels = [1.0])
+    # The three arguments of the children change in one update of the compute graph; with one
+    # observable each, a child can resolve with the new `x` and the old `absR`. `add_input!` is
+    # ComputePipeline's, reached through Makie, which does not export it.
+    Makie.add_input!(p.attributes, :region, region)
+    map!(r -> (r.x, r.y, r.absR), p.attributes, :region, [:x, :y, :absR])
+    contourf!(p, p.x, p.y, p.absR; levels = [0.0, 1.0])
+    # A fixed colour keeps the line away from the colormap, whose range comes from the data and is
+    # NaN on an all-NaN grid.
+    contour!(p, p.x, p.y, p.absR; levels = [1.0], color = :black)
     hlines!(p, 0; yautolimits = false)
     vlines!(p, 0; xautolimits = false)
     return p
