@@ -8,6 +8,7 @@ if "core" in GROUPS
     @safetestset "Utility functions" include("utils.jl")
     @safetestset "Tableau" include("tableau.jl")
     @safetestset "Partitioned tableau" include("tableau_partitioned.jl")
+    @safetestset "Rooted trees" include("rooted_trees.jl")
     @safetestset "Order conditions" include("order_conditions.jl")
     @safetestset "Symmetry" include("symmetry.jl")
     @safetestset "Symplecticity" include("symplecticity.jl")

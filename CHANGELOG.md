@@ -23,6 +23,17 @@ change to the minor version may break compatibility.
   that the decisions are exact there. `stability_at_infinity` computes `R(∞)` and does not read the
   tableau's stored `R∞`. The stability intervals throw an error where the bisection does not
   locate an endpoint to the precision of `float(T)`, rather than return an inexact endpoint.
+- The order conditions and the classical order of a tableau, from the rooted trees of Butcher's
+  theory, in the new file `src/rooted_trees.jl` and in `src/order_conditions.jl`.
+  `order_conditions(tab, p)` returns the residual `bᵀψ(t) - 1/γ(t)` of each tree of order 1 to
+  `p`, with no tolerance, in the element type of the tableau, exact for `Rational{BigInt}` and
+  SymPy. `computed_order(tab; pmax = 10)` tests these conditions up to order `pmax`, and above
+  it takes the order that the simplifying assumptions B, C and D give; its result names the
+  route and whether the order is exact or a lower bound. `stage_order(tab)` gives the largest
+  `q ≤ s` with C(1) to C(q), `error_constant(tab)` the 2-norm of the coefficients of the leading
+  term of the local error, and `isconsistent(tab)` tells whether the stored nodes are `c = A𝟙`.
+  The trees use `A𝟙`, not the stored `c`. The test suite compares the trees, their densities and
+  symmetries and the elementary weights with RootedTrees.jl, a test dependency only.
 - `stabilityplot(tab)` and `stabilityplot!(ax, tab)` plot the stability region of a tableau: the
   set where `|R(z)| ≤ 1` filled, its boundary, and the real and imaginary axes. They are a Makie
   recipe in the package extension `RungeKuttaMakieExt`, which loads with Makie, for example through
