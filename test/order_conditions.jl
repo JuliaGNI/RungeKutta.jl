@@ -219,6 +219,12 @@ end
     @test linear_order(tab; rtol = 3.75e-10) == 2
     @test linear_order(tab; rtol = 2.4e-10) == 1
 
+    # the bound takes |b|: with b = [-1, 2 + 2e-10], the residual of the tree of order 1 is
+    # 2e-10, and its bound rtol · (|b₁| + |b₂|) is 1.5 and 0.75 times the residual
+    neg = Tableau{Float64}(:neg, 1, [0 0; 1 0], [-1, 2 + 2e-10], [0, 1])
+    @test computed_order(neg; rtol = 1e-10).order == 1
+    @test computed_order(neg; rtol = 5e-11).order == 0
+
     # a small residual that is not round-off
     rk4 = TableauRK4(Float64)
     b = Vector(rk4.b)
