@@ -7,9 +7,9 @@ lines through 0. The data come from [`stability_region`](@ref), with the same ke
 defaults, so a plot costs `n²` evaluations of the stability function. A window or a grid that
 `stability_region` refuses raises its `ArgumentError`.
 
-`stabilityplot` is a Makie recipe and has a method only when a Makie backend is loaded, such as
-CairoMakie or GLMakie. It returns a `Makie.FigureAxisPlot`, and takes the usual `figure` and
-`axis` keywords of Makie:
+`stabilityplot` is a Makie recipe and has a method only when Makie is loaded. A Makie backend,
+such as CairoMakie or GLMakie, loads Makie and draws the plot. `stabilityplot` returns a
+`Makie.FigureAxisPlot`, and takes the usual `figure` and `axis` keywords of Makie:
 
 ```julia
 using CairoMakie
@@ -25,6 +25,6 @@ function stabilityplot end
 
 Add the stability region of `tab` to the axis `ax`, as [`stabilityplot`](@ref) draws it, and
 return the plot object. A change of `xlims`, `ylims` or `n` on the plot object recomputes the
-region. A Makie backend must be loaded.
+region. A Makie backend must be loaded to draw the plot.
 """
 function stabilityplot! end

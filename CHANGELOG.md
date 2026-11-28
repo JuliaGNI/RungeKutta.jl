@@ -25,8 +25,8 @@ change to the minor version may break compatibility.
   locate an endpoint to the precision of `float(T)`, rather than return an inexact endpoint.
 - `stabilityplot(tab)` and `stabilityplot!(ax, tab)` plot the stability region of a tableau: the
   set where `|R(z)| ≤ 1` filled, its boundary, and the real and imaginary axes. They are a Makie
-  recipe in the package extension `RungeKuttaMakieExt`, which loads with a Makie backend such as
-  CairoMakie; Makie is a weak dependency. The data come from `stability_region`, with the same
+  recipe in the package extension `RungeKuttaMakieExt`, which loads with Makie, for example through
+  a backend such as CairoMakie; Makie is a weak dependency. The data come from `stability_region`, with the same
   keywords `xlims`, `ylims` and `n` and the same defaults. The axis limits follow the window, also
   when it excludes 0.
 
