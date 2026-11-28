@@ -318,7 +318,7 @@ end
 
 # The roots in (0, ∞) of p, which has simple roots and p(0) ≠ 0, in increasing order. Each root is
 # bracketed by bisection on the Sturm count until the bracket holds no other root and both of its
-# ends round to one value of F; the midpoint of the bracket is returned.
+# ends round to one value of F, else it throws; the midpoint of the bracket is returned.
 function _positive_roots(p::Vector{_Exact}, ::Type{F}) where {F}
     roots = _Exact[]
     length(p) == 1 && return roots
@@ -385,11 +385,11 @@ function _nonnegative_until(f::_BoundedPoly, ::Type{F}; touch = false) where {F}
     return F(Inf)
 end
 
-# Whether the bounded polynomial f is nonnegative on (0, ∞), decided exactly: f, with the factor
-# xʲ of its lowest nonzero coefficient divided out, is positive at 0, so it is nonnegative exactly
-# when the part of it of odd multiplicity has no root in (0, ∞), that is when the Sturm sequence
-# of that part has as many sign variations at 0 as at the Cauchy bound of its roots. No root is
-# located, and nothing is converted to a floating-point type.
+# Whether the bounded polynomial f is nonnegative on (0, ∞), decided exactly: with the factor xʲ
+# of its lowest nonzero coefficient divided out, f is nonnegative exactly when it is zero, or when
+# it is positive at 0 and the part of it of odd multiplicity has no root in (0, ∞), that is when
+# the Sturm sequence of that part has as many sign variations at 0 as at the Cauchy bound of its
+# roots. No root is located, and nothing is converted to a floating-point type.
 function _isnonnegative(f::_BoundedPoly)
     g, _ = _positive_part(f)
     g === nothing && return false
@@ -466,7 +466,7 @@ sides does not end the interval.
 
 It is decided from the coefficients of ``R = P/Q``: the interval ends at the first ``u > 0`` where
 ``Q(-u)^2 - P(-u)^2`` changes its sign to negative, found by a square-free factorisation and a
-Sturm sequence in exact rational arithmetic, and an irrational endpoint is located by bisection to
+Sturm sequence in exact rational arithmetic, and each endpoint is located by bisection to
 the precision of `float(T)`. For a floating-point `T`, the coefficients of ``P`` and ``Q`` are
 counted as zero as in [`stability_at_infinity`](@ref), and a coefficient of
 ``Q(-u)^2 - P(-u)^2`` when its magnitude is at most its first-order bound, as in
