@@ -340,3 +340,35 @@ fixed; the fix goes in `CHANGELOG.md`.
   (`src/order_conditions.jl:283`). The results are right; the cost is the only effect.
 - **kind:** found late
 - **found:** 2026-11-28
+
+### K33 · For a `Tableau{Int64}`, the elementary weights wrap around without an error
+
+- **location:** `src/rooted_trees.jl:103`
+- **evidence:** `_stage_vectors` computes the stage vectors in the element type `T` of the
+  tableau. For `t = Tableau{Int64}(:wrap, 1, [Int64(1) << 62;;], Int64[4], Int64[0])`,
+  `order_conditions(t, 2)` gives the residuals `[3, -1//2]`: the elementary weight `4 · 2^62` of
+  the tree of order 2 wraps to 0. `Tableau{BigInt}` with the same coefficients gives
+  `[3, 36893488147419103231//2]`, and `Tableau{Rational{Int64}}` throws the `OverflowError` of
+  K10. An integer element type is not one of the decided element types (K18). The tests of
+  `order_conditions` use an `Int` tableau only with small coefficients
+  (`test/order_conditions.jl:190`).
+- **kind:** found late
+- **found:** #61, a review comment
+
+### K34 · At a nonzero `rtol`, the order of `computed_order` can depend on `pmax`
+
+- **location:** `src/order_conditions.jl:217`
+- **evidence:** above `pmax`, the route counts B, C and D with the absolute floor
+  `atol = rtol`, and the trees up to `pmax` use the scaled bound
+  `rtol · |t| · |b|ᵀ|ψ|(t)`. So the route can pass a condition that a tree of the same order
+  fails. `computed_order(TableauExplicitEuler(Rational{BigInt}); rtol = 1//2)` gives
+  `(order = 2, route = :simplifying_assumptions, exact = true)` with `pmax = 1` and
+  `(order = 1, route = :trees, exact = true)` with `pmax = 2`; `error_constant` with the same
+  keywords gives 0.2357… and 0.5. A `Float64` Gauss(3) whose `a` is changed so that the residuals of C(3) are 8
+  to 15 eps, with `c = A𝟙`, gives `(order = 4, route = :simplifying_assumptions, exact = false)`
+  with `pmax = 2` and 3, and `(order = 3, route = :trees, exact = true)` with `pmax = 4` and 6. At
+  the default `rtol` of an exact type both routes test exact zero and agree. Gauss, Radau IIA and
+  Lobatto IIIA, s = 2 … 4, in `Float64` and `BigFloat` give the same order with `pmax = 2` and
+  `pmax = 2s + 1`. The route rule is decided; a change of it is open. See also K27 and K31.
+- **kind:** found late
+- **found:** #61, a review comment
