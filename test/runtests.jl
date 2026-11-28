@@ -11,6 +11,7 @@ if "core" in GROUPS
     @safetestset "Order conditions" include("order_conditions.jl")
     @safetestset "Symmetry" include("symmetry.jl")
     @safetestset "Symplecticity" include("symplecticity.jl")
+    @safetestset "Stability" include("stability.jl")
     @safetestset "Gauss tableaus" include("tableaus/gauss.jl")
     @safetestset "Lobatto tableaus" include("tableaus/lobatto.jl")
     @safetestset "Radau tableaus" include("tableaus/radau.jl")
