@@ -61,8 +61,8 @@ fixed; the fix goes in `CHANGELOG.md`.
 
 - **location:** `src/symmetry.jl:5`
 - **evidence:** `check_symmetry`, `check_symplecticity` (`src/symplecticity.jl:5`, `:18`) and the
-  left-hand sides of `check_order_conditions_b`, `_c` and `_d` (`src/order_conditions.jl:18`,
-  `:29`, `:40`) form their sums in the element type, and checked `Rational{Int64}` arithmetic
+  left-hand sides of `check_order_conditions_b`, `_c` and `_d` (`src/order_conditions.jl:20`,
+  `:25`, `:30`) form their sums in the element type, and checked `Rational{Int64}` arithmetic
   throws. With `M = typemax(Int64)` and `tab = Tableau(:edge, 1, [M // 1;;], [1 // 1], [0 // 1])`,
   both `check_symmetry(tab)` and `check_symplecticity(tab)` raise
   `OverflowError: 9223372036854775807 + 9223372036854775807 overflowed for type Int64`. With
