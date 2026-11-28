@@ -57,7 +57,24 @@ fixed; the fix goes in `CHANGELOG.md`.
 - **kind:** defect
 - **found:** 2026-11-27
 
-### K10 · The real interval of `TableauRK5` in a float type is up to 242 ULPs from its exact value
+### K10 · The symmetry, symplecticity and order checks overflow for a `Rational{Int64}` tableau near the Int64 limit
+
+- **location:** `src/symmetry.jl:5`
+- **evidence:** `check_symmetry`, `check_symplecticity` (`src/symplecticity.jl:5`, `:18`) and the
+  left-hand sides of `check_order_conditions_b`, `_c` and `_d` (`src/order_conditions.jl:18`,
+  `:29`, `:40`) form their sums in the element type, and checked `Rational{Int64}` arithmetic
+  throws. With `M = typemax(Int64)` and `tab = Tableau(:edge, 1, [M // 1;;], [1 // 1], [0 // 1])`,
+  both `check_symmetry(tab)` and `check_symplecticity(tab)` raise
+  `OverflowError: 9223372036854775807 + 9223372036854775807 overflowed for type Int64`. With
+  `tab2 = Tableau(:edge2, 1, [0//1 0//1; 0//1 0//1], [M // 1, M // 1], [0 // 1, 0 // 1])`,
+  `check_order_conditions_b(tab2, 1)` raises the same error. `_divide` in
+  `src/order_conditions.jl` forms only the right-hand side of the order checks in BigInt: it
+  removes the overflow from the subtraction in `isapprox`, not from a sum on the left-hand side.
+  A fix: widen integer and rational entries to BigInt before the sums in all five checks.
+- **kind:** defect
+- **found:** #57
+
+### K11 · The real interval of `TableauRK5` in a float type is up to 242 ULPs from its exact value
 
 - **location:** `src/stability.jl:463`
 - **evidence:** `real_stability_interval(TableauRK5(Float64))` is `5.603972407468875`. The exact
@@ -70,7 +87,7 @@ fixed; the fix goes in `CHANGELOG.md`.
 - **found:** 2026-11-27, the decided rule on the zero counts of the floating-point decisions
   (scenario "Float32 decisions"), which computes `P` and `Q` in the element type of the tableau
 
-### K11 · `isastable` refuses an A-stable tableau whose `P` cancels a pole of `Q` in the left half-plane
+### K12 · `isastable` refuses an A-stable tableau whose `P` cancels a pole of `Q` in the left half-plane
 
 - **location:** `src/stability.jl:425`
 - **evidence:** `Tableau{Rational{BigInt}}(:red, 1, [-1 0; 0 1], [0, 1], [0, 0])` has
@@ -80,7 +97,7 @@ fixed; the fix goes in `CHANGELOG.md`.
 - **kind:** found late
 - **found:** 2026-11-27, condition (i) of the requirement "A- and L-stability by an algebraic test"
 
-### K12 · In `Float32`, the interval of a pair can differ from its value in `Float64`
+### K13 · In `Float32`, the interval of a pair can differ from its value in `Float64`
 
 - **location:** `src/stability.jl:534`
 - **evidence:** `imaginary_stability_interval(PartitionedTableau(f(Float32, 5)))` gives
@@ -93,7 +110,7 @@ fixed; the fix goes in `CHANGELOG.md`.
 - **found:** 2026-11-27, the decided rule on the zero counts of the floating-point decisions,
   whose tested domain is `s ≤ 4`
 
-### K13 · `linear_order` exceeds `deg P + deg Q` at a scale beyond `1/rtol`
+### K14 · `linear_order` exceeds `deg P + deg Q` at a scale beyond `1/rtol`
 
 - **location:** `src/stability.jl:190`
 - **evidence:** for the θ-method
@@ -104,7 +121,7 @@ fixed; the fix goes in `CHANGELOG.md`.
 - **kind:** found late
 - **found:** 2026-11-27, the decided bound of the linear-order residual
 
-### K14 · `stability_region` returns `NaN` where `P(z)` and `Q(z)` overflow
+### K15 · `stability_region` returns `NaN` where `P(z)` and `Q(z)` overflow
 
 - **location:** `src/stability.jl:609`
 - **evidence:**
@@ -114,7 +131,7 @@ fixed; the fix goes in `CHANGELOG.md`.
 - **kind:** found late
 - **found:** 2026-11-27
 
-### K15 · `linear_order(TableauLobattoIIIF(BigFloat, 6))` is `1`
+### K16 · `linear_order(TableauLobattoIIIF(BigFloat, 6))` is `1`
 
 - **location:** `src/stability.jl:190`
 - **evidence:** `linear_order(TableauLobattoIIIF(BigFloat, 6))` returns `1`, where the linear
@@ -123,7 +140,7 @@ fixed; the fix goes in `CHANGELOG.md`.
 - **kind:** found late
 - **found:** 2026-11-27
 
-### K16 · The interval of a pair throws an unclear `ArgumentError` where its conditions overflow
+### K17 · The interval of a pair throws an unclear `ArgumentError` where its conditions overflow
 
 - **location:** `src/stability.jl:353`
 - **evidence:** for the θ-method

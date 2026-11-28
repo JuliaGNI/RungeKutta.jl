@@ -23,7 +23,7 @@ change to the minor version may break compatibility.
   that the decisions are exact there. `stability_at_infinity` computes `R(∞)` and does not read the
   tableau's stored `R∞`.
 
-## v0.6.8 (unreleased)
+## v0.6.8
 
 ### Fixed
 
@@ -43,12 +43,15 @@ change to the minor version may break compatibility.
 - The default `atol` and `rtol` of `check_order_conditions_b`, `check_order_conditions_c` and
   `check_order_conditions_d`, and so of the three `satisfies_simplifying_assumption_*`, are
   exactly zero for an integer or rational element type, and these checks form the right-hand
-  side `x / k` as the exact rational `x // k` for such a type, so they compare exactly. They
+  side `x / k` as the exact rational `x // k` in `BigInt` for such a type, so they compare
+  exactly where the sums of the left-hand side do not overflow the element type. They
   raised a `MethodError` for `Rational{BigInt}`, because `eps` has no method for it. Other element
   types keep the default `16eps(T)` and the division in the element type.
 - The default `atol` and `rtol` of `check_symplecticity` (for a `Tableau` and a
   `PartitionedTableau`) and of `check_symmetry` are exactly zero for an integer or rational
-  element type, so `issymplectic` and `issymmetric` decide exactly for such a tableau. In 0.6.7
+  element type, so `issymplectic` and `issymmetric` decide exactly for such a tableau where its
+  sums do not overflow the element type, as checked `Rational{Int64}` arithmetic can near the
+  Int64 limit. In 0.6.7
   all four raised a `MethodError` for `Rational{BigInt}`, because `eps` has no method for it. For
   `Rational{BigInt}`, `issymplectic` and `issymmetric` are now true for the implicit midpoint rule
   and false for `TableauRK4`. `check_symmetry` and `issymmetric` of a `PartitionedTableau` forward
