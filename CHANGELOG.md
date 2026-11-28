@@ -10,7 +10,8 @@ change to the minor version may break compatibility.
 
 - The stability function and the linear and nonlinear stability of a tableau, in the new file
   `src/stability.jl`. `stability_function(tab)` returns a `StabilityFunction`, the coefficients of
-  `R(z) = P(z)/Q(z)`, computed exactly in `Rational{BigInt}` and in SymPy, and callable as `R(z)`.
+  `R(z) = P(z)/Q(z)` in the element type of the tableau, exact for `Rational{BigInt}` and SymPy,
+  and callable as `R(z)`.
   From it, `stability_at_infinity`, `linear_order` and `pade_type` give `R(∞)`, the linear order
   (the order of `R` as an approximation of `exp`, which can differ from the classical order) and
   the Padé type; `isastable` and `islstable` decide A- and L-stability from the coefficients,
