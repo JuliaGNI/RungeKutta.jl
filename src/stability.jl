@@ -340,6 +340,8 @@ function _positive_roots(p::Vector{_Exact}, ::Type{F}) where {F}
             end
         end
         vhi == va - 1 || error("the bisection did not isolate a root of the Sturm sequence")
+        F(lo) == F(hi) ||
+            error("the bisection did not locate a root to the precision of $F")
         push!(roots, (lo + hi) / 2)
         a, va = hi, vhi
     end
@@ -361,7 +363,8 @@ end
 # The supremum of the r ≥ 0 with f ≥ 0 on [0, r], as F: the first root at which f changes its sign
 # to negative, that is a root of odd multiplicity. Where `touch` is true, a sign change counts only
 # where f, with the factor xʲ of its lowest nonzero coefficient divided out, falls below the bound
-# -Σₖ eₖ xᵏ of its round-off between that root and the next, or is negative beyond the last root.
+# -Σₖ eₖ xᵏ of its round-off at the midpoint between that root and the next, or is negative beyond
+# the last root.
 # A point where f touches zero then does not end the interval when round-off splits it into two
 # close roots.
 function _nonnegative_until(f::_BoundedPoly, ::Type{F}; touch = false) where {F}
@@ -382,7 +385,21 @@ function _nonnegative_until(f::_BoundedPoly, ::Type{F}; touch = false) where {F}
     return F(Inf)
 end
 
-_isnonnegative(f) = isinf(_nonnegative_until(f, Float64))
+# Whether the bounded polynomial f is nonnegative on (0, ∞), decided exactly: f, with the factor
+# xʲ of its lowest nonzero coefficient divided out, is positive at 0, so it is nonnegative exactly
+# when the part of it of odd multiplicity has no root in (0, ∞), that is when the Sturm sequence
+# of that part has as many sign variations at 0 as at the Cauchy bound of its roots. No root is
+# located, and nothing is converted to a floating-point type.
+function _isnonnegative(f::_BoundedPoly)
+    g, _ = _positive_part(f)
+    g === nothing && return false
+    isempty(g) && return true
+    p = _odd_multiplicity_part(g)
+    length(p) == 1 && return true
+    seq = _sturm_sequence(p)
+    bound = 1 + maximum(abs, p[1:(end - 1)]) / abs(p[end])
+    return _sign_variations(seq, zero(_Exact)) == _sign_variations(seq, bound)
+end
 
 # Whether every root of q, whose constant coefficient is not zero, has a positive real part: the
 # Routh–Hurwitz test of q(-z), each entry of the first column of the Routh array of the sign of
@@ -455,10 +472,13 @@ counted as zero as in [`stability_at_infinity`](@ref), and a coefficient of
 ``Q(-u)^2 - P(-u)^2`` when its magnitude is at most its first-order bound, as in
 [`isastable`](@ref). For a nonzero `rtol`, a root where the polynomial changes its sign then ends
 the interval only where the polynomial, with the factor ``u^j`` of its lowest nonzero coefficient
-divided out, falls below the bound ``-\\sum_k e_k u^k`` of its round-off between that root and the
-next, or is negative beyond the last root, so that a touching point that round-off splits into
-two close roots does not end it. The default `rtol` is `16 * eps(T)` for a floating-point `T` and
-`0` for a rational one, where every decision is exact.
+divided out, falls below the bound ``-\\sum_k e_k u^k`` of its round-off at the midpoint between
+that root and the next, or is negative beyond the last root, so that a touching point that
+round-off splits into two close roots does not end it. The default `rtol` is `16 * eps(T)` for a
+floating-point `T` and `0` for a rational one, where every decision is exact.
+
+Throws an error where the bisection does not locate an endpoint to the precision of `float(T)`
+in its step budget, such as the endpoint ``2^{-10000}`` of ``R(z) = 1 + 2^{10001} z``.
 """
 function real_stability_interval(tab::Tableau{T}; rtol = _default_rtol(T)) where {T <: Real}
     P, Q = _breflect.(_bounded_stability_function(tab, rtol))
@@ -526,10 +546,11 @@ of a condition ``g`` counts as zero when its magnitude is at most its bound, whi
 and sums that make ``g`` carry on as in [`isastable`](@ref). With the factor ``ν^j`` of its
 lowest nonzero coefficient divided out, a root where ``g`` changes its sign ends the interval only
 where ``g`` falls below ``-\\sum_k e_k ν^k``, with ``e_k`` the bound of its coefficient ``k``,
-between that root and the next, or is negative beyond the last root: a point where a condition
-touches zero, such as ``\\det(I + M) = 0`` at ``M = -I`` for the Gauss tableaus, then does not
-end the interval when round-off splits it into two close roots. The default `rtol` is
-`16 * eps(T)` for a floating-point `T` and `0` for a rational one, where every decision is exact.
+at the midpoint between that root and the next, or is negative beyond the last root: a point
+where a condition touches zero, such as ``\\det(I + M) = 0`` at ``M = -I`` for the Gauss
+tableaus, then does not end the interval when round-off splits it into two close roots. The
+default `rtol` is `16 * eps(T)` for a floating-point `T` and `0` for a rational one, where every
+decision is exact.
 """
 function imaginary_stability_interval(
         tab::PartitionedTableau{T}; rtol = _default_rtol(T)) where {T <: Real}
@@ -577,7 +598,7 @@ function isalgebraicallystable(tab::Tableau{T}; rtol = _default_rtol(T)) where {
         d, k = findmax(LinearAlgebra.diag(M))
         d <= tol && return all(x -> abs(x) <= tol, M)
         rest = [i for i in axes(M, 1) if i != k]
-        M = M[rest, rest] - M[rest, k] * transpose(M[k, rest]) / d
+        M = M[rest, rest] - (M[rest, k] / d) * transpose(M[k, rest])
     end
     return true
 end

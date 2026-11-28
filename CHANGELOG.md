@@ -21,7 +21,8 @@ change to the minor version may break compatibility.
   algebraic stability; and `stability_region` returns the values of `|R|` on a grid, for a plot.
   Each predicate takes a keyword `rtol`, whose default is zero for a rational element type, so
   that the decisions are exact there. `stability_at_infinity` computes `R(∞)` and does not read the
-  tableau's stored `R∞`.
+  tableau's stored `R∞`. The stability intervals throw an error where the bisection does not
+  locate an endpoint to the precision of `float(T)`, rather than return an inexact endpoint.
 
 ## v0.6.8
 

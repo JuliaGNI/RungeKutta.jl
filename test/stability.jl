@@ -252,6 +252,15 @@ end
     # Q(z) = P(z) = 1 + z², E ≡ 0: only the Routh test sees the poles ±i on the axis, where its
     # first column holds a zero
     @test !isastable(Tableau{RB}(:axis, 1, [0 1; -1 0], [0, 0], [0, 0]))
+    # R(z) = 1 + a z + a² z², E(y) = a² y² (1 - a² y²): E < 0 for y > 1/a = 2^2048, a root
+    # beyond floatmax(Float64), which an exact decision does not convert
+    a = 1 // big(2)^2048
+    @test isastable(Tableau{RB}(:far, 2, [0 0; a 0], [0, a], [0, 0])) === false
+    # R(z) = (1 - z/2 - z²/4) / ((1 - z)(1 - z/2)), E(y) = y² (8 + 3y²) / 16 has no positive
+    # root: the Sturm counts of 8 + 3y² at 0 and at the Cauchy bound agree
+    diag = Tableau{RB}(:diag, 1, [1 0; 0 1 // 2], [1 // 2, 1 // 2], [1, 1 // 2])
+    @test isastable(diag) === true
+    @test islstable(diag) === false
 
     # a symbolic tableau
     tab = TableauGauss(symtype(), 2)
@@ -495,6 +504,11 @@ end
     ε = 1 // big(2)^5000
     @test_throws r"^the bisection did not isolate a root of the Sturm sequence$" RungeKutta._positive_roots(
         RB[1 + ε, -2 - ε, 1], Float64)
+    # an endpoint 2^-10000 that the bisection cannot reach in its step budget is an error, not
+    # a wrong value
+    @test_throws r"^the bisection did not locate a root to the precision of BigFloat" real_stability_interval(Tableau{
+        RB}(
+        :k19, 1, RB[0;;], RB[big(2) ^ 10001], RB[0]))
 end
 
 @testset "$(rpad("Algebraic stability",80))" begin
@@ -536,6 +550,11 @@ end
             @test !isalgebraicallystable(tab)
         end
     end
+    # M = (1f20 - 1/4) [1 1; 1 1], positive semidefinite of rank one: the elimination divides
+    # the pivot column by the pivot before the product, whose entries 1f40 overflow Float32
+    k23 = Tableau{Float32}(:k23, 1, fill(1.0f20, 2, 2), Float32[1 / 2, 1 / 2],
+        Float32[2.0f20, 2.0f20])
+    @test isalgebraicallystable(k23) === true
 
     # the inferred return type
     for T in (Float64, Float32, BigFloat, RB)
