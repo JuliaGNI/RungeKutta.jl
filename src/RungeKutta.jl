@@ -72,6 +72,10 @@ export StabilityFunction,
        imaginary_stability_interval,
        stability_region
 
+include("stabilityplot.jl")
+
+export stabilityplot, stabilityplot!
+
 include("Tableaus.jl")
 @reexport using .Tableaus
 

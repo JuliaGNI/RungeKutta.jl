@@ -18,4 +18,5 @@ if "core" in GROUPS
     @safetestset "Explicit and implicit tableaus" include("tableaus/tableaus.jl")
     @safetestset "Partitioned tableaus" include("tableaus/prk.jl")
     @safetestset "Tableau list" include("Tableaus.jl")
+    @safetestset "Stability plot" include("stabilityplot.jl")
 end
