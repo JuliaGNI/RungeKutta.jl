@@ -388,7 +388,10 @@ end
     end
     # SymPy defines eps(Sym), so the checks of C, and with them the stage order, run on Sym
     @test stage_order(gsym) == 2
-    @test isconsistent(gsym)
+    @test isconsistent(gsym) === true
+    # TableauGauss(symtype(), 2) holds BigFloat values converted to Sym, so it is not exact
+    @test stage_order(TableauGauss(S, 2)) == 0
+    @test isconsistent(TableauGauss(S, 2)) === false
 end
 
 @testset "$(rpad("Order diagnostics: degenerate tableaus",80))" begin

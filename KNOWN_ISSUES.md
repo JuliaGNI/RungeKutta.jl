@@ -254,3 +254,19 @@ fixed; the fix goes in `CHANGELOG.md`.
   `Float32` only up to four stages.
 - **kind:** found late
 - **found:** 2026-11-28
+
+### K26 · `TableauGauss(symtype(), s)` holds `BigFloat` values converted to `Sym`, not exact ones
+
+- **location:** `src/tableaus/gauss.jl:46`
+- **evidence:** `TableauGauss(::Type{T}, s)` builds the coefficients in `BigFloat` and converts
+  them to `T`, so for SymPy's `Sym` the entries are floating-point numbers, such as
+  `0.211324865405187` for `c₁`. Four of the residuals of
+  `order_conditions(TableauGauss(symtype(), 2), 4)` for the trees of order 3 and 4 lie between
+  7e-18 and 6e-17, and `simplify` does not make them zero;
+  `stage_order` gives 0 and `isconsistent` gives `false`, as `check_order_conditions_c` already
+  does on `main`, because `eps(Sym)` is 0 and the checks compare exactly. The tableau built as
+  `docs/src/gauss.md` builds it, from `gauss_coefficients(S, s)`, `gauss_legendre_weights(S, s)`
+  and `gauss_legendre_nodes(S, s)`, is exact: its residuals of order 4 or less simplify to zero,
+  its stage order is 2 and it is consistent.
+- **kind:** found late
+- **found:** 2026-11-28
