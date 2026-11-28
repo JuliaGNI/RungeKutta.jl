@@ -135,8 +135,9 @@ fixed; the fix goes in `CHANGELOG.md`.
 
 - **location:** `src/stability.jl:190`
 - **evidence:** `linear_order(TableauLobattoIIIF(BigFloat, 6))` returns `1`, where the linear
-  order of Lobatto IIIF is `2s = 12`. The tests cover `s ≤ 4`. Whether the 256-bit tableau of
-  `src/tableaus/lobatto.jl` or the residual bound causes it is not established.
+  order of Lobatto IIIF is `2s = 12`. The tests cover `s ≤ 4`. The cause is the 256-bit tableau
+  of `src/tableaus/lobatto.jl`, whose row sums differ from its nodes by 58.5 `eps(BigFloat)`; K26
+  gives the figures of this and the other `BigFloat` tableaus.
 - **kind:** found late
 - **found:** 2026-11-27
 
@@ -224,24 +225,50 @@ fixed; the fix goes in `CHANGELOG.md`.
 - **kind:** missing test
 - **found:** #59
 
-### K24 · Some `BigFloat` tableaus are less accurate than `eps(BigFloat)`, so `computed_order` and `stage_order` miss their orders
+### K24 · A stability plot does not take a tableau of another concrete type after it is made
+
+- **location:** `ext/RungeKuttaMakieExt.jl:9`
+- **evidence:** with `p = stabilityplot!(Axis(Figure()[1, 1]), TableauRK4(); n = 5)`,
+  `p[1][] = Tableau{Float64}(:ie, 1, [1.0;;], [1.0], [1.0])` throws
+  `MethodError: Cannot convert an object of type Tableau{Float64,1,Missing,1} to an object of type Tableau{Float64,4,Missing,16}`.
+  Makie stores the argument of a plot with its concrete type. A tableau of the same type,
+  `p[1][] = TableauRK438()`, recomputes the plot. A change of an attribute (`p.n[] = 9`)
+  recomputes it too.
+- **kind:** found late
+- **found:** 2026-11-28, the decided return values of `stabilityplot!`, which name only a change
+  of an attribute
+
+### K25 · With Makie loaded, the help of `stabilityplot` shows "No docstring defined"
+
+- **location:** `ext/RungeKuttaMakieExt.jl:9`
+- **evidence:** after `using CairoMakie`, `@doc stabilityplot` shows the docstring of
+  `src/stabilityplot.jl`, then "No docstring defined." and the plot type and attributes that
+  `@recipe` generates. `keys(Base.Docs.meta(Base.get_extension(RungeKutta, :RungeKuttaMakieExt)))`
+  holds `RungeKutta.stabilityplot`, `RungeKutta.stabilityplot!` and
+  `RungeKuttaMakieExt.StabilityPlot`. The docs build does not load Makie, so the docs pages show
+  the docstring of `src/stabilityplot.jl` only.
+- **kind:** docs
+- **found:** 2026-11-28, the decided docstrings on the stubs in `src/` and the decided `@recipe`
+
+### K26 · Some `BigFloat` tableaus are less accurate than `eps(BigFloat)`, so `computed_order` and `stage_order` miss their orders
 
 - **location:** `src/tableaus/radau.jl:61`
 - **evidence:** `maximum(abs.(tab.a * ones(BigFloat, s) .- tab.c)) / eps(BigFloat)` is 39.6, 129
   and 262 for `TableauRadauIA(BigFloat, s)`, s = 4, 5, 6, 92.1 and 272 for
-  `TableauLobattoIIIB(BigFloat, s)`, s = 5, 6, and 58.5 for `TableauLobattoIIIF(BigFloat, 6)`
-  (`src/tableaus/lobatto.jl:265` and `:480`). The largest residual of a tree condition over its
-  bound `16eps(BigFloat) · |t| · |b|ᵀ|ψ|(t)` is 1.38 for Radau IA(5), 2.81 for Lobatto IIIF(6) and
-  0.985 for Radau IB(5). So `computed_order` gives 5 for Radau IA(5), whose order is 9, 1 for
-  Lobatto IIIF(6), whose order is 10, and `(order = 10, route = :trees, exact = false)` for
-  Radau IA(6), whose order is 11; `stage_order` gives 0 for Radau IA(4), (5) and (6) and Lobatto
-  IIIB(5) and (6). In `Float64` the same tableaus are within 0.5 eps, and
-  `computed_order(TableauRadauIA(Float64, 6))` is 11. The tests use `BigFloat` only up to
+  `TableauLobattoIIIB(BigFloat, s)`, s = 5, 6, 66.9 for `TableauRadauIB(BigFloat, 5)` and 58.5
+  for `TableauLobattoIIIF(BigFloat, 6)` (`src/tableaus/lobatto.jl:265` and `:480`). The largest
+  residual of a tree condition over its bound `16eps(BigFloat) · |t| · |b|ᵀ|ψ|(t)` is 1.38 for
+  Radau IA(5), 2.81 for Lobatto IIIF(6) and 0.985 for Radau IB(5). So `computed_order` gives 5
+  for Radau IA(5), whose order is 9, 1 for Lobatto IIIF(6), whose order is 10, and
+  `(order = 10, route = :trees, exact = false)` for Radau IA(6), whose order is 11;
+  `stage_order` gives 0 for Radau IA(4), (5) and (6), Lobatto IIIB(5) and (6), Radau IB(5) (4 in
+  `Float64`) and Lobatto IIIF(6) (5 in `Float64`). In `Float64` the same tableaus are within
+  0.5 eps, and `computed_order(TableauRadauIA(Float64, 6))` is 11. The tests use `BigFloat` only up to
   Gauss(5), Radau IIA(4), Lobatto IIIA(5) and IIIF(5).
 - **kind:** found late
 - **found:** 2026-11-28; the same inaccuracy as K16
 
-### K25 · In `Float32`, `computed_order` gives one order more than the true order for some tableaus with six stages
+### K27 · In `Float32`, `computed_order` gives one order more than the true order for some tableaus with six stages
 
 - **location:** `src/order_conditions.jl:217`
 - **evidence:** `computed_order(f(Float32, 6))` is
@@ -249,13 +276,13 @@ fixed; the fix goes in `CHANGELOG.md`.
   `TableauRadauIIA` (order 11), and the same with order 11 for `TableauLobattoIIIA` and
   `TableauLobattoIIIC` (order 10). The count of B on these tableaus is 12 and 11, one more than
   in exact arithmetic: the residual of B(12) and B(11), 3.9e-7 for Radau and 1.7e-6 for Lobatto
-  (the same weights and nodes in IIIA and IIIC) in `BigFloat`, lies below the absolute tolerance `16eps(Float32)` = 1.9e-6.
-  The counts of C and D are the exact ones. In `Float64` each gives its order. The tests use
+  (the same weights and nodes in IIIA and IIIC) in `BigFloat`, lies below the absolute tolerance
+  `16eps(Float32)` = 1.9e-6. The counts of C and D are the exact ones. In `Float64` each gives its order. The tests use
   `Float32` only up to four stages.
 - **kind:** found late
 - **found:** 2026-11-28
 
-### K26 · `TableauGauss(symtype(), s)` holds `BigFloat` values converted to `Sym`, not exact ones
+### K28 · `TableauGauss(symtype(), s)` holds `BigFloat` values converted to `Sym`, not exact ones
 
 - **location:** `src/tableaus/gauss.jl:46`
 - **evidence:** `TableauGauss(::Type{T}, s)` builds the coefficients in `BigFloat` and converts
@@ -268,5 +295,47 @@ fixed; the fix goes in `CHANGELOG.md`.
   `docs/src/gauss.md` builds it, from `gauss_coefficients(S, s)`, `gauss_legendre_weights(S, s)`
   and `gauss_legendre_nodes(S, s)`, is exact: its residuals of order 4 or less simplify to zero,
   its stage order is 2 and it is consistent.
+- **kind:** found late
+- **found:** 2026-11-28
+
+### K29 · In `Float16`, `computed_order` can give an order above the true order
+
+- **location:** `src/order_conditions.jl:203`
+- **evidence:** `computed_order(TableauGauss(Float16, 2))` is
+  `(order = 5, route = :trees, exact = true)`, where the order is 4: the default
+  `rtol = 16eps(Float16)` does not separate the residuals of the trees of order 5 from round-off.
+  `Float16` is not one of the decided element types (`Float32`, `Float64`, `BigFloat`,
+  `Rational{BigInt}`, `Sym`), and the tests do not use it.
+- **kind:** found late
+- **found:** 2026-11-28
+
+### K30 · The default `rtol` of the order diagnostics follows the current `BigFloat` precision, not that of the tableau
+
+- **location:** `src/order_conditions.jl:203`
+- **evidence:** with `t = TableauGauss(BigFloat, 2)` built at 256 bits,
+  `setprecision(512) do; (computed_order(t), stage_order(t), isconsistent(t)); end` gives
+  `((order = 1, route = :trees, exact = true), 0, false)`: the default `16eps(BigFloat)` is taken
+  at 512 bits, below the round-off of the 256-bit coefficients. At 256 bits the same calls give
+  order 4, stage order 2 and `true`.
+- **kind:** found late
+- **found:** 2026-11-28
+
+### K31 · `computed_order` takes any `rtol`, also `Inf`, `NaN` or a negative one
+
+- **location:** `src/order_conditions.jl:211`
+- **evidence:** for `g = TableauGauss(Float64, 2)`, `computed_order(g; rtol = Inf)` is
+  `(order = 10, route = :trees, exact = true)`, and `rtol = NaN` and `rtol = -1.0` give
+  `(order = 0, route = :trees, exact = true)`. No guard checks `rtol`, and which values to refuse
+  is not decided. `error_constant` passes its `rtol` on to `computed_order`.
+- **kind:** found late
+- **found:** 2026-11-28
+
+### K32 · `computed_order` builds the stage vectors of every tree up to `pmax` before it tests the first
+
+- **location:** `src/order_conditions.jl:208`
+- **evidence:** `computed_order` calls `_stage_vectors` on all trees of order 1 to `pmax`, 1205
+  trees for the default `pmax = 10`, also where a tree of order 1 fails. `error_constant` calls
+  `computed_order` and then builds the stage vectors of the trees up to order `p + 1` again
+  (`src/order_conditions.jl:283`). The results are right; the cost is the only effect.
 - **kind:** found late
 - **found:** 2026-11-28

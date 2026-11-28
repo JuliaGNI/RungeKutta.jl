@@ -34,6 +34,12 @@ change to the minor version may break compatibility.
   of the local error, and `isconsistent(tab)` tells whether the stored nodes are `c = A𝟙`. The
   trees use `A𝟙`, not the stored `c`. The test suite compares the trees, their densities and
   symmetries and the elementary weights with RootedTrees.jl, a test dependency only.
+- `stabilityplot(tab)` and `stabilityplot!(ax, tab)` plot the stability region of a tableau: the
+  set where `|R(z)| ≤ 1` filled, its boundary, and the real and imaginary axes. They are a Makie
+  recipe in the package extension `RungeKuttaMakieExt`, which loads with Makie, for example through
+  a backend such as CairoMakie; Makie is a weak dependency. The data come from `stability_region`,
+  with the same keywords `xlims`, `ylims` and `n` and the same defaults. The axis limits follow the
+  window, also when it excludes 0.
 
 ## v0.6.8
 
