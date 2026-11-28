@@ -29,7 +29,14 @@ export isexplicit,
 export name, order, description, reference
 export coefficients, nodes, weights
 
+include("rooted_trees.jl")
 include("order_conditions.jl")
+
+export order_conditions,
+       computed_order,
+       stage_order,
+       error_constant,
+       isconsistent
 
 export check_order_conditions_b,
        check_order_conditions_c,

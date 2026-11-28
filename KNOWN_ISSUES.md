@@ -223,3 +223,34 @@ fixed; the fix goes in `CHANGELOG.md`.
   box.
 - **kind:** missing test
 - **found:** #59
+
+### K24 · Some `BigFloat` tableaus are less accurate than `eps(BigFloat)`, so `computed_order` and `stage_order` miss their orders
+
+- **location:** `src/tableaus/radau.jl:61`
+- **evidence:** `maximum(abs.(tab.a * ones(BigFloat, s) .- tab.c)) / eps(BigFloat)` is 39.6, 129
+  and 262 for `TableauRadauIA(BigFloat, s)`, s = 4, 5, 6, 92.1 and 272 for
+  `TableauLobattoIIIB(BigFloat, s)`, s = 5, 6, and 58.5 for `TableauLobattoIIIF(BigFloat, 6)`
+  (`src/tableaus/lobatto.jl:265` and `:480`). The largest residual of a tree condition over its
+  bound `16eps(BigFloat) · |t| · |b|ᵀ|ψ|(t)` is 1.38 for Radau IA(5), 2.81 for Lobatto IIIF(6) and
+  0.985 for Radau IB(5). So `computed_order` gives 5 for Radau IA(5), whose order is 9, 1 for
+  Lobatto IIIF(6), whose order is 10, and `(order = 10, route = :trees, exact = false)` for
+  Radau IA(6), whose order is 11; `stage_order` gives 0 for Radau IA(4), (5) and (6) and Lobatto
+  IIIB(5) and (6). In `Float64` the same tableaus are within 0.5 eps, and
+  `computed_order(TableauRadauIA(Float64, 6))` is 11. The tests use `BigFloat` only up to
+  Gauss(5), Radau IIA(4), Lobatto IIIA(5) and IIIF(5).
+- **kind:** found late
+- **found:** 2026-11-28; the same inaccuracy as K16
+
+### K25 · In `Float32`, `computed_order` gives one order more than the true order for some tableaus with six stages
+
+- **location:** `src/order_conditions.jl:217`
+- **evidence:** `computed_order(f(Float32, 6))` is
+  `(order = 12, route = :simplifying_assumptions, exact = true)` for `TableauRadauIA` and
+  `TableauRadauIIA` (order 11), and the same with order 11 for `TableauLobattoIIIA` and
+  `TableauLobattoIIIC` (order 10). The count of B on these tableaus is 12 and 11, one more than
+  in exact arithmetic: the residual of B(12) and B(11), 3.9e-7 for Radau and 1.7e-6 for Lobatto
+  (the same weights and nodes in IIIA and IIIC) in `BigFloat`, lies below the absolute tolerance `16eps(Float32)` = 1.9e-6.
+  The counts of C and D are the exact ones. In `Float64` each gives its order. The tests use
+  `Float32` only up to four stages.
+- **kind:** found late
+- **found:** 2026-11-28
