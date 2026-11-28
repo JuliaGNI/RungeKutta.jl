@@ -29,4 +29,18 @@ function Makie.plot!(p::StabilityPlot)
     return p
 end
 
+# An `Axis` reads the autolimit flags only of its top-level plots, and the default bounding box of
+# a recipe joins all of its children. This bounding box leaves out the children that set either
+# flag to false, the coordinate axes, so that a window that excludes 0 keeps its own limits.
+function Makie.boundingbox(p::StabilityPlot, space::Symbol = :data)
+    bb = Ref(Makie.Rect3d())
+    for c in p.plots
+        if Makie.to_value(get(c, :xautolimits, true)) &&
+           Makie.to_value(get(c, :yautolimits, true))
+            Makie.update_boundingbox!(bb, Makie.boundingbox(c, space))
+        end
+    end
+    return bb[]
+end
+
 end

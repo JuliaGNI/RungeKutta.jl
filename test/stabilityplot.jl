@@ -138,7 +138,10 @@ end
     @test only(hl)[1][] == 0
     @test only(vl)[1][] == 0
     reset_limits!(ax)
-    @test all(>(0), ax.finallimits[].origin)
+    limits = ax.finallimits[]
+    @test all(>(0), limits.origin)
+    @test all(limits.origin .<= (1.0, 0.5))
+    @test all(limits.origin .+ limits.widths .>= (3.0, 2.0))
 end
 
 @testset "A refused window reaches the caller" begin
