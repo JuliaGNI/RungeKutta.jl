@@ -190,8 +190,8 @@ The order condition of a tree ``t`` holds when
 where ``|ψ|(t)`` is ``ψ(t)`` built from ``|A|``: the first-order bound on the change of the
 elementary weight when every entry of ``A`` and ``b`` changes by a relative `rtol`. For the tall
 trees it is the bound of [`linear_order`](@ref). The simplifying assumptions are checked with
-[`check_order_conditions_b`](@ref), [`check_order_conditions_c`](@ref) and
-[`check_order_conditions_d`](@ref), with `atol = rtol = rtol`. The default `rtol` is
+`check_order_conditions_b`, `check_order_conditions_c` and `check_order_conditions_d`, with
+`atol = rtol = rtol`. The default `rtol` is
 `16 * eps(T)` for a floating-point `T` and `0` for a rational one, where every test is exact.
 
 The classical order is at most the [`linear_order`](@ref), the order of the stability function,
@@ -218,7 +218,7 @@ function computed_order(tab::Tableau{T}; pmax::Integer = 10,
     η = _leading_count(k -> all(check_order_conditions_c(tabA1, k; atol = rtol, rtol = rtol)), s)
     ζ = _leading_count(k -> all(check_order_conditions_d(tabA1, k; atol = rtol, rtol = rtol)), s)
     pBCD = _order_bound(qB, η, ζ)
-    p = max(pmax, pBCD)
+    p = Int(max(pmax, pBCD))
     return (
         order = p, route = pBCD > pmax ? :simplifying_assumptions : :trees, exact = p >= qB)
 end
@@ -233,7 +233,7 @@ assumptions ``C(1), …, C(q)`` hold,
 \sum_{j=1}^{s} a_{ij} c_j^{k-1} = \frac{c_i^k}{k} , \qquad i = 1, …, s , \; k = 1, …, q ,
 ```
 
-on the stored nodes ``c``, as [`check_order_conditions_c`](@ref) tests them, with its defaults and
+on the stored nodes ``c``, as `check_order_conditions_c` tests them, with its defaults and
 the keywords `kwargs` (`atol`, `rtol`). It is 0 where ``c ≠ A 𝟙`` (see [`isconsistent`](@ref)).
 
 Throws an `ArgumentError` when a coefficient of `a` or `b` is not finite.
@@ -247,7 +247,7 @@ end
     isconsistent(tab::Tableau; kwargs...)
 
 Return `true` where the stored nodes of `tab` are the row sums of its coefficients, ``c = A 𝟙``,
-that is where ``C(1)`` holds as [`check_order_conditions_c`](@ref) tests it, with its defaults and
+that is where ``C(1)`` holds as `check_order_conditions_c` tests it, with its defaults and
 the keywords `kwargs` (`atol`, `rtol`). The order conditions of [`order_conditions`](@ref) and
 [`computed_order`](@ref) use ``A 𝟙`` in either case.
 
@@ -277,7 +277,6 @@ Throws an `ArgumentError` when the computed order is a lower bound (`exact` is `
 """
 function error_constant(tab::Tableau{T}; pmax::Integer = 10,
         rtol = _default_rtol(T)) where {T <: Real}
-    _check_finite(tab)
     r = computed_order(tab; pmax = pmax, rtol = rtol)
     r.exact || throw(ArgumentError("the computed order is a lower bound; increase pmax"))
     b = Vector{T}(tab.b)

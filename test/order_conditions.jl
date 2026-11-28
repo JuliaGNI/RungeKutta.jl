@@ -153,6 +153,14 @@ const QQ = Rational{BigInt}
         @test eltype(RungeKutta.residuals_c(g, 3)) == T
         @test eltype(RungeKutta.residuals_d(g, 3)) == T
     end
+
+    # the checks of C and D take rtol: with atol = 0, the round-off of the sides passes only
+    # through the relative tolerance
+    g = TableauGauss(Float64, 3)
+    for k in 1:3
+        @test all(check_order_conditions_c(g, k; atol = 0, rtol = 1e-12))
+        @test all(check_order_conditions_d(g, k; atol = 0, rtol = 1e-12))
+    end
 end
 
 @testset "$(rpad("order_conditions",80))" begin
@@ -219,6 +227,12 @@ end
     @test linear_order(tab; rtol = 3.75e-10) == 2
     @test linear_order(tab; rtol = 2.4e-10) == 1
 
+    # the default rtol, 16eps(Float64): the bound of the same tree is about 16eps, so a residual
+    # of 24eps fails it and one of 12eps passes it
+    mid(δ) = Tableau{Float64}(:mid, 2, [0 0; 0.5+δ 0], [0, 1], [0, 0.5])
+    @test computed_order(mid(24eps(Float64))).order == 1
+    @test computed_order(mid(12eps(Float64))).order == 2
+
     # the bound takes |b|: with b = [-1, 2 + 2e-10], the residual of the tree of order 1 is
     # 2e-10, and its bound rtol · (|b₁| + |b₂|) is 1.5 and 0.75 times the residual
     neg = Tableau{Float64}(:neg, 1, [0 0; 1 0], [-1, 2 + 2e-10], [0, 1])
@@ -232,6 +246,7 @@ end
     b[2] -= 3e-9
     @test computed_order(Tableau{Float64}(:rk4p, 4, rk4.a, b, rk4.c)).order == 1
     @test computed_order(rk4) == (order = 4, route = :trees, exact = true)
+    @test computed_order(rk4).order isa Int
 
     # an exact default
     rk4q = TableauRK4(QQ)
@@ -239,6 +254,7 @@ end
     bq[1] += 1 // big(10)^30
     bq[2] -= 1 // big(10)^30
     @test computed_order(Tableau{QQ}(:rk4q, 4, rk4q.a, bq, rk4q.c)).order == 1
+    @test computed_order(rk4q).order isa Int
 
     # the default of the other precision, and the cap 2s on B
     @test computed_order(TableauGauss(Float32, 4)).order == 8
@@ -275,6 +291,12 @@ end
 
     @test_throws r"^ArgumentError: pmax must be at least 1$" computed_order(TableauRK4(QQ);
         pmax = 0)
+    # the order is an Int for any integer type of pmax
+    for pmax in (big(3), UInt(3), Int8(3))
+        r = computed_order(TableauGauss(Float64, 2); pmax = pmax)
+        @test r == (order = 4, route = :simplifying_assumptions, exact = true)
+        @test r.order isa Int
+    end
     # RK4 has B(4), C(1) and D(1): p_BCD = min(4, 3, 4) = 3, above pmax = 1 and below q_B = 4
     @test computed_order(TableauRK4(QQ); pmax = 1) ==
           (order = 3, route = :simplifying_assumptions, exact = false)
@@ -323,6 +345,7 @@ end
         @test stage_order(TableauGauss(T, 3)) isa Int
     end
     @test stage_order(TableauRK4(QQ)) == 1
+    @test stage_order(TableauRK4(QQ)) isa Int
     @test stage_order(TableauExplicitEuler(QQ)) == 1
     @test stage_order(TableauRK4(QQ); atol = 1, rtol = 0) == 4
 
@@ -360,8 +383,19 @@ end
 
     # the order comes from the simplifying assumptions; the trees of order p + 1 > pmax + 1
     @test computed_order(TableauGauss(QQ, 1); pmax = 1).order == 2
+    @test error_constant(TableauGauss(BigFloat, 1); pmax = 1) isa BigFloat
     @test isapprox(error_constant(TableauGauss(BigFloat, 1); pmax = 1),
         error_constant(TableauGauss(BigFloat, 1)); rtol = 8eps(BigFloat))
+
+    # rtol reaches the computed order: RK4 with b₁ += 3e-9 and b₂ -= 3e-9 has order 1 at the
+    # default and order 4 with rtol = 1e-6, where its error constant is close to that of RK4
+    rk4 = TableauRK4(Float64)
+    b = Vector(rk4.b)
+    b[1] += 3e-9
+    b[2] -= 3e-9
+    tp = Tableau{Float64}(:rk4p, 4, rk4.a, b, rk4.c)
+    @test isapprox(error_constant(tp; rtol = 1e-6), error_constant(rk4); rtol = 1e-9)
+    @test error_constant(tp) < 1e-8
 end
 
 @testset "$(rpad("Order diagnostics: non-finite coefficients and SymPy",80))" begin
